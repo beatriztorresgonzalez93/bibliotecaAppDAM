@@ -1,0 +1,12 @@
+{
+  "usuarios": [ "..." ],
+  "libros": [
+    { "isbn": "978000000001", "titulo": "El Quijote", "autor": "Cervantes" },
+    { "isbn": "978000000002", "titulo": "Harry Potter", "autor": "J.K. Rowling" }
+  ],
+  "ejemplares": [
+    { "isbnLibro": "978000000001", "codigoInventario": "QUI-001", "estado": "DISPONIBLE" },
+    { "isbnLibro": "978000000002", "codigoInventario": "HP-001", "estado": "DISPONIBLE" },
+    { "isbnLibro": "978000000002", "codigoInventario": "HP-002", "estado": "DISPONIBLE" }
+  ]
+}

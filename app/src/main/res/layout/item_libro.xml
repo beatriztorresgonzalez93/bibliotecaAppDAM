@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="12dp">
+
+    <TextView
+        android:id="@+id/tvTitulo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Título"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvAutor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Autor"
+        android:layout_marginTop="4dp" />
+
+    <TextView
+        android:id="@+id/tvIsbn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="ISBN"
+        android:layout_marginTop="2dp" />
+
+    <TextView
+        android:id="@+id/tvDisponibles"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Disponibles: 0 / 0"
+        android:layout_marginTop="4dp" />
+
+    <Button
+        android:id="@+id/btnPrestar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Prestar"
+        android:layout_marginTop="8dp"/>
+
+
+</LinearLayout>

@@ -13,30 +13,64 @@ public class LoginActivity extends AppCompatActivity {
     private EditText etUsuario, etPassword;
     private Button btnLogin;
 
+    private AppDatabase db;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        SeedData.seedIfEmpty(this);
+
         setContentView(R.layout.activity_login);
+
+        db = AppDatabase.getInstance(this);
+
+
+// Si la tabla está vacía, crea un admin de prueba
+        if (db.usuarioDao().count() == 0) {
+            Usuario admin = new Usuario();
+            admin.nombre = "Admin";
+            admin.email = "admin@demo.com";
+            admin.password = "admin123";
+            admin.rol = "ADMIN";
+            db.usuarioDao().insert(admin);
+        }
+
 
         etUsuario = findViewById(R.id.etUsuario);
         etPassword = findViewById(R.id.etPassword);
         btnLogin = findViewById(R.id.btnLogin);
 
         btnLogin.setOnClickListener(v -> {
-            String usuario = etUsuario.getText().toString().trim();
+            String email = etUsuario.getText().toString().trim();
             String pass = etPassword.getText().toString().trim();
 
-            if (usuario.isEmpty() || pass.isEmpty()) {
-                Toast.makeText(this, "Rellena usuario y contraseña", Toast.LENGTH_SHORT).show();
+            if (email.isEmpty() || pass.isEmpty()) {
+                Toast.makeText(this, "Rellena email y contraseña", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            // De momento: login “correcto” si no está vacío
-            Toast.makeText(this, "Login correcto", Toast.LENGTH_SHORT).show();
+            db = AppDatabase.getInstance(this);
 
-            // Ir a la pantalla principal (de momento MainActivity)
-            startActivity(new Intent(this, MainActivity.class));
+            Usuario u = db.usuarioDao().login(email, pass);
+
+            if (u == null) {
+                Toast.makeText(this, "Credenciales incorrectas", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            Toast.makeText(this, "Bienvenida/o " + u.nombre, Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(this, LibrosActivity.class));
             finish();
+
+            Intent intent = new Intent(this, LibrosActivity.class);
+            intent.putExtra("ID_USUARIO", u.id);
+            startActivity(intent);
+            finish();
+
+
         });
+
     }
 }

@@ -6,10 +6,15 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-@Database(entities = {Usuario.class}, version = 1)
+@Database(entities = {Usuario.class, Libro.class, Ejemplar.class, Prestamo.class}, version = 6)
 public abstract class AppDatabase extends RoomDatabase {
 
     public abstract UsuarioDao usuarioDao();
+    public abstract LibroDao libroDao();
+
+    public abstract EjemplarDao ejemplarDao();
+
+    public abstract PrestamoDao prestamoDao();
 
     private static volatile AppDatabase INSTANCE;
 
@@ -22,8 +27,8 @@ public abstract class AppDatabase extends RoomDatabase {
                                     AppDatabase.class,
                                     "biblioteca_db"
                             )
-                            // Para probar rápido (luego lo quitamos y lo hacemos pro)
-                            .allowMainThreadQueries()
+                            .fallbackToDestructiveMigration()
+                            .allowMainThreadQueries() // luego lo quitamos
                             .build();
                 }
             }
