@@ -13,9 +13,14 @@
         android:theme="@style/Theme.BibliotecaApp"
         tools:targetApi="31">
         <activity
-            android:name=".LibrosActivity"
+            android:name=".UsuarioDetalleActivity"
             android:exported="false" />
-        <!-- Pantalla inicial -->
+        <activity
+            android:name=".UsuarioActivity"
+            android:exported="false" />
+        <activity
+            android:name=".LibrosActivity"
+            android:exported="false" /> <!-- Pantalla inicial -->
         <activity
             android:name=".LoginActivity"
             android:exported="true">

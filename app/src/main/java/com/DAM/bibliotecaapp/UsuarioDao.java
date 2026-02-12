@@ -23,5 +23,16 @@ public interface UsuarioDao {
 
     @Query("SELECT * FROM Usuario WHERE email = :email AND password = :password LIMIT 1")
     Usuario login(String email, String password);
+
+    @Query("SELECT * FROM Usuario ORDER BY nombre ASC")
+    List<Usuario> getAllOrderByNombre();
+
+    @Query("SELECT * FROM Usuario WHERE (nombre LIKE :q OR email LIKE :q) ORDER BY nombre ASC")
+    List<Usuario> search(String q);
+
+    @Query("SELECT * FROM Usuario WHERE id = :id LIMIT 1")
+    Usuario getById(int id);
+
+
 }
 

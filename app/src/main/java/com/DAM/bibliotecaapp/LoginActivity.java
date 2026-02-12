@@ -15,7 +15,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private AppDatabase db;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,8 +25,7 @@ public class LoginActivity extends AppCompatActivity {
 
         db = AppDatabase.getInstance(this);
 
-
-// Si la tabla está vacía, crea un admin de prueba
+        // Si la tabla está vacía, crea un admin de prueba
         if (db.usuarioDao().count() == 0) {
             Usuario admin = new Usuario();
             admin.nombre = "Admin";
@@ -36,7 +34,6 @@ public class LoginActivity extends AppCompatActivity {
             admin.rol = "ADMIN";
             db.usuarioDao().insert(admin);
         }
-
 
         etUsuario = findViewById(R.id.etUsuario);
         etPassword = findViewById(R.id.etPassword);
@@ -51,8 +48,6 @@ public class LoginActivity extends AppCompatActivity {
                 return;
             }
 
-            db = AppDatabase.getInstance(this);
-
             Usuario u = db.usuarioDao().login(email, pass);
 
             if (u == null) {
@@ -60,17 +55,21 @@ public class LoginActivity extends AppCompatActivity {
                 return;
             }
 
-            Toast.makeText(this, "Bienvenida/o " + u.nombre, Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(this, LibrosActivity.class));
-            finish();
 
-            Intent intent = new Intent(this, LibrosActivity.class);
-            intent.putExtra("ID_USUARIO", u.id);
+
+            Toast.makeText(this, "Bienvenida/o " + u.nombre, Toast.LENGTH_SHORT).show();
+
+            getSharedPreferences("session", MODE_PRIVATE)
+                    .edit()
+                    .putInt("usuario_id", u.id)
+                    .putString("rol", u.rol)
+                    .apply();
+
+
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            intent.putExtra("usuario_id", u.id);
             startActivity(intent);
             finish();
-
-
         });
-
     }
 }
