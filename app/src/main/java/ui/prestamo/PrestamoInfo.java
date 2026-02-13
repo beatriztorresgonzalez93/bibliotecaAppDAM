@@ -1,4 +1,4 @@
-package com.DAM.bibliotecaapp;
+package ui.prestamo;
 
 public class PrestamoInfo {
     public int idPrestamo;

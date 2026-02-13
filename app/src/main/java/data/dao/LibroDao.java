@@ -1,10 +1,12 @@
-package com.DAM.bibliotecaapp;
+package data.dao;
 
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
 
 import java.util.List;
+
+import data.entities.Libro;
 
 @Dao
 public interface LibroDao {

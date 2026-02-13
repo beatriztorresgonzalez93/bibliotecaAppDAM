@@ -1,4 +1,4 @@
-package com.DAM.bibliotecaapp;
+package ui.main;
 
 import android.os.Bundle;
 
@@ -9,6 +9,13 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import android.content.Intent;
 import android.widget.Button;
+
+import ui.libro.LibrosActivity;
+import ui.prestamo.PrestamoActivity;
+import com.DAM.bibliotecaapp.R;
+import ui.usuario.UsuarioActivity;
+
+import ui.login.LoginActivity;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -44,12 +51,18 @@ public class MainActivity extends AppCompatActivity {
             getSharedPreferences("session", MODE_PRIVATE).edit().clear().apply();
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
             finish();
+
         });
 
 
         btnUsuario.setOnClickListener(v ->
                 startActivity(new Intent(MainActivity.this, UsuarioActivity.class))
         );
+
+        btnPrestamos.setOnClickListener(v ->
+                startActivity(new Intent(MainActivity.this, PrestamoActivity.class))
+        );
+
 
         int usuarioId = getIntent().getIntExtra("usuario_id", -1);
 
@@ -60,9 +73,9 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, LibrosActivity.class))
         );
 
-//        btnPrestamos.setOnClickListener(v ->
-//                startActivity(new Intent(MainActivity.this, PrestamosActivity.class))
-//        );
+        btnPrestamos.setOnClickListener(v ->
+                startActivity(new Intent(MainActivity.this, PrestamoActivity.class))
+        );
 
     }
 }

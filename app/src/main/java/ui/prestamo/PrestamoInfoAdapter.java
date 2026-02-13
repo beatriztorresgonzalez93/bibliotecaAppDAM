@@ -1,4 +1,4 @@
-package com.DAM.bibliotecaapp;
+package ui.prestamo;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,18 +8,20 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.DAM.bibliotecaapp.R;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class PrestamoActivoAdapter extends RecyclerView.Adapter<PrestamoActivoAdapter.VH> {
+public class PrestamoInfoAdapter extends RecyclerView.Adapter<PrestamoInfoAdapter.VH> {
 
-    private final List<Prestamo> data = new ArrayList<>();
+    private final List<PrestamoInfo> data = new ArrayList<>();
     private final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
 
-    public void setData(List<Prestamo> list) {
+    public void setData(List<PrestamoInfo> list) {
         data.clear();
         if (list != null) data.addAll(list);
         notifyDataSetChanged();
@@ -35,13 +37,13 @@ public class PrestamoActivoAdapter extends RecyclerView.Adapter<PrestamoActivoAd
 
     @Override
     public void onBindViewHolder(@NonNull VH h, int position) {
-        Prestamo p = data.get(position);
+        PrestamoInfo p = data.get(position);
 
         String fPrestamo = sdf.format(new Date(p.fechaPrestamo));
         String fVence = sdf.format(new Date(p.fechaVencimiento));
 
-        h.tvLinea1.setText("Ejemplar ID: " + p.idEjemplar + " · Estado: " + p.estado);
-        h.tvLinea2.setText("Prestado: " + fPrestamo + " · Vence: " + fVence);
+        h.tvLinea1.setText(p.titulo + " · " + p.autor);
+        h.tvLinea2.setText("Ejemplar: " + p.codigoInventario + " · Prestado: " + fPrestamo + " · Vence: " + fVence);
     }
 
     @Override

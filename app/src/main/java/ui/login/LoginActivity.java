@@ -1,4 +1,4 @@
-package com.DAM.bibliotecaapp;
+package ui.login;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,6 +7,12 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import data.db.AppDatabase;
+import ui.main.MainActivity;
+import com.DAM.bibliotecaapp.R;
+import data.seed.SeedData;
+import data.entities.Usuario;
 
 public class LoginActivity extends AppCompatActivity {
 

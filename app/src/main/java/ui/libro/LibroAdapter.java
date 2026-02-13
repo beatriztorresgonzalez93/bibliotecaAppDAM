@@ -1,14 +1,20 @@
-package com.DAM.bibliotecaapp;
+package ui.libro;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import data.db.AppDatabase;
+
+import data.entities.Libro;
+import ui.prestamo.NuevoPrestamoActivity;
+import com.DAM.bibliotecaapp.R;
 
 import java.util.List;
 
@@ -16,12 +22,10 @@ public class LibroAdapter extends RecyclerView.Adapter<LibroAdapter.LibroViewHol
 
     private final AppDatabase db;
     private final List<Libro> libros;
-    private final int idUsuario;
 
-    public LibroAdapter(AppDatabase db, List<Libro> libros, int idUsuario) {
+    public LibroAdapter(AppDatabase db, List<Libro> libros) {
         this.db = db;
         this.libros = libros;
-        this.idUsuario = idUsuario;
     }
 
     @NonNull
@@ -45,50 +49,22 @@ public class LibroAdapter extends RecyclerView.Adapter<LibroAdapter.LibroViewHol
 
         holder.btnPrestar.setEnabled(disp > 0);
 
-        holder.btnPrestar.setOnClickListener(view -> {
-            // 0) Seguridad: si no tenemos usuario logueado
-            if (idUsuario == -1) {
-                Toast.makeText(view.getContext(), "Error: usuario no válido", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            // 1) Buscar un ejemplar disponible
-            Ejemplar ej = db.ejemplarDao().getPrimerDisponible(libro.id);
-            if (ej == null) {
-                Toast.makeText(view.getContext(), "No hay ejemplares disponibles", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            // 2) Crear préstamo
-            Prestamo p = new Prestamo();
-            p.idUsuario = idUsuario;
-            p.idEjemplar = ej.id;
-            p.fechaPrestamo = System.currentTimeMillis();
-
-            long catorceDias = 14L * 24 * 60 * 60 * 1000;
-            p.fechaVencimiento = p.fechaPrestamo + catorceDias;
-
-            p.fechaDevolucion = null;
-            p.estado = "ACTIVO";
-
-            db.prestamoDao().insert(p);
-
-            // 3) Marcar ejemplar como PRESTADO
-            db.ejemplarDao().actualizarEstado(ej.id, "PRESTADO");
-
-            Toast.makeText(view.getContext(), "Préstamo realizado", Toast.LENGTH_SHORT).show();
-
-            // 4) Refrescar la lista completa (así se actualizan los disponibles seguro)
-            notifyDataSetChanged();
+        // NUEVO FLUJO: abrir pantalla de nuevo préstamo
+        holder.btnPrestar.setOnClickListener(v -> {
+            Intent i = new Intent(v.getContext(), NuevoPrestamoActivity.class);
+            i.putExtra("idLibro", libro.id);
+            i.putExtra("titulo", libro.titulo);
+            v.getContext().startActivity(i);
         });
     }
 
     @Override
     public int getItemCount() {
-        return libros.size();
+        return libros != null ? libros.size() : 0;
     }
 
     static class LibroViewHolder extends RecyclerView.ViewHolder {
+
         TextView tvTitulo, tvAutor, tvIsbn, tvDisponibles;
         Button btnPrestar;
 

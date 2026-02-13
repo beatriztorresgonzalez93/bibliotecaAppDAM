@@ -1,10 +1,14 @@
-package com.DAM.bibliotecaapp;
+package data.dao;
 
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
 
 import java.util.List;
+
+import data.entities.Prestamo;
+import ui.prestamo.PrestamoGlobal;
+import ui.prestamo.PrestamoInfo;
 
 @Dao
 public interface PrestamoDao {
@@ -41,6 +45,27 @@ public interface PrestamoDao {
                     "ORDER BY p.fechaPrestamo DESC"
     )
     List<PrestamoInfo> getActivosInfoByUsuario(int idUsuario);
+
+    @Query(
+            "SELECT " +
+                    " p.id AS idPrestamo, " +
+                    " l.titulo AS titulo, " +
+                    " l.autor AS autor, " +
+                    " u.nombre AS nombreUsuario, " +
+                    " u.email AS emailUsuario, " +
+                    " e.codigoInventario AS codigoInventario, " +
+                    " p.fechaPrestamo AS fechaPrestamo, " +
+                    " p.fechaVencimiento AS fechaVencimiento, " +
+                    " p.estado AS estado " +
+                    "FROM prestamo p " +
+                    "JOIN ejemplar e ON e.id = p.idEjemplar " +
+                    "JOIN libro l ON l.id = e.idLibro " +
+                    "JOIN Usuario u ON u.id = p.idUsuario " +
+                    "WHERE p.fechaDevolucion IS NULL " +
+                    "ORDER BY p.fechaVencimiento ASC"
+    )
+    List<PrestamoGlobal> getPrestamosActivosGlobal();
+
 
 
 

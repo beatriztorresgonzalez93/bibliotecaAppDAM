@@ -1,10 +1,19 @@
-package com.DAM.bibliotecaapp;
+package data.db;
 
 import android.content.Context;
 
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+
+import data.dao.EjemplarDao;
+import data.dao.LibroDao;
+import data.dao.PrestamoDao;
+import data.dao.UsuarioDao;
+import data.entities.Ejemplar;
+import data.entities.Libro;
+import data.entities.Prestamo;
+import data.entities.Usuario;
 
 @Database(entities = {Usuario.class, Libro.class, Ejemplar.class, Prestamo.class}, version = 7)
 public abstract class AppDatabase extends RoomDatabase {
@@ -35,4 +44,9 @@ public abstract class AppDatabase extends RoomDatabase {
         }
         return INSTANCE;
     }
+
+    public void runInTx(Runnable r) {
+        runInTransaction(r);
+    }
+
 }

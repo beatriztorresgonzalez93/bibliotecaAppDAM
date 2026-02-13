@@ -1,4 +1,4 @@
-package com.DAM.bibliotecaapp;
+package ui.usuario;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,8 +8,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.DAM.bibliotecaapp.R;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import data.entities.Usuario;
 
 public class UsuarioAdapter extends RecyclerView.Adapter<UsuarioAdapter.VH> {
 

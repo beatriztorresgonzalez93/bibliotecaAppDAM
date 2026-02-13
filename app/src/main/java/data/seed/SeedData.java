@@ -1,4 +1,4 @@
-package com.DAM.bibliotecaapp;
+package data.seed;
 
 import android.content.Context;
 
@@ -9,6 +9,11 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+
+import data.db.AppDatabase;
+import data.entities.Ejemplar;
+import data.entities.Libro;
+import data.entities.Usuario;
 
 public class SeedData {
 

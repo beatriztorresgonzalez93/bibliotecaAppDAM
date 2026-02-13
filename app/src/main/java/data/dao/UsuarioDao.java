@@ -1,10 +1,12 @@
-package com.DAM.bibliotecaapp;
+package data.dao;
 
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
 
 import java.util.List;
+
+import data.entities.Usuario;
 
 @Dao
 public interface UsuarioDao {
@@ -32,6 +34,13 @@ public interface UsuarioDao {
 
     @Query("SELECT * FROM Usuario WHERE id = :id LIMIT 1")
     Usuario getById(int id);
+
+    @Query("SELECT * FROM Usuario WHERE email = :email LIMIT 1")
+    Usuario getByEmail(String email);
+    @Query("SELECT email FROM Usuario ORDER BY email")
+    List<String> getAllEmails();
+
+
 
 
 }

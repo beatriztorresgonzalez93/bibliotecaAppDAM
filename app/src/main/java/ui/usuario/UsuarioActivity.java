@@ -1,4 +1,4 @@
-package com.DAM.bibliotecaapp;
+package ui.usuario;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,11 +9,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import androidx.appcompat.widget.SearchView;
 
+import data.db.AppDatabase;
+import com.DAM.bibliotecaapp.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import data.entities.Usuario;
 
 public class UsuarioActivity extends AppCompatActivity {
 

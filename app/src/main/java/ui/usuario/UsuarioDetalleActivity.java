@@ -1,4 +1,4 @@
-package com.DAM.bibliotecaapp;
+package ui.usuario;
 
 import android.os.Bundle;
 import android.view.View;
@@ -8,15 +8,25 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import data.db.AppDatabase;
+import com.DAM.bibliotecaapp.R;
+
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import data.entities.Usuario;
+import ui.prestamo.PrestamoInfo;
+import ui.prestamo.PrestamoInfoAdapter;
 
 public class UsuarioDetalleActivity extends AppCompatActivity {
 
     private AppDatabase db;
 
     private TextView tvSinPrestamos;
+
+    private int usuarioId;
+
 
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
@@ -45,7 +55,8 @@ public class UsuarioDetalleActivity extends AppCompatActivity {
 
         rv.setAdapter(adapter);
 
-        int usuarioId = getIntent().getIntExtra("usuario_id", -1);
+        usuarioId = getIntent().getIntExtra("usuario_id", -1);
+
 
         if (usuarioId == -1) {
             tvNombre.setText("Error: usuario no recibido");
@@ -93,5 +104,13 @@ public class UsuarioDetalleActivity extends AppCompatActivity {
 
             });
         });
+
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (usuarioId != -1) cargarDatos(usuarioId);
+    }
+
 }
