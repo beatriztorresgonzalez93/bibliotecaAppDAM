@@ -20,11 +20,33 @@ public class LibrosActivity extends AppCompatActivity {
     private RecyclerView rvLibros;
     private AppDatabase db;
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
+    private androidx.appcompat.widget.SearchView svLibros;
+    private String queryActual = "";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_libros);
+
+        svLibros = findViewById(R.id.svLibros);
+
+        svLibros.setOnQueryTextListener(new androidx.appcompat.widget.SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                queryActual = query == null ? "" : query.trim();
+                cargarLibros();
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                queryActual = newText == null ? "" : newText.trim();
+                cargarLibros();
+                return true;
+            }
+        });
+
 
         rvLibros = findViewById(R.id.rvLibros);
         rvLibros.setLayoutManager(new LinearLayoutManager(this));
@@ -37,7 +59,14 @@ public class LibrosActivity extends AppCompatActivity {
 
     private void cargarLibros() {
         executor.execute(() -> {
-            List<Libro> libros = db.libroDao().getAll();
+            List<Libro> libros;
+
+            if (queryActual.isEmpty()) {
+                libros = db.libroDao().getAll();
+            } else {
+                String q = "%" + queryActual + "%";
+                libros = db.libroDao().search(q);
+            }
 
             runOnUiThread(() -> {
                 LibroAdapter adapter = new LibroAdapter(db, libros);
@@ -45,6 +74,7 @@ public class LibrosActivity extends AppCompatActivity {
             });
         });
     }
+
 
     @Override
     protected void onResume() {

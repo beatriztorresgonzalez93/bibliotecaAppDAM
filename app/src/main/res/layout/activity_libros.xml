@@ -12,6 +12,14 @@
         android:textSize="22sp"
         android:layout_marginBottom="12dp" />
 
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/svLibros"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:iconifiedByDefault="false"
+        android:queryHint="Buscar por título, autor o ISBN" />
+
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvLibros"
         android:layout_width="match_parent"
