@@ -51,9 +51,12 @@ public class PrestamoActivity extends AppCompatActivity {
 
     private void cargarPrestamos() {
         executor.execute(() -> {
+            db.prestamoDao().marcarVencidos(System.currentTimeMillis());
+
             List<PrestamoGlobal> lista = db.prestamoDao().getPrestamosActivosGlobal();
             runOnUiThread(() -> adapter.setData(lista));
         });
+
     }
 
     private void mostrarDialogoDevolucion(int idPrestamo) {

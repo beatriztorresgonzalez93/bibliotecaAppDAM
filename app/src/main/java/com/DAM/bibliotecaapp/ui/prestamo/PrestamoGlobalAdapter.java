@@ -64,6 +64,30 @@ public class PrestamoGlobalAdapter extends RecyclerView.Adapter<PrestamoGlobalAd
                 + " · Ejemplar: " + p.codigoInventario
                 + " · Vence: " + fVence
                 + " · " + p.estado);
+
+        h.tvEstado.setText(p.estado);
+
+        if ("VENCIDO".equals(p.estado)) {
+            h.tvEstado.setTextColor(h.itemView.getResources().getColor(R.color.estado_vencido));
+        } else if ("ACTIVO".equals(p.estado)) {
+            h.tvEstado.setTextColor(h.itemView.getResources().getColor(R.color.estado_activo));
+        } else if ("DEVUELTO".equals(p.estado)) {
+            h.tvEstado.setTextColor(h.itemView.getResources().getColor(R.color.estado_devuelto));
+        } else {
+            // por si aparece otro estado inesperado
+            h.tvEstado.setTextColor(h.itemView.getResources().getColor(android.R.color.black));
+        }
+
+        if ("VENCIDO".equals(p.estado)) {
+            h.container.setBackgroundColor(h.itemView.getResources().getColor(R.color.fondo_vencido));
+        } else {
+            h.container.setBackgroundColor(h.itemView.getResources().getColor(android.R.color.transparent));
+        }
+
+
+
+
+
     }
 
     @Override
@@ -73,10 +97,18 @@ public class PrestamoGlobalAdapter extends RecyclerView.Adapter<PrestamoGlobalAd
 
     static class VH extends RecyclerView.ViewHolder {
         TextView tvLinea1, tvLinea2;
+        TextView tvEstado;
+
+        View container;
+
         VH(@NonNull View itemView) {
             super(itemView);
             tvLinea1 = itemView.findViewById(R.id.tvLinea1);
             tvLinea2 = itemView.findViewById(R.id.tvLinea2);
+            tvEstado = itemView.findViewById(R.id.tvEstado);
+            container = itemView.findViewById(R.id.container);
+
+
         }
     }
 }

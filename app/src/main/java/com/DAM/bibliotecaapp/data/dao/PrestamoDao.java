@@ -73,6 +73,13 @@ public interface PrestamoDao {
     )
     List<PrestamoGlobal> getPrestamosActivosGlobal();
 
+    @Query("UPDATE prestamo SET estado = 'VENCIDO' " +
+            "WHERE fechaVencimiento < :ahora " +
+            "AND fechaDevolucion IS NULL " +
+            "AND estado = 'ACTIVO'")
+    int marcarVencidos(long ahora);
+
+
 
 
 
