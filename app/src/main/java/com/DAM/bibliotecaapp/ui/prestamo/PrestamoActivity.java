@@ -1,16 +1,18 @@
 package com.DAM.bibliotecaapp.ui.prestamo;
 
 import android.os.Bundle;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.app.AlertDialog;
-import android.widget.Toast;
 
-
-import com.DAM.bibliotecaapp.data.db.AppDatabase;
 import com.DAM.bibliotecaapp.R;
+import com.DAM.bibliotecaapp.data.db.AppDatabase;
 import com.DAM.bibliotecaapp.data.pojo.PrestamoGlobal;
 
 import java.util.List;
@@ -24,22 +26,46 @@ public class PrestamoActivity extends AppCompatActivity {
 
     private PrestamoGlobalAdapter adapter;
 
+    private Spinner spFiltro;
+    private String filtroActual = "Todos";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_prestamo);
+        setContentView(R.layout.activity_prestamo); // <- revisa si tu layout se llama distinto
 
         db = AppDatabase.getInstance(this);
 
-        RecyclerView rv = findViewById(R.id.rvPrestamos);
+        // 1) Recycler
+        RecyclerView rv = findViewById(R.id.rvPrestamos); // <- revisa si tu id se llama distinto
         rv.setLayoutManager(new LinearLayoutManager(this));
 
-        adapter = new PrestamoGlobalAdapter(prestamo -> {
-            mostrarDialogoDevolucion(prestamo.idPrestamo);
-        });
+        adapter = new PrestamoGlobalAdapter(prestamo -> mostrarDialogoDevolucion(prestamo.idPrestamo));
         rv.setAdapter(adapter);
 
+        // 2) Spinner filtro
+        spFiltro = findViewById(R.id.spFiltroPrestamos); // <- asegúrate de añadir este Spinner al XML
 
+        ArrayAdapter<String> filtroAdapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_spinner_item,
+                new String[]{"Todos", "Activos", "Vencidos"}
+        );
+        filtroAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spFiltro.setAdapter(filtroAdapter);
+
+        spFiltro.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, android.view.View view, int position, long id) {
+                filtroActual = parent.getItemAtPosition(position).toString();
+                cargarPrestamos();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+
+        // Primera carga
         cargarPrestamos();
     }
 
@@ -51,12 +77,20 @@ public class PrestamoActivity extends AppCompatActivity {
 
     private void cargarPrestamos() {
         executor.execute(() -> {
+            // Marca vencidos automáticamente
             db.prestamoDao().marcarVencidos(System.currentTimeMillis());
 
-            List<PrestamoGlobal> lista = db.prestamoDao().getPrestamosActivosGlobal();
+            List<PrestamoGlobal> lista;
+            if ("Activos".equals(filtroActual)) {
+                lista = db.prestamoDao().getPrestamosSoloActivosGlobal();
+            } else if ("Vencidos".equals(filtroActual)) {
+                lista = db.prestamoDao().getPrestamosVencidosGlobal();
+            } else {
+                lista = db.prestamoDao().getPrestamosNoDevueltosGlobal();
+            }
+
             runOnUiThread(() -> adapter.setData(lista));
         });
-
     }
 
     private void mostrarDialogoDevolucion(int idPrestamo) {
@@ -67,6 +101,7 @@ public class PrestamoActivity extends AppCompatActivity {
                 .setPositiveButton("Devolver", (d, w) -> devolverPrestamo(idPrestamo))
                 .show();
     }
+
     private void devolverPrestamo(int idPrestamo) {
         executor.execute(() -> {
             long ahora = System.currentTimeMillis();
@@ -79,9 +114,8 @@ public class PrestamoActivity extends AppCompatActivity {
 
             runOnUiThread(() -> {
                 Toast.makeText(this, "Devolución registrada", Toast.LENGTH_SHORT).show();
-                cargarPrestamos(); // refresca lista global
+                cargarPrestamos();
             });
         });
     }
-
 }

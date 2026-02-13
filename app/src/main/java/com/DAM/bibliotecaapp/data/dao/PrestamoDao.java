@@ -21,6 +21,7 @@ public interface PrestamoDao {
 
     @Query("SELECT COUNT(*) FROM prestamo WHERE idEjemplar = :idEjemplar AND estado = 'ACTIVO'")
     int ejemplarPrestadoActivo(int idEjemplar);
+
     @Query("SELECT COUNT(*) FROM prestamo WHERE idUsuario = :idUsuario AND fechaDevolucion IS NULL")
     int countActivosByUsuario(int idUsuario);
 
@@ -33,6 +34,7 @@ public interface PrestamoDao {
     @Query("UPDATE prestamo SET fechaDevolucion = :fechaDev, estado = 'DEVUELTO' WHERE id = :idPrestamo")
     int marcarDevuelto(int idPrestamo, long fechaDev);
 
+    // --------- DETALLE USUARIO: activos con info del libro/ejemplar ---------
 
     @Query(
             "SELECT " +
@@ -47,12 +49,23 @@ public interface PrestamoDao {
                     "  p.estado AS estado " +
                     "FROM prestamo p " +
                     "JOIN ejemplar e ON e.id = p.idEjemplar " +
-                    "JOIN Libro l ON l.id = e.idLibro " +
+                    "JOIN libro l ON l.id = e.idLibro " +
                     "WHERE p.idUsuario = :idUsuario AND p.fechaDevolucion IS NULL " +
                     "ORDER BY p.fechaPrestamo DESC"
     )
     List<PrestamoInfo> getActivosInfoByUsuario(int idUsuario);
 
+    // --------- VENCIDOS AUTOMÁTICOS ---------
+
+    @Query("UPDATE prestamo SET estado = 'VENCIDO' " +
+            "WHERE fechaVencimiento < :ahora " +
+            "AND fechaDevolucion IS NULL " +
+            "AND estado = 'ACTIVO'")
+    int marcarVencidos(long ahora);
+
+    // --------- LISTA GLOBAL (para filtros) ---------
+
+    // TODOS (no devueltos): ACTIVO + VENCIDO
     @Query(
             "SELECT " +
                     " p.id AS idPrestamo, " +
@@ -71,17 +84,47 @@ public interface PrestamoDao {
                     "WHERE p.fechaDevolucion IS NULL " +
                     "ORDER BY p.fechaVencimiento ASC"
     )
-    List<PrestamoGlobal> getPrestamosActivosGlobal();
+    List<PrestamoGlobal> getPrestamosNoDevueltosGlobal();
 
-    @Query("UPDATE prestamo SET estado = 'VENCIDO' " +
-            "WHERE fechaVencimiento < :ahora " +
-            "AND fechaDevolucion IS NULL " +
-            "AND estado = 'ACTIVO'")
-    int marcarVencidos(long ahora);
+    // SOLO VENCIDOS
+    @Query(
+            "SELECT " +
+                    " p.id AS idPrestamo, " +
+                    " l.titulo AS titulo, " +
+                    " l.autor AS autor, " +
+                    " u.nombre AS nombreUsuario, " +
+                    " u.email AS emailUsuario, " +
+                    " e.codigoInventario AS codigoInventario, " +
+                    " p.fechaPrestamo AS fechaPrestamo, " +
+                    " p.fechaVencimiento AS fechaVencimiento, " +
+                    " p.estado AS estado " +
+                    "FROM prestamo p " +
+                    "JOIN ejemplar e ON e.id = p.idEjemplar " +
+                    "JOIN libro l ON l.id = e.idLibro " +
+                    "JOIN Usuario u ON u.id = p.idUsuario " +
+                    "WHERE p.fechaDevolucion IS NULL AND p.estado = 'VENCIDO' " +
+                    "ORDER BY p.fechaVencimiento ASC"
+    )
+    List<PrestamoGlobal> getPrestamosVencidosGlobal();
 
-
-
-
-
-
+    // SOLO ACTIVOS
+    @Query(
+            "SELECT " +
+                    " p.id AS idPrestamo, " +
+                    " l.titulo AS titulo, " +
+                    " l.autor AS autor, " +
+                    " u.nombre AS nombreUsuario, " +
+                    " u.email AS emailUsuario, " +
+                    " e.codigoInventario AS codigoInventario, " +
+                    " p.fechaPrestamo AS fechaPrestamo, " +
+                    " p.fechaVencimiento AS fechaVencimiento, " +
+                    " p.estado AS estado " +
+                    "FROM prestamo p " +
+                    "JOIN ejemplar e ON e.id = p.idEjemplar " +
+                    "JOIN libro l ON l.id = e.idLibro " +
+                    "JOIN Usuario u ON u.id = p.idUsuario " +
+                    "WHERE p.fechaDevolucion IS NULL AND p.estado = 'ACTIVO' " +
+                    "ORDER BY p.fechaVencimiento ASC"
+    )
+    List<PrestamoGlobal> getPrestamosSoloActivosGlobal();
 }
