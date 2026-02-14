@@ -8,36 +8,27 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.DAM.bibliotecaapp.data.db.AppDatabase;
 import com.DAM.bibliotecaapp.R;
+import com.DAM.bibliotecaapp.data.db.AppDatabase;
+import com.DAM.bibliotecaapp.data.entities.Usuario;
+import com.DAM.bibliotecaapp.data.pojo.PrestamoInfo;
+import com.DAM.bibliotecaapp.ui.prestamo.PrestamoInfoAdapter;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import com.DAM.bibliotecaapp.data.entities.Usuario;
-import com.DAM.bibliotecaapp.data.pojo.PrestamoInfo;
-import com.DAM.bibliotecaapp.ui.prestamo.PrestamoInfoAdapter;
-import com.DAM.bibliotecaapp.data.pojo.PrestamoInfo;
-
-
-
-import androidx.appcompat.app.AlertDialog;
-
-
 public class UsuarioDetalleActivity extends AppCompatActivity {
 
     private AppDatabase db;
-
-    private TextView tvSinPrestamos;
+    private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
     private int usuarioId;
 
-
-    private final ExecutorService executor = Executors.newSingleThreadExecutor();
-
-    private TextView tvNombre, tvEmail, tvRol, tvPrestamosActivos;
+    private TextView tvNombre, tvEmail, tvRol, tvPrestamosActivos, tvSinPrestamos;
     private PrestamoInfoAdapter adapter;
+
+    public static final String EXTRA_USUARIO_ID = "usuarioId";
 
 
     @Override
@@ -53,18 +44,16 @@ public class UsuarioDetalleActivity extends AppCompatActivity {
         tvPrestamosActivos = findViewById(R.id.tvPrestamosActivos);
         tvSinPrestamos = findViewById(R.id.tvSinPrestamos);
 
-
         RecyclerView rv = findViewById(R.id.rvPrestamosActivos);
         rv.setLayoutManager(new LinearLayoutManager(this));
 
-        adapter = new PrestamoInfoAdapter(prestamoInfo -> {
-            mostrarDialogoDevolucion(prestamoInfo.idPrestamo);
-        });
+        adapter = new PrestamoInfoAdapter(prestamoInfo ->
+                mostrarDialogoDevolucion(prestamoInfo.idPrestamo)
+        );
         rv.setAdapter(adapter);
 
-
-
-        usuarioId = getIntent().getIntExtra("usuario_id", -1);
+        // OJO: clave consistente "usuarioId"
+        usuarioId = getIntent().getIntExtra(EXTRA_USUARIO_ID, -1);
 
 
         if (usuarioId == -1) {
@@ -76,20 +65,30 @@ public class UsuarioDetalleActivity extends AppCompatActivity {
     }
 
     private void cargarDatos(int usuarioId) {
-
         executor.execute(() -> {
+            // 1) Actualiza vencidos antes de leer
+            db.prestamoDao().marcarVencidos(System.currentTimeMillis());
 
             Usuario usuario = db.usuarioDao().getById(usuarioId);
 
-            int prestamosActivos =
-                    db.prestamoDao().countActivosByUsuario(usuarioId);
+            // 2) Lista NO DEVUELTOS (activos + vencidos)
+            List<PrestamoInfo> lista = db.prestamoDao().getNoDevueltosByUsuario(usuarioId);
 
-            List<PrestamoInfo> listaActivos = db.prestamoDao().getActivosInfoByUsuario(usuarioId);
-            adapter.setData(listaActivos);
+            // 3) Contadores
+            int activos = 0;
+            int vencidos = 0;
 
+            if (lista != null) {
+                for (PrestamoInfo p : lista) {
+                    if ("VENCIDO".equals(p.estado)) vencidos++;
+                    else activos++;
+                }
+            }
+
+            int finalActivos = activos;
+            int finalVencidos = vencidos;
 
             runOnUiThread(() -> {
-
                 if (usuario == null) {
                     tvNombre.setText("Usuario no encontrado");
                     return;
@@ -99,21 +98,18 @@ public class UsuarioDetalleActivity extends AppCompatActivity {
                 tvEmail.setText(usuario.email);
                 tvRol.setText("Rol: " + usuario.rol);
 
-                tvPrestamosActivos.setText(
-                        "Préstamos activos: " + prestamosActivos
-                );
+                // Aquí ya puedes mostrar ambos si quieres:
+                tvPrestamosActivos.setText("Activos: " + finalActivos + " · Vencidos: " + finalVencidos);
 
-                adapter.setData(listaActivos);
+                adapter.setData(lista);
 
-                if (listaActivos == null || listaActivos.isEmpty()) {
+                if (lista == null || lista.isEmpty()) {
                     tvSinPrestamos.setVisibility(View.VISIBLE);
                 } else {
                     tvSinPrestamos.setVisibility(View.GONE);
                 }
-
             });
         });
-
     }
 
     @Override
@@ -121,6 +117,7 @@ public class UsuarioDetalleActivity extends AppCompatActivity {
         super.onResume();
         if (usuarioId != -1) cargarDatos(usuarioId);
     }
+
     private void mostrarDialogoDevolucion(int idPrestamo) {
         new androidx.appcompat.app.AlertDialog.Builder(this)
                 .setTitle("Confirmar devolución")
@@ -129,6 +126,7 @@ public class UsuarioDetalleActivity extends AppCompatActivity {
                 .setPositiveButton("Devolver", (d, w) -> devolverPrestamo(idPrestamo))
                 .show();
     }
+
     private void devolverPrestamo(int idPrestamo) {
         executor.execute(() -> {
             long ahora = System.currentTimeMillis();
@@ -141,9 +139,8 @@ public class UsuarioDetalleActivity extends AppCompatActivity {
 
             runOnUiThread(() -> {
                 android.widget.Toast.makeText(this, "Devolución registrada", android.widget.Toast.LENGTH_SHORT).show();
-                cargarDatos(usuarioId); // refresca el detalle del usuario
+                cargarDatos(usuarioId);
             });
         });
     }
-
 }

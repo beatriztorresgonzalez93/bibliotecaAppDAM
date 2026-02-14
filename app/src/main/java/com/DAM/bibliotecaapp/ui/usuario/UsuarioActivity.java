@@ -13,6 +13,7 @@ import com.DAM.bibliotecaapp.data.db.AppDatabase;
 import com.DAM.bibliotecaapp.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -38,11 +39,13 @@ public class UsuarioActivity extends AppCompatActivity {
 
         rv.setLayoutManager(new LinearLayoutManager(this));
 
+        // ✅ Adapter con lista vacía al inicio
         adapter = new UsuarioAdapter(u -> {
-            Intent intent = new Intent(UsuarioActivity.this, UsuarioDetalleActivity.class);
-            intent.putExtra("usuario_id", u.id);
-            startActivity(intent);
+            Intent i = new Intent(UsuarioActivity.this, UsuarioDetalleActivity.class);
+            i.putExtra("usuarioId", u.id);
+            startActivity(i);
         });
+        rv.setAdapter(adapter);
 
 
         rv.setAdapter(adapter);
@@ -63,7 +66,6 @@ public class UsuarioActivity extends AppCompatActivity {
             // Próximo paso: crear usuario
         });
     }
-
 
     private void cargarUsuarios() {
         executor.execute(() -> {

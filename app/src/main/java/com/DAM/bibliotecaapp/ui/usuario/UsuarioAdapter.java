@@ -21,7 +21,7 @@ public class UsuarioAdapter extends RecyclerView.Adapter<UsuarioAdapter.VH> {
         void onClick(Usuario u);
     }
 
-    private List<Usuario> data = new ArrayList<>();  // ← ESTA ES LA VARIABLE QUE FALTABA
+    private List<Usuario> data = new ArrayList<>();
     private final OnUsuarioClickListener listener;
 
     public UsuarioAdapter(OnUsuarioClickListener listener) {
@@ -30,9 +30,7 @@ public class UsuarioAdapter extends RecyclerView.Adapter<UsuarioAdapter.VH> {
 
     public void setData(List<Usuario> list) {
         data.clear();
-        if (list != null) {
-            data.addAll(list);
-        }
+        if (list != null) data.addAll(list);
         notifyDataSetChanged();
     }
 
@@ -47,10 +45,8 @@ public class UsuarioAdapter extends RecyclerView.Adapter<UsuarioAdapter.VH> {
     @Override
     public void onBindViewHolder(@NonNull VH holder, int position) {
         Usuario u = data.get(position);
-
         holder.tvNombre.setText(u.nombre);
         holder.tvEmail.setText(u.email);
-
         holder.itemView.setOnClickListener(v -> listener.onClick(u));
     }
 
@@ -60,9 +56,7 @@ public class UsuarioAdapter extends RecyclerView.Adapter<UsuarioAdapter.VH> {
     }
 
     static class VH extends RecyclerView.ViewHolder {
-
-        TextView tvNombre;
-        TextView tvEmail;
+        TextView tvNombre, tvEmail;
 
         public VH(@NonNull View itemView) {
             super(itemView);

@@ -1,5 +1,6 @@
 package com.DAM.bibliotecaapp.ui.prestamo;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,6 +51,18 @@ public class PrestamoInfoAdapter extends RecyclerView.Adapter<PrestamoInfoAdapte
     public void onBindViewHolder(@NonNull VH h, int position) {
         PrestamoInfo p = data.get(position);
 
+        boolean esVencido = "VENCIDO".equals(p.estado);
+
+        if (esVencido) {
+            h.tvEstado.setText("VENCIDO");
+            h.tvEstado.setTextColor(Color.RED);
+            h.container.setBackgroundColor(Color.parseColor("#FFEBEE")); // rojo suave
+        } else {
+            h.tvEstado.setText("ACTIVO");
+            h.tvEstado.setTextColor(Color.parseColor("#2E7D32")); // verde
+            h.container.setBackgroundColor(Color.TRANSPARENT);
+        }
+
         String fPrestamo = sdf.format(new Date(p.fechaPrestamo));
         String fVence = sdf.format(new Date(p.fechaVencimiento));
 
@@ -59,6 +72,7 @@ public class PrestamoInfoAdapter extends RecyclerView.Adapter<PrestamoInfoAdapte
         h.btnDevolver.setOnClickListener(v -> {
             if (listener != null) listener.onDevolverClick(p);
         });
+
     }
 
     @Override
@@ -67,13 +81,16 @@ public class PrestamoInfoAdapter extends RecyclerView.Adapter<PrestamoInfoAdapte
     }
 
     static class VH extends RecyclerView.ViewHolder {
-        TextView tvLinea1, tvLinea2;
+        TextView tvLinea1, tvLinea2; TextView tvEstado; View container;
+
         Button btnDevolver;
 
         VH(@NonNull View itemView) {
             super(itemView);
             tvLinea1 = itemView.findViewById(R.id.tvLinea1);
             tvLinea2 = itemView.findViewById(R.id.tvLinea2);
+            tvEstado = itemView.findViewById(R.id.tvEstado);
+            container = itemView.findViewById(R.id.container);
             btnDevolver = itemView.findViewById(R.id.btnDevolver);
         }
     }

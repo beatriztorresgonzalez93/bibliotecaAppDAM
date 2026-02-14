@@ -135,5 +135,25 @@ public interface PrestamoDao {
             "AND estado = 'ACTIVO'")
     int ampliarPlazo(int idPrestamo, long msExtra);
 
+    @Query(
+            "SELECT " +
+                    "  p.id AS idPrestamo, " +
+                    "  p.idEjemplar AS idEjemplar, " +          // 👈 AÑADIDO
+                    "  l.id AS idLibro, " +                      // 👈 AÑADIDO
+                    "  l.titulo AS titulo, " +
+                    "  l.autor AS autor, " +
+                    "  e.codigoInventario AS codigoInventario, " +
+                    "  p.fechaPrestamo AS fechaPrestamo, " +
+                    "  p.fechaVencimiento AS fechaVencimiento, " +
+                    "  p.estado AS estado " +
+                    "FROM prestamo p " +
+                    "JOIN ejemplar e ON e.id = p.idEjemplar " +
+                    "JOIN libro l ON l.id = e.idLibro " +
+                    "WHERE p.idUsuario = :idUsuario " +
+                    "AND p.fechaDevolucion IS NULL " +
+                    "ORDER BY p.fechaVencimiento ASC"
+    )
+    List<PrestamoInfo> getNoDevueltosByUsuario(int idUsuario);
+
 
 }
