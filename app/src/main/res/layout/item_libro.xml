@@ -28,6 +28,18 @@
         android:layout_marginTop="2dp" />
 
     <TextView
+        android:id="@+id/tvEditorial"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp" />
+
+    <TextView
+        android:id="@+id/tvGenero"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp" />
+
+    <TextView
         android:id="@+id/tvDisponibles"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -40,6 +52,9 @@
         android:layout_height="wrap_content"
         android:text="Prestar"
         android:layout_marginTop="8dp"/>
+
+
+
 
 
 </LinearLayout>

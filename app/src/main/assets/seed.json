@@ -611,2502 +611,3502 @@
     {
       "isbn": "9789971540456",
       "titulo": "Cien años de soledad",
-      "autor": "Gabriel García Márquez"
+      "autor": "Gabriel García Márquez",
+      "genero": "Realismo mágico",
+      "editorial": "Editorial Sudamericana"
     },
     {
       "isbn": "9784989046129",
       "titulo": "Don Quijote de la Mancha",
-      "autor": "Miguel de Cervantes"
+      "autor": "Miguel de Cervantes",
+      "genero": "Clásico",
+      "editorial": "Cátedra"
     },
     {
       "isbn": "9788536027067",
       "titulo": "Rayuela",
-      "autor": "Julio Cortázar"
+      "autor": "Julio Cortázar",
+      "genero": "Literatura contemporánea",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9781018332253",
       "titulo": "Pedro Páramo",
-      "autor": "Juan Rulfo"
+      "autor": "Juan Rulfo",
+      "genero": "Realismo mágico",
+      "editorial": "Fondo de Cultura Económica"
     },
     {
       "isbn": "9781508502395",
       "titulo": "La casa de los espíritus",
-      "autor": "Isabel Allende"
+      "autor": "Isabel Allende",
+      "genero": "Realismo mágico",
+      "editorial": "Plaza & Janés"
     },
     {
       "isbn": "9785461584115",
       "titulo": "1984",
-      "autor": "George Orwell"
+      "autor": "George Orwell",
+      "genero": "Distopía",
+      "editorial": "Debolsillo"
     },
     {
       "isbn": "9783663523666",
       "titulo": "Rebelión en la granja",
-      "autor": "George Orwell"
+      "autor": "George Orwell",
+      "genero": "Sátira política",
+      "editorial": "Debolsillo"
     },
     {
       "isbn": "9787092074881",
       "titulo": "Un mundo feliz",
-      "autor": "Aldous Huxley"
+      "autor": "Aldous Huxley",
+      "genero": "Distopía",
+      "editorial": "Debolsillo"
     },
     {
       "isbn": "9788850800216",
       "titulo": "Fahrenheit 451",
-      "autor": "Ray Bradbury"
+      "autor": "Ray Bradbury",
+      "genero": "Ciencia ficción",
+      "editorial": "Minotauro"
     },
     {
       "isbn": "9780502366170",
       "titulo": "El gran Gatsby",
-      "autor": "F. Scott Fitzgerald"
+      "autor": "F. Scott Fitzgerald",
+      "genero": "Clásico",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9783656498797",
       "titulo": "Matar a un ruiseñor",
-      "autor": "Harper Lee"
+      "autor": "Harper Lee",
+      "genero": "Clásico",
+      "editorial": "HarperCollins"
     },
     {
       "isbn": "9789759509064",
       "titulo": "Orgullo y prejuicio",
-      "autor": "Jane Austen"
+      "autor": "Jane Austen",
+      "genero": "Clásico",
+      "editorial": "Penguin Clásicos"
     },
     {
       "isbn": "9788724784895",
       "titulo": "Crimen y castigo",
-      "autor": "Fiódor Dostoievski"
+      "autor": "Fiódor Dostoievski",
+      "genero": "Clásico",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9782324597732",
       "titulo": "Los hermanos Karamázov",
-      "autor": "Fiódor Dostoievski"
+      "autor": "Fiódor Dostoievski",
+      "genero": "Clásico",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9786165725767",
       "titulo": "Anna Karénina",
-      "autor": "León Tolstói"
+      "autor": "León Tolstói",
+      "genero": "Clásico",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9785685313171",
       "titulo": "Guerra y paz",
-      "autor": "León Tolstói"
+      "autor": "León Tolstói",
+      "genero": "Clásico",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9789839464207",
       "titulo": "Madame Bovary",
-      "autor": "Gustave Flaubert"
+      "autor": "Gustave Flaubert",
+      "genero": "Clásico",
+      "editorial": "Cátedra"
     },
     {
       "isbn": "9787364594659",
       "titulo": "Los miserables",
-      "autor": "Victor Hugo"
+      "autor": "Victor Hugo",
+      "genero": "Clásico",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9787632102708",
       "titulo": "Drácula",
-      "autor": "Bram Stoker"
+      "autor": "Bram Stoker",
+      "genero": "Terror gótico",
+      "editorial": "Valdemar"
     },
     {
       "isbn": "9787031721883",
       "titulo": "Frankenstein",
-      "autor": "Mary Shelley"
+      "autor": "Mary Shelley",
+      "genero": "Terror gótico",
+      "editorial": "Valdemar"
     },
     {
       "isbn": "9782679512732",
       "titulo": "El retrato de Dorian Gray",
-      "autor": "Oscar Wilde"
+      "autor": "Oscar Wilde",
+      "genero": "Clásico",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9786187847096",
       "titulo": "El señor de los anillos",
-      "autor": "J.R.R. Tolkien"
+      "autor": "J.R.R. Tolkien",
+      "genero": "Fantasía épica",
+      "editorial": "Minotauro"
     },
     {
       "isbn": "9781954036819",
       "titulo": "El hobbit",
-      "autor": "J.R.R. Tolkien"
+      "autor": "J.R.R. Tolkien",
+      "genero": "Fantasía épica",
+      "editorial": "Minotauro"
     },
     {
       "isbn": "9781566450591",
       "titulo": "Harry Potter y la piedra filosofal",
-      "autor": "J.K. Rowling"
+      "autor": "J.K. Rowling",
+      "genero": "Fantasía juvenil",
+      "editorial": "Salamandra"
     },
     {
       "isbn": "9780167995227",
       "titulo": "Los juegos del hambre",
-      "autor": "Suzanne Collins"
+      "autor": "Suzanne Collins",
+      "genero": "Distopía juvenil",
+      "editorial": "RBA Molino"
     },
     {
       "isbn": "9784281085239",
       "titulo": "Dune",
-      "autor": "Frank Herbert"
+      "autor": "Frank Herbert",
+      "genero": "Ciencia ficción",
+      "editorial": "Nova"
     },
     {
       "isbn": "9780813393612",
       "titulo": "Fundación",
-      "autor": "Isaac Asimov"
+      "autor": "Isaac Asimov",
+      "genero": "Ciencia ficción",
+      "editorial": "Debolsillo"
     },
     {
       "isbn": "9783787166220",
       "titulo": "El nombre de la rosa",
-      "autor": "Umberto Eco"
+      "autor": "Umberto Eco",
+      "genero": "Misterio histórico",
+      "editorial": "Lumen"
     },
     {
       "isbn": "9789208855735",
       "titulo": "El perfume",
-      "autor": "Patrick Süskind"
+      "autor": "Patrick Süskind",
+      "genero": "Thriller",
+      "editorial": "Seix Barral"
     },
     {
       "isbn": "9788182728820",
       "titulo": "La sombra del viento",
-      "autor": "Carlos Ruiz Zafón"
+      "autor": "Carlos Ruiz Zafón",
+      "genero": "Misterio",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9780872249417",
       "titulo": "El código Da Vinci",
-      "autor": "Dan Brown"
+      "autor": "Dan Brown",
+      "genero": "Thriller",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9781588386083",
       "titulo": "Los pilares de la Tierra",
-      "autor": "Ken Follett"
+      "autor": "Ken Follett",
+      "genero": "Novela histórica",
+      "editorial": "Plaza & Janés"
     },
     {
       "isbn": "9787022382451",
       "titulo": "El alquimista",
-      "autor": "Paulo Coelho"
+      "autor": "Paulo Coelho",
+      "genero": "Ficción espiritual",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9787267338664",
       "titulo": "La carretera",
-      "autor": "Cormac McCarthy"
+      "autor": "Cormac McCarthy",
+      "genero": "Posapocalíptico",
+      "editorial": "Random House"
     },
     {
       "isbn": "9786771044429",
       "titulo": "El cuento de la criada",
-      "autor": "Margaret Atwood"
+      "autor": "Margaret Atwood",
+      "genero": "Distopía",
+      "editorial": "Salamandra"
     },
     {
       "isbn": "9788520682944",
       "titulo": "Sapiens: De animales a dioses",
-      "autor": "Yuval Noah Harari"
+      "autor": "Yuval Noah Harari",
+      "genero": "Ensayo",
+      "editorial": "Debate"
     },
     {
       "isbn": "9788224002499",
       "titulo": "Cosmos",
-      "autor": "Carl Sagan"
+      "autor": "Carl Sagan",
+      "genero": "Divulgación científica",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9784609606023",
       "titulo": "El arte de la guerra",
-      "autor": "Sun Tzu"
+      "autor": "Sun Tzu",
+      "genero": "Estrategia",
+      "editorial": "Edaf"
     },
     {
       "isbn": "9787680030312",
       "titulo": "Meditaciones",
-      "autor": "Marco Aurelio"
+      "autor": "Marco Aurelio",
+      "genero": "Filosofía estoica",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9783247740502",
       "titulo": "El príncipe",
-      "autor": "Nicolás Maquiavelo"
+      "autor": "Nicolás Maquiavelo",
+      "genero": "Filosofía política",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9780006341345",
       "titulo": "El amor en los tiempos del cólera",
-      "autor": "Gabriel García Márquez"
+      "autor": "Gabriel García Márquez",
+      "genero": "Realismo mágico",
+      "editorial": "Oveja Negra"
     },
     {
       "isbn": "9785827055136",
       "titulo": "Crónica de una muerte anunciada",
-      "autor": "Mario Vargas Llosa"
+      "autor": "Mario Vargas Llosa",
+      "genero": "Realismo mágico",
+      "editorial": "Plaza & Janés"
     },
     {
       "isbn": "9781695947313",
       "titulo": "La fiesta del Chivo",
-      "autor": "Julio Cortázar"
+      "autor": "Julio Cortázar",
+      "genero": "Narrativa",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9789404423684",
       "titulo": "Conversación en La Catedral",
-      "autor": "Jorge Luis Borges"
+      "autor": "Jorge Luis Borges",
+      "genero": "Narrativa",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9786330696557",
       "titulo": "La ciudad y los perros",
-      "autor": "Mario Benedetti"
+      "autor": "Mario Benedetti",
+      "genero": "Narrativa",
+      "editorial": "Debolsillo"
     },
     {
       "isbn": "9788157066711",
       "titulo": "El Aleph",
-      "autor": "Ernesto Sabato"
+      "autor": "Ernesto Sabato",
+      "genero": "Narrativa",
+      "editorial": "Debolsillo"
     },
     {
       "isbn": "9786138747444",
       "titulo": "Ficciones",
-      "autor": "Laura Esquivel"
+      "autor": "Laura Esquivel",
+      "genero": "Narrativa",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9781285597218",
       "titulo": "La tregua",
-      "autor": "Camilo José Cela"
+      "autor": "Camilo José Cela",
+      "genero": "Narrativa",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9780151195879",
       "titulo": "El túnel",
-      "autor": "Leopoldo Alas «Clarín»"
+      "autor": "Leopoldo Alas «Clarín»",
+      "genero": "Narrativa",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9782118387976",
       "titulo": "Sobre héroes y tumbas",
-      "autor": "Fernando de Rojas"
+      "autor": "Fernando de Rojas",
+      "genero": "Narrativa",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9789160986652",
       "titulo": "Como agua para chocolate",
-      "autor": "Antonio Machado"
+      "autor": "Antonio Machado",
+      "genero": "Narrativa",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9781070638751",
       "titulo": "La colmena",
-      "autor": "Juan Ramón Jiménez"
+      "autor": "Juan Ramón Jiménez",
+      "genero": "Narrativa",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9786568883170",
       "titulo": "La Regenta",
-      "autor": "Federico García Lorca"
+      "autor": "Federico García Lorca",
+      "genero": "Narrativa",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9780988426672",
       "titulo": "Fortunata y Jacinta",
-      "autor": "Albert Camus"
+      "autor": "Albert Camus",
+      "genero": "Narrativa",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9788527199995",
       "titulo": "La Celestina",
-      "autor": "Jane Austen"
+      "autor": "Jane Austen",
+      "genero": "Clásico",
+      "editorial": "Penguin Clásicos"
     },
     {
       "isbn": "9781510583818",
       "titulo": "Campos de Castilla",
-      "autor": "Emily Brontë"
+      "autor": "Emily Brontë",
+      "genero": "Poesía",
+      "editorial": "Visor"
     },
     {
       "isbn": "9784425312115",
       "titulo": "Platero y yo",
-      "autor": "Louisa May Alcott"
+      "autor": "Louisa May Alcott",
+      "genero": "Narrativa",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9788277491929",
       "titulo": "Bodas de sangre",
-      "autor": "John Steinbeck"
+      "autor": "John Steinbeck",
+      "genero": "Narrativa",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9789179166762",
       "titulo": "La casa de Bernarda Alba",
-      "autor": "Ernest Hemingway"
+      "autor": "Ernest Hemingway",
+      "genero": "Narrativa",
+      "editorial": "Debolsillo"
     },
     {
       "isbn": "9785052496049",
       "titulo": "El extranjero",
-      "autor": "J.D. Salinger"
+      "autor": "J.D. Salinger",
+      "genero": "Narrativa",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9787432305828",
       "titulo": "La peste",
-      "autor": "Herman Melville"
+      "autor": "Herman Melville",
+      "genero": "Narrativa",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9784757796850",
       "titulo": "El mito de Sísifo",
-      "autor": "Mark Twain"
+      "autor": "Mark Twain",
+      "genero": "Filosofía",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9789351352518",
       "titulo": "Jane Eyre",
-      "autor": "Jules Verne"
+      "autor": "Jules Verne",
+      "genero": "Narrativa",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9781434865052",
       "titulo": "Cumbres borrascosas",
-      "autor": "Franz Kafka"
+      "autor": "Franz Kafka",
+      "genero": "Narrativa",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9785090772532",
       "titulo": "Mujercitas",
-      "autor": "James Joyce"
+      "autor": "James Joyce",
+      "genero": "Narrativa",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9783146302597",
       "titulo": "Las uvas de la ira",
-      "autor": "Thomas Mann"
+      "autor": "Thomas Mann",
+      "genero": "Narrativa",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9782315029419",
       "titulo": "De ratones y hombres",
-      "autor": "Günter Grass"
+      "autor": "Günter Grass",
+      "genero": "Narrativa",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9780533617579",
       "titulo": "El viejo y el mar",
-      "autor": "Vladimir Nabokov"
+      "autor": "Vladimir Nabokov",
+      "genero": "Narrativa",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9780742417779",
       "titulo": "Por quién doblan las campanas",
-      "autor": "Toni Morrison"
+      "autor": "Toni Morrison",
+      "genero": "Narrativa",
+      "editorial": "Debolsillo"
     },
     {
       "isbn": "9789127483255",
       "titulo": "El guardián entre el centeno",
-      "autor": "Markus Zusak"
+      "autor": "Markus Zusak",
+      "genero": "Narrativa",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9789651482755",
       "titulo": "Moby Dick",
-      "autor": "Yann Martel"
+      "autor": "Yann Martel",
+      "genero": "Narrativa",
+      "editorial": "Debolsillo"
     },
     {
       "isbn": "9786087455193",
       "titulo": "Las aventuras de Tom Sawyer",
-      "autor": "Mark Haddon"
+      "autor": "Mark Haddon",
+      "genero": "Aventura",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9787648486908",
       "titulo": "Las aventuras de Huckleberry Finn",
-      "autor": "Fernando Aramburu"
+      "autor": "Fernando Aramburu",
+      "genero": "Aventura",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9786908231715",
       "titulo": "Viaje al centro de la Tierra",
-      "autor": "Irene Vallejo"
+      "autor": "Irene Vallejo",
+      "genero": "Aventura",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9780291909602",
       "titulo": "Veinte mil leguas de viaje submarino",
-      "autor": "Gabriel García Márquez"
+      "autor": "Gabriel García Márquez",
+      "genero": "Realismo mágico",
+      "editorial": "Debolsillo"
     },
     {
       "isbn": "9783275457908",
       "titulo": "La vuelta al mundo en ochenta días",
-      "autor": "Mario Vargas Llosa"
+      "autor": "Mario Vargas Llosa",
+      "genero": "Aventura",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9783571200703",
       "titulo": "El proceso",
-      "autor": "Julio Cortázar"
+      "autor": "Julio Cortázar",
+      "genero": "Clásico",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9787857742611",
       "titulo": "La metamorfosis",
-      "autor": "Jorge Luis Borges"
+      "autor": "Jorge Luis Borges",
+      "genero": "Clásico",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9788006919502",
       "titulo": "Ulises",
-      "autor": "Mario Benedetti"
+      "autor": "Mario Benedetti",
+      "genero": "Clásico",
+      "editorial": "Lumen"
     },
     {
       "isbn": "9784675302423",
       "titulo": "La montaña mágica",
-      "autor": "Ernesto Sabato"
+      "autor": "Ernesto Sabato",
+      "genero": "Narrativa",
+      "editorial": "Debolsillo"
     },
     {
       "isbn": "9785552590193",
       "titulo": "El tambor de hojalata",
-      "autor": "Laura Esquivel"
+      "autor": "Laura Esquivel",
+      "genero": "Narrativa",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9786805959958",
       "titulo": "Lolita",
-      "autor": "Camilo José Cela"
+      "autor": "Camilo José Cela",
+      "genero": "Clásico",
+      "editorial": "Anagrama"
     },
     {
       "isbn": "9784998947776",
       "titulo": "Beloved",
-      "autor": "Leopoldo Alas «Clarín»"
+      "autor": "Leopoldo Alas «Clarín»",
+      "genero": "Literatura contemporánea",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9789577926494",
       "titulo": "La ladrona de libros",
-      "autor": "Fernando de Rojas"
+      "autor": "Fernando de Rojas",
+      "genero": "Narrativa histórica",
+      "editorial": "Lumen"
     },
     {
       "isbn": "9785701305258",
       "titulo": "Vida de Pi",
-      "autor": "Antonio Machado"
+      "autor": "Antonio Machado",
+      "genero": "Aventura",
+      "editorial": "Salamandra"
     },
     {
       "isbn": "9786964251436",
       "titulo": "El curioso incidente del perro a medianoche",
-      "autor": "Juan Ramón Jiménez"
+      "autor": "Juan Ramón Jiménez",
+      "genero": "Narrativa contemporánea",
+      "editorial": "Salamandra"
     },
     {
       "isbn": "9783942969529",
       "titulo": "Patria",
-      "autor": "Federico García Lorca"
+      "autor": "Federico García Lorca",
+      "genero": "Narrativa contemporánea",
+      "editorial": "Tusquets"
     },
     {
       "isbn": "9788754454492",
       "titulo": "El infinito en un junco",
-      "autor": "Albert Camus"
+      "autor": "Albert Camus",
+      "genero": "Ensayo",
+      "editorial": "Siruela"
     },
     {
       "isbn": "9790000000001",
       "titulo": "Alas de sangre",
-      "autor": "Rebecca Yarros"
+      "autor": "Rebecca Yarros",
+      "genero": "Fantasía romántica",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000002",
       "titulo": "Hierro en llamas",
-      "autor": "Rebecca Yarros"
+      "autor": "Rebecca Yarros",
+      "genero": "Fantasía romántica",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000003",
       "titulo": "Crepúsculo",
-      "autor": "Stephenie Meyer"
+      "autor": "Stephenie Meyer",
+      "genero": "Romance paranormal",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000004",
       "titulo": "Luna nueva",
-      "autor": "Stephenie Meyer"
+      "autor": "Stephenie Meyer",
+      "genero": "Romance paranormal",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000005",
       "titulo": "Eclipse",
-      "autor": "Stephenie Meyer"
+      "autor": "Stephenie Meyer",
+      "genero": "Romance paranormal",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000006",
       "titulo": "Amanecer",
-      "autor": "Stephenie Meyer"
+      "autor": "Stephenie Meyer",
+      "genero": "Romance paranormal",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000007",
       "titulo": "Sol de medianoche",
-      "autor": "Stephenie Meyer"
+      "autor": "Stephenie Meyer",
+      "genero": "Romance paranormal",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000008",
       "titulo": "En los zapatos de Valeria",
-      "autor": "Elisabeth Benavent"
+      "autor": "Elisabeth Benavent",
+      "genero": "Romance contemporáneo",
+      "editorial": "Suma de Letras"
     },
     {
       "isbn": "9790000000009",
       "titulo": "Valeria en el espejo",
-      "autor": "Elisabeth Benavent"
+      "autor": "Elisabeth Benavent",
+      "genero": "Romance contemporáneo",
+      "editorial": "Suma de Letras"
     },
     {
       "isbn": "9790000000010",
       "titulo": "Valeria en blanco y negro",
-      "autor": "Elisabeth Benavent"
+      "autor": "Elisabeth Benavent",
+      "genero": "Romance contemporáneo",
+      "editorial": "Suma de Letras"
     },
     {
       "isbn": "9790000000011",
       "titulo": "Valeria al desnudo",
-      "autor": "Elisabeth Benavent"
+      "autor": "Elisabeth Benavent",
+      "genero": "Romance contemporáneo",
+      "editorial": "Suma de Letras"
     },
     {
       "isbn": "9790000000012",
       "titulo": "Fuimos canciones",
-      "autor": "Elisabeth Benavent"
+      "autor": "Elisabeth Benavent",
+      "genero": "Romance contemporáneo",
+      "editorial": "Suma de Letras"
     },
     {
       "isbn": "9790000000013",
       "titulo": "Seremos recuerdos",
-      "autor": "Elisabeth Benavent"
+      "autor": "Elisabeth Benavent",
+      "genero": "Romance contemporáneo",
+      "editorial": "Suma de Letras"
     },
     {
       "isbn": "9790000000014",
       "titulo": "Un cuento perfecto",
-      "autor": "Elisabeth Benavent"
+      "autor": "Elisabeth Benavent",
+      "genero": "Romance contemporáneo",
+      "editorial": "Suma de Letras"
     },
     {
       "isbn": "9790000000015",
       "titulo": "Toda la verdad de mis mentiras",
-      "autor": "Elisabeth Benavent"
+      "autor": "Elisabeth Benavent",
+      "genero": "Romance contemporáneo",
+      "editorial": "Suma de Letras"
     },
     {
       "isbn": "9790000000016",
       "titulo": "El arte de engañar al karma",
-      "autor": "Elisabeth Benavent"
+      "autor": "Elisabeth Benavent",
+      "genero": "Romance contemporáneo",
+      "editorial": "Suma de Letras"
     },
     {
       "isbn": "9790000000017",
       "titulo": "Cuando no queden más estrellas que contar",
-      "autor": "María Martínez"
+      "autor": "María Martínez",
+      "genero": "Romance contemporáneo",
+      "editorial": "Suma de Letras"
     },
     {
       "isbn": "9790000000018",
       "titulo": "Tú y otros desastres naturales",
-      "autor": "María Martínez"
+      "autor": "María Martínez",
+      "genero": "Narrativa",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000019",
       "titulo": "La fragilidad de un corazón bajo la lluvia",
-      "autor": "María Martínez"
+      "autor": "María Martínez",
+      "genero": "Romance contemporáneo",
+      "editorial": "Suma de Letras"
     },
     {
       "isbn": "9790000000020",
       "titulo": "Palabras que nunca te dije",
-      "autor": "María Martínez"
+      "autor": "María Martínez",
+      "genero": "Narrativa",
+      "editorial": "Debolsillo"
     },
     {
       "isbn": "9790000000021",
       "titulo": "El día que dejó de nevar en Alaska",
-      "autor": "Alice Kellen"
+      "autor": "Alice Kellen",
+      "genero": "Romance contemporáneo",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000022",
       "titulo": "Nosotros en la luna",
-      "autor": "Alice Kellen"
+      "autor": "Alice Kellen",
+      "genero": "Romance contemporáneo",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000023",
       "titulo": "Todo lo que nunca fuimos",
-      "autor": "Alice Kellen"
+      "autor": "Alice Kellen",
+      "genero": "Romance contemporáneo",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000024",
       "titulo": "Todo lo que somos juntos",
-      "autor": "Alice Kellen"
+      "autor": "Alice Kellen",
+      "genero": "Romance contemporáneo",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000025",
       "titulo": "El mapa de los anhelos",
-      "autor": "Alice Kellen"
+      "autor": "Alice Kellen",
+      "genero": "Romance contemporáneo",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000026",
       "titulo": "Gothikana",
-      "autor": "Runyx"
+      "autor": "Runyx",
+      "genero": "Narrativa",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000027",
       "titulo": "The Predator",
-      "autor": "Runyx"
+      "autor": "Runyx",
+      "genero": "Narrativa",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9790000000028",
       "titulo": "The Reaper",
-      "autor": "Runyx"
+      "autor": "Runyx",
+      "genero": "Narrativa",
+      "editorial": "Debolsillo"
     },
     {
       "isbn": "9790000000029",
       "titulo": "The Emperor",
-      "autor": "Runyx"
+      "autor": "Runyx",
+      "genero": "Narrativa",
+      "editorial": "Debolsillo"
     },
     {
       "isbn": "9790000000030",
       "titulo": "The Finisher",
-      "autor": "Runyx"
+      "autor": "Runyx",
+      "genero": "Narrativa",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000031",
       "titulo": "Romper el círculo",
-      "autor": "Colleen Hoover"
+      "autor": "Colleen Hoover",
+      "genero": "Romance contemporáneo",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000032",
       "titulo": "Volver a empezar",
-      "autor": "Colleen Hoover"
+      "autor": "Colleen Hoover",
+      "genero": "Romance contemporáneo",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000033",
       "titulo": "Verity",
-      "autor": "Colleen Hoover"
+      "autor": "Colleen Hoover",
+      "genero": "Romance contemporáneo",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000034",
       "titulo": "Ugly Love",
-      "autor": "Colleen Hoover"
+      "autor": "Colleen Hoover",
+      "genero": "Romance contemporáneo",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000035",
       "titulo": "Confess",
-      "autor": "Colleen Hoover"
+      "autor": "Colleen Hoover",
+      "genero": "Romance contemporáneo",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000036",
       "titulo": "November 9",
-      "autor": "Colleen Hoover"
+      "autor": "Colleen Hoover",
+      "genero": "Romance contemporáneo",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000037",
       "titulo": "De sangre y cenizas",
-      "autor": "Jennifer L. Armentrout"
+      "autor": "Jennifer L. Armentrout",
+      "genero": "Narrativa",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9790000000038",
       "titulo": "Un reino de carne y fuego",
-      "autor": "Jennifer L. Armentrout"
+      "autor": "Jennifer L. Armentrout",
+      "genero": "Narrativa",
+      "editorial": "Debolsillo"
     },
     {
       "isbn": "9790000000039",
       "titulo": "La corona de huesos dorados",
-      "autor": "Jennifer L. Armentrout"
+      "autor": "Jennifer L. Armentrout",
+      "genero": "Fantasía",
+      "editorial": "Hidra"
     },
     {
       "isbn": "9790000000040",
       "titulo": "Sombra y hueso",
-      "autor": "Leigh Bardugo"
+      "autor": "Leigh Bardugo",
+      "genero": "Fantasía juvenil",
+      "editorial": "Hidra"
     },
     {
       "isbn": "9790000000041",
       "titulo": "Asedio y tormenta",
-      "autor": "Leigh Bardugo"
+      "autor": "Leigh Bardugo",
+      "genero": "Fantasía juvenil",
+      "editorial": "Hidra"
     },
     {
       "isbn": "9790000000042",
       "titulo": "Ruina y ascenso",
-      "autor": "Leigh Bardugo"
+      "autor": "Leigh Bardugo",
+      "genero": "Fantasía juvenil",
+      "editorial": "Hidra"
     },
     {
       "isbn": "9790000000043",
       "titulo": "Seis de cuervos",
-      "autor": "Leigh Bardugo"
+      "autor": "Leigh Bardugo",
+      "genero": "Fantasía juvenil",
+      "editorial": "Hidra"
     },
     {
       "isbn": "9790000000044",
       "titulo": "Reino de ladrones",
-      "autor": "Leigh Bardugo"
+      "autor": "Leigh Bardugo",
+      "genero": "Fantasía juvenil",
+      "editorial": "Hidra"
     },
     {
       "isbn": "9790000000045",
       "titulo": "El príncipe cruel",
-      "autor": "Holly Black"
+      "autor": "Holly Black",
+      "genero": "Fantasía juvenil",
+      "editorial": "Hidra"
     },
     {
       "isbn": "9790000000046",
       "titulo": "El rey malvado",
-      "autor": "Holly Black"
+      "autor": "Holly Black",
+      "genero": "Fantasía juvenil",
+      "editorial": "Hidra"
     },
     {
       "isbn": "9790000000047",
       "titulo": "La reina de nada",
-      "autor": "Holly Black"
+      "autor": "Holly Black",
+      "genero": "Fantasía juvenil",
+      "editorial": "Hidra"
     },
     {
       "isbn": "9790000000048",
       "titulo": "Una corte de rosas y espinas",
-      "autor": "Sarah J. Maas"
+      "autor": "Sarah J. Maas",
+      "genero": "Fantasía romántica",
+      "editorial": "Hidra"
     },
     {
       "isbn": "9790000000049",
       "titulo": "Una corte de niebla y furia",
-      "autor": "Sarah J. Maas"
+      "autor": "Sarah J. Maas",
+      "genero": "Fantasía romántica",
+      "editorial": "Hidra"
     },
     {
       "isbn": "9790000000050",
       "titulo": "Una corte de alas y ruina",
-      "autor": "Sarah J. Maas"
+      "autor": "Sarah J. Maas",
+      "genero": "Fantasía romántica",
+      "editorial": "Hidra"
     },
     {
       "isbn": "9790000000051",
       "titulo": "Casa de tierra y sangre",
-      "autor": "Sarah J. Maas"
+      "autor": "Sarah J. Maas",
+      "genero": "Fantasía juvenil",
+      "editorial": "Hidra"
     },
     {
       "isbn": "9790000000052",
       "titulo": "Caraval",
-      "autor": "Stephanie Garber"
+      "autor": "Stephanie Garber",
+      "genero": "Fantasía juvenil",
+      "editorial": "Puck"
     },
     {
       "isbn": "9790000000053",
       "titulo": "Legendary",
-      "autor": "Stephanie Garber"
+      "autor": "Stephanie Garber",
+      "genero": "Fantasía juvenil",
+      "editorial": "Puck"
     },
     {
       "isbn": "9790000000054",
       "titulo": "Finale",
-      "autor": "Stephanie Garber"
+      "autor": "Stephanie Garber",
+      "genero": "Fantasía juvenil",
+      "editorial": "Puck"
     },
     {
       "isbn": "9790000000055",
       "titulo": "Érase una vez un corazón roto",
-      "autor": "Stephanie Garber"
+      "autor": "Stephanie Garber",
+      "genero": "Fantasía juvenil",
+      "editorial": "Puck"
     },
     {
       "isbn": "9790000000056",
       "titulo": "La hipótesis del amor",
-      "autor": "Ali Hazelwood"
+      "autor": "Ali Hazelwood",
+      "genero": "Romance contemporáneo",
+      "editorial": "Contraluz"
     },
     {
       "isbn": "9790000000057",
       "titulo": "La química del amor",
-      "autor": "Ali Hazelwood"
+      "autor": "Ali Hazelwood",
+      "genero": "Romance contemporáneo",
+      "editorial": "Contraluz"
     },
     {
       "isbn": "9790000000058",
       "titulo": "Heartstopper: Dos chicos juntos",
-      "autor": "Alice Oseman"
+      "autor": "Alice Oseman",
+      "genero": "Novela gráfica (YA)",
+      "editorial": "Hodder Children's Books"
     },
     {
       "isbn": "9790000000059",
       "titulo": "Heartstopper: Mi persona favorita",
-      "autor": "Alice Oseman"
+      "autor": "Alice Oseman",
+      "genero": "Novela gráfica (YA)",
+      "editorial": "Hodder Children's Books"
     },
     {
       "isbn": "9790000000060",
       "titulo": "Rojo, blanco y sangre azul",
-      "autor": "Casey McQuiston"
+      "autor": "Casey McQuiston",
+      "genero": "Narrativa",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000061",
       "titulo": "La canción de Aquiles",
-      "autor": "Madeline Miller"
+      "autor": "Madeline Miller",
+      "genero": "Narrativa",
+      "editorial": "Debolsillo"
     },
     {
       "isbn": "9790000000062",
       "titulo": "Circe",
-      "autor": "Madeline Miller"
+      "autor": "Madeline Miller",
+      "genero": "Narrativa",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000063",
       "titulo": "Powerless",
-      "autor": "Lauren Roberts"
+      "autor": "Lauren Roberts",
+      "genero": "Narrativa",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000064",
       "titulo": "Happy Place",
-      "autor": "Emily Henry"
+      "autor": "Emily Henry",
+      "genero": "Narrativa",
+      "editorial": "Debolsillo"
     },
     {
       "isbn": "9790000000065",
       "titulo": "Book Lovers",
-      "autor": "Emily Henry"
+      "autor": "Emily Henry",
+      "genero": "Romance contemporáneo",
+      "editorial": "Suma de Letras"
     },
     {
       "isbn": "9790000000066",
       "titulo": "Beach Read",
-      "autor": "Emily Henry"
+      "autor": "Emily Henry",
+      "genero": "Narrativa",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9790000000067",
       "titulo": "People We Meet on Vacation",
-      "autor": "Emily Henry"
+      "autor": "Emily Henry",
+      "genero": "Narrativa",
+      "editorial": "Debolsillo"
     },
     {
       "isbn": "9790000000068",
       "titulo": "Love and Other Words",
-      "autor": "Christina Lauren"
+      "autor": "Christina Lauren",
+      "genero": "Romance contemporáneo",
+      "editorial": "Suma de Letras"
     },
     {
       "isbn": "9790000000069",
       "titulo": "The Unhoneymooners",
-      "autor": "Christina Lauren"
+      "autor": "Christina Lauren",
+      "genero": "Narrativa",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000070",
       "titulo": "Twisted Love",
-      "autor": "Ana Huang"
+      "autor": "Ana Huang",
+      "genero": "Romance contemporáneo",
+      "editorial": "Crossbooks"
     },
     {
       "isbn": "9790000000071",
       "titulo": "Twisted Games",
-      "autor": "Ana Huang"
+      "autor": "Ana Huang",
+      "genero": "Romance contemporáneo",
+      "editorial": "Crossbooks"
     },
     {
       "isbn": "9790000000072",
       "titulo": "Twisted Hate",
-      "autor": "Ana Huang"
+      "autor": "Ana Huang",
+      "genero": "Romance contemporáneo",
+      "editorial": "Crossbooks"
     },
     {
       "isbn": "9790000000073",
       "titulo": "Twisted Lies",
-      "autor": "Ana Huang"
+      "autor": "Ana Huang",
+      "genero": "Romance contemporáneo",
+      "editorial": "Crossbooks"
     },
     {
       "isbn": "9790000000074",
       "titulo": "King of Wrath",
-      "autor": "Ana Huang"
+      "autor": "Ana Huang",
+      "genero": "Romance contemporáneo",
+      "editorial": "Crossbooks"
     },
     {
       "isbn": "9790000000075",
       "titulo": "King of Pride",
-      "autor": "Ana Huang"
+      "autor": "Ana Huang",
+      "genero": "Romance contemporáneo",
+      "editorial": "Crossbooks"
     },
     {
       "isbn": "9790000000076",
       "titulo": "Better Than the Movies",
-      "autor": "Lynn Painter"
+      "autor": "Lynn Painter",
+      "genero": "Narrativa",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000077",
       "titulo": "Mr. Wrong Number",
-      "autor": "Lynn Painter"
+      "autor": "Lynn Painter",
+      "genero": "Narrativa",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000078",
       "titulo": "Today Tonight Tomorrow",
-      "autor": "Rachel Lynn Solomon"
+      "autor": "Rachel Lynn Solomon",
+      "genero": "Narrativa",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000079",
       "titulo": "The Spanish Love Deception",
-      "autor": "Elena Armas"
+      "autor": "Elena Armas",
+      "genero": "Romance contemporáneo",
+      "editorial": "Suma de Letras"
     },
     {
       "isbn": "9790000000080",
       "titulo": "The American Roommate Experiment",
-      "autor": "Elena Armas"
+      "autor": "Elena Armas",
+      "genero": "Narrativa",
+      "editorial": "Debolsillo"
     },
     {
       "isbn": "9790000000081",
       "titulo": "Icebreaker",
-      "autor": "Hannah Grace"
+      "autor": "Hannah Grace",
+      "genero": "Narrativa",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000082",
       "titulo": "Wildfire",
-      "autor": "Hannah Grace"
+      "autor": "Hannah Grace",
+      "genero": "Narrativa",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000083",
       "titulo": "Things We Never Got Over",
-      "autor": "Lucy Score"
+      "autor": "Lucy Score",
+      "genero": "Narrativa",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000084",
       "titulo": "Things We Hide from the Light",
-      "autor": "Lucy Score"
+      "autor": "Lucy Score",
+      "genero": "Narrativa",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000085",
       "titulo": "Hook, Line, and Sinker",
-      "autor": "Tessa Bailey"
+      "autor": "Tessa Bailey",
+      "genero": "Narrativa",
+      "editorial": "Debolsillo"
     },
     {
       "isbn": "9790000000086",
       "titulo": "It Happened One Summer",
-      "autor": "Tessa Bailey"
+      "autor": "Tessa Bailey",
+      "genero": "Narrativa",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000087",
       "titulo": "Love, Theoretically",
-      "autor": "Ali Hazelwood"
+      "autor": "Ali Hazelwood",
+      "genero": "Romance contemporáneo",
+      "editorial": "Contraluz"
     },
     {
       "isbn": "9790000000088",
       "titulo": "Check & Mate",
-      "autor": "Ali Hazelwood"
+      "autor": "Ali Hazelwood",
+      "genero": "Romance contemporáneo",
+      "editorial": "Contraluz"
     },
     {
       "isbn": "9790000000089",
       "titulo": "Fourth Wing",
-      "autor": "Rebecca Yarros"
+      "autor": "Rebecca Yarros",
+      "genero": "Fantasía romántica",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000090",
       "titulo": "Iron Flame",
-      "autor": "Rebecca Yarros"
+      "autor": "Rebecca Yarros",
+      "genero": "Fantasía romántica",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000091",
       "titulo": "Divine Rivals",
-      "autor": "Rebecca Ross"
+      "autor": "Rebecca Ross",
+      "genero": "Narrativa",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000092",
       "titulo": "Ruthless Vows",
-      "autor": "Rebecca Ross"
+      "autor": "Rebecca Ross",
+      "genero": "Narrativa",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9790000000093",
       "titulo": "Once Upon a Broken Heart",
-      "autor": "Stephanie Garber"
+      "autor": "Stephanie Garber",
+      "genero": "Fantasía juvenil",
+      "editorial": "Puck"
     },
     {
       "isbn": "9790000000094",
       "titulo": "The Ballad of Never After",
-      "autor": "Stephanie Garber"
+      "autor": "Stephanie Garber",
+      "genero": "Fantasía juvenil",
+      "editorial": "Puck"
     },
     {
       "isbn": "9790000000095",
       "titulo": "The Fine Print",
-      "autor": "Lauren Asher"
+      "autor": "Lauren Asher",
+      "genero": "Narrativa",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000096",
       "titulo": "Terms and Conditions",
-      "autor": "Lauren Asher"
+      "autor": "Lauren Asher",
+      "genero": "Narrativa",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000097",
       "titulo": "Final Offer",
-      "autor": "Lauren Asher"
+      "autor": "Lauren Asher",
+      "genero": "Narrativa",
+      "editorial": "Debolsillo"
     },
     {
       "isbn": "9790000000098",
       "titulo": "The Cheat Sheet",
-      "autor": "Sarah Adams"
+      "autor": "Sarah Adams",
+      "genero": "Narrativa",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9790000000099",
       "titulo": "Practice Makes Perfect",
-      "autor": "Sarah Adams"
+      "autor": "Sarah Adams",
+      "genero": "Narrativa",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000100",
       "titulo": "Reminders of Him",
-      "autor": "Colleen Hoover"
+      "autor": "Colleen Hoover",
+      "genero": "Romance contemporáneo",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000101",
       "titulo": "Layla",
-      "autor": "Colleen Hoover"
+      "autor": "Colleen Hoover",
+      "genero": "Romance contemporáneo",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000102",
       "titulo": "Regretting You",
-      "autor": "Colleen Hoover"
+      "autor": "Colleen Hoover",
+      "genero": "Romance contemporáneo",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000103",
       "titulo": "Heart Bones",
-      "autor": "Colleen Hoover"
+      "autor": "Colleen Hoover",
+      "genero": "Romance contemporáneo",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000104",
       "titulo": "La Ilíada",
-      "autor": "Homero"
+      "autor": "Homero",
+      "genero": "Épica clásica",
+      "editorial": "Gredos"
     },
     {
       "isbn": "9790000000105",
       "titulo": "La Odisea",
-      "autor": "Homero"
+      "autor": "Homero",
+      "genero": "Épica clásica",
+      "editorial": "Gredos"
     },
     {
       "isbn": "9790000000106",
       "titulo": "La Eneida",
-      "autor": "Virgilio"
+      "autor": "Virgilio",
+      "genero": "Épica clásica",
+      "editorial": "Gredos"
     },
     {
       "isbn": "9790000000107",
       "titulo": "La Divina Comedia",
-      "autor": "Dante Alighieri"
+      "autor": "Dante Alighieri",
+      "genero": "Clásico",
+      "editorial": "Cátedra"
     },
     {
       "isbn": "9790000000108",
       "titulo": "Decamerón",
-      "autor": "Giovanni Boccaccio"
+      "autor": "Giovanni Boccaccio",
+      "genero": "Clásico",
+      "editorial": "Cátedra"
     },
     {
       "isbn": "9790000000109",
       "titulo": "Hamlet",
-      "autor": "William Shakespeare"
+      "autor": "William Shakespeare",
+      "genero": "Teatro",
+      "editorial": "Cátedra"
     },
     {
       "isbn": "9790000000110",
       "titulo": "Macbeth",
-      "autor": "William Shakespeare"
+      "autor": "William Shakespeare",
+      "genero": "Teatro",
+      "editorial": "Cátedra"
     },
     {
       "isbn": "9790000000111",
       "titulo": "Romeo y Julieta",
-      "autor": "William Shakespeare"
+      "autor": "William Shakespeare",
+      "genero": "Teatro",
+      "editorial": "Cátedra"
     },
     {
       "isbn": "9790000000112",
       "titulo": "Sueño de una noche de verano",
-      "autor": "William Shakespeare"
+      "autor": "William Shakespeare",
+      "genero": "Teatro",
+      "editorial": "Cátedra"
     },
     {
       "isbn": "9790000000113",
       "titulo": "El mercader de Venecia",
-      "autor": "William Shakespeare"
+      "autor": "William Shakespeare",
+      "genero": "Teatro",
+      "editorial": "Cátedra"
     },
     {
       "isbn": "9790000000114",
       "titulo": "La tempestad",
-      "autor": "William Shakespeare"
+      "autor": "William Shakespeare",
+      "genero": "Teatro",
+      "editorial": "Cátedra"
     },
     {
       "isbn": "9790000000115",
       "titulo": "Rey Lear",
-      "autor": "William Shakespeare"
+      "autor": "William Shakespeare",
+      "genero": "Teatro",
+      "editorial": "Cátedra"
     },
     {
       "isbn": "9790000000116",
       "titulo": "Otelo",
-      "autor": "William Shakespeare"
+      "autor": "William Shakespeare",
+      "genero": "Teatro",
+      "editorial": "Cátedra"
     },
     {
       "isbn": "9790000000117",
       "titulo": "La isla del tesoro",
-      "autor": "Robert Louis Stevenson"
+      "autor": "Robert Louis Stevenson",
+      "genero": "Aventura",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9790000000118",
       "titulo": "El extraño caso del doctor Jekyll y mister Hyde",
-      "autor": "Robert Louis Stevenson"
+      "autor": "Robert Louis Stevenson",
+      "genero": "Terror gótico",
+      "editorial": "Valdemar"
     },
     {
       "isbn": "9790000000119",
       "titulo": "Alicia en el país de las maravillas",
-      "autor": "Lewis Carroll"
+      "autor": "Lewis Carroll",
+      "genero": "Fantasía",
+      "editorial": "Nórdica Libros"
     },
     {
       "isbn": "9790000000120",
       "titulo": "A través del espejo",
-      "autor": "Lewis Carroll"
+      "autor": "Lewis Carroll",
+      "genero": "Fantasía",
+      "editorial": "Nórdica Libros"
     },
     {
       "isbn": "9790000000121",
       "titulo": "Robinson Crusoe",
-      "autor": "Daniel Defoe"
+      "autor": "Daniel Defoe",
+      "genero": "Aventura",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9790000000122",
       "titulo": "Los viajes de Gulliver",
-      "autor": "Jonathan Swift"
+      "autor": "Jonathan Swift",
+      "genero": "Sátira",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9790000000123",
       "titulo": "Las flores del mal",
-      "autor": "Charles Baudelaire"
+      "autor": "Charles Baudelaire",
+      "genero": "Poesía",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9790000000124",
       "titulo": "Cuento de Navidad",
-      "autor": "Charles Dickens"
+      "autor": "Charles Dickens",
+      "genero": "Clásico",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9790000000125",
       "titulo": "Grandes esperanzas",
-      "autor": "Charles Dickens"
+      "autor": "Charles Dickens",
+      "genero": "Clásico",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9790000000126",
       "titulo": "David Copperfield",
-      "autor": "Charles Dickens"
+      "autor": "Charles Dickens",
+      "genero": "Clásico",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9790000000127",
       "titulo": "Oliver Twist",
-      "autor": "Charles Dickens"
+      "autor": "Charles Dickens",
+      "genero": "Clásico",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9790000000128",
       "titulo": "Historia de dos ciudades",
-      "autor": "Charles Dickens"
+      "autor": "Charles Dickens",
+      "genero": "Clásico",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9790000000129",
       "titulo": "El jugador",
-      "autor": "Fiódor Dostoievski"
+      "autor": "Fiódor Dostoievski",
+      "genero": "Clásico",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9790000000130",
       "titulo": "El doble",
-      "autor": "Fiódor Dostoievski"
+      "autor": "Fiódor Dostoievski",
+      "genero": "Clásico",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9790000000131",
       "titulo": "Resurrección",
-      "autor": "León Tolstói"
+      "autor": "León Tolstói",
+      "genero": "Clásico",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9790000000132",
       "titulo": "La muerte de Iván Ilich",
-      "autor": "León Tolstói"
+      "autor": "León Tolstói",
+      "genero": "Clásico",
+      "editorial": "Cátedra"
     },
     {
       "isbn": "9790000000133",
       "titulo": "Padres e hijos",
-      "autor": "Iván Turguénev"
+      "autor": "Iván Turguénev",
+      "genero": "Narrativa",
+      "editorial": "Debolsillo"
     },
     {
       "isbn": "9790000000134",
       "titulo": "Oblómov",
-      "autor": "Iván Goncharov"
+      "autor": "Iván Goncharov",
+      "genero": "Narrativa",
+      "editorial": "Debolsillo"
     },
     {
       "isbn": "9790000000135",
       "titulo": "Eugenio Oneguin",
-      "autor": "Alexandr Pushkin"
+      "autor": "Alexandr Pushkin",
+      "genero": "Narrativa",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000136",
       "titulo": "Relatos de San Petersburgo",
-      "autor": "Nikolái Gógol"
+      "autor": "Nikolái Gógol",
+      "genero": "Narrativa",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000137",
       "titulo": "Almas muertas",
-      "autor": "Nikolái Gógol"
+      "autor": "Nikolái Gógol",
+      "genero": "Narrativa",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9790000000138",
       "titulo": "Los demonios",
-      "autor": "Fiódor Dostoievski"
+      "autor": "Fiódor Dostoievski",
+      "genero": "Clásico",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9790000000139",
       "titulo": "El conde de Montecristo",
-      "autor": "Alexandre Dumas"
+      "autor": "Alexandre Dumas",
+      "genero": "Narrativa",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000140",
       "titulo": "Los tres mosqueteros",
-      "autor": "Alexandre Dumas"
+      "autor": "Alexandre Dumas",
+      "genero": "Narrativa",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000141",
       "titulo": "El rojo y el negro",
-      "autor": "Stendhal"
+      "autor": "Stendhal",
+      "genero": "Narrativa",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000142",
       "titulo": "Los Buddenbrook",
-      "autor": "Thomas Mann"
+      "autor": "Thomas Mann",
+      "genero": "Narrativa",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9790000000143",
       "titulo": "Cuentos",
-      "autor": "Antón Chéjov"
+      "autor": "Antón Chéjov",
+      "genero": "Narrativa",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000144",
       "titulo": "La gaviota",
-      "autor": "Antón Chéjov"
+      "autor": "Antón Chéjov",
+      "genero": "Narrativa",
+      "editorial": "Debolsillo"
     },
     {
       "isbn": "9790000000145",
       "titulo": "El jardín de los cerezos",
-      "autor": "Antón Chéjov"
+      "autor": "Antón Chéjov",
+      "genero": "Narrativa",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000146",
       "titulo": "El retrato de una dama",
-      "autor": "Henry James"
+      "autor": "Henry James",
+      "genero": "Narrativa",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9790000000147",
       "titulo": "Los cuentos de Canterbury",
-      "autor": "Geoffrey Chaucer"
+      "autor": "Geoffrey Chaucer",
+      "genero": "Narrativa",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000148",
       "titulo": "Los novios",
-      "autor": "Alessandro Manzoni"
+      "autor": "Alessandro Manzoni",
+      "genero": "Narrativa",
+      "editorial": "Debolsillo"
     },
     {
       "isbn": "9790000000149",
       "titulo": "La letra escarlata",
-      "autor": "Nathaniel Hawthorne"
+      "autor": "Nathaniel Hawthorne",
+      "genero": "Narrativa",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000150",
       "titulo": "Bartleby, el escribiente",
-      "autor": "Herman Melville"
+      "autor": "Herman Melville",
+      "genero": "Narrativa",
+      "editorial": "Debolsillo"
     },
     {
       "isbn": "9790000000151",
       "titulo": "El corazón de las tinieblas",
-      "autor": "Joseph Conrad"
+      "autor": "Joseph Conrad",
+      "genero": "Romance contemporáneo",
+      "editorial": "Suma de Letras"
     },
     {
       "isbn": "9790000000152",
       "titulo": "El ruido y la furia",
-      "autor": "William Faulkner"
+      "autor": "William Faulkner",
+      "genero": "Narrativa",
+      "editorial": "Debolsillo"
     },
     {
       "isbn": "9790000000153",
       "titulo": "Mientras agonizo",
-      "autor": "William Faulkner"
+      "autor": "William Faulkner",
+      "genero": "Narrativa",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9790000000154",
       "titulo": "Mujeritas",
-      "autor": "Louisa May Alcott"
+      "autor": "Louisa May Alcott",
+      "genero": "Narrativa",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000155",
       "titulo": "El extraño",
-      "autor": "Albert Camus"
+      "autor": "Albert Camus",
+      "genero": "Narrativa",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000156",
       "titulo": "La náusea",
-      "autor": "Jean-Paul Sartre"
+      "autor": "Jean-Paul Sartre",
+      "genero": "Narrativa",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000157",
       "titulo": "Esperando a Godot",
-      "autor": "Samuel Beckett"
+      "autor": "Samuel Beckett",
+      "genero": "Narrativa",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000158",
       "titulo": "La trilogía de Nueva York",
-      "autor": "Paul Auster"
+      "autor": "Paul Auster",
+      "genero": "Narrativa",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000159",
       "titulo": "El poder y la gloria",
-      "autor": "Graham Greene"
+      "autor": "Graham Greene",
+      "genero": "Narrativa",
+      "editorial": "Debolsillo"
     },
     {
       "isbn": "9790000000160",
       "titulo": "El corazón es un cazador solitario",
-      "autor": "Carson McCullers"
+      "autor": "Carson McCullers",
+      "genero": "Romance contemporáneo",
+      "editorial": "Suma de Letras"
     },
     {
       "isbn": "9790000000161",
       "titulo": "El señor de las moscas",
-      "autor": "William Golding"
+      "autor": "William Golding",
+      "genero": "Narrativa",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000162",
       "titulo": "El lobo estepario",
-      "autor": "Hermann Hesse"
+      "autor": "Hermann Hesse",
+      "genero": "Narrativa",
+      "editorial": "Debolsillo"
     },
     {
       "isbn": "9790000000163",
       "titulo": "Siddhartha",
-      "autor": "Hermann Hesse"
+      "autor": "Hermann Hesse",
+      "genero": "Narrativa",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000164",
       "titulo": "Demian",
-      "autor": "Hermann Hesse"
+      "autor": "Hermann Hesse",
+      "genero": "Narrativa",
+      "editorial": "Debolsillo"
     },
     {
       "isbn": "9790000000165",
       "titulo": "En el camino",
-      "autor": "Jack Kerouac"
+      "autor": "Jack Kerouac",
+      "genero": "Narrativa",
+      "editorial": "Debolsillo"
     },
     {
       "isbn": "9790000000166",
       "titulo": "Trampa-22",
-      "autor": "Joseph Heller"
+      "autor": "Joseph Heller",
+      "genero": "Narrativa",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000167",
       "titulo": "Matadero cinco",
-      "autor": "Kurt Vonnegut"
+      "autor": "Kurt Vonnegut",
+      "genero": "Narrativa",
+      "editorial": "Debolsillo"
     },
     {
       "isbn": "9790000000168",
       "titulo": "El pájaro espino",
-      "autor": "Colleen McCullough"
+      "autor": "Colleen McCullough",
+      "genero": "Narrativa",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9790000000169",
       "titulo": "El adiós a las armas",
-      "autor": "Ernest Hemingway"
+      "autor": "Ernest Hemingway",
+      "genero": "Narrativa",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9790000000170",
       "titulo": "El color púrpura",
-      "autor": "Alice Walker"
+      "autor": "Alice Walker",
+      "genero": "Narrativa",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000171",
       "titulo": "El amante",
-      "autor": "Marguerite Duras"
+      "autor": "Marguerite Duras",
+      "genero": "Narrativa",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000172",
       "titulo": "La historia interminable",
-      "autor": "Michael Ende"
+      "autor": "Michael Ende",
+      "genero": "Ensayo",
+      "editorial": "Debate"
     },
     {
       "isbn": "9790000000173",
       "titulo": "El cementerio de Praga",
-      "autor": "Umberto Eco"
+      "autor": "Umberto Eco",
+      "genero": "Narrativa / ensayo",
+      "editorial": "Lumen"
     },
     {
       "isbn": "9790000000174",
       "titulo": "La insoportable levedad del ser",
-      "autor": "Milan Kundera"
+      "autor": "Milan Kundera",
+      "genero": "Narrativa",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000175",
       "titulo": "Seda",
-      "autor": "Alessandro Baricco"
+      "autor": "Alessandro Baricco",
+      "genero": "Narrativa",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9790000000176",
       "titulo": "La elegancia del erizo",
-      "autor": "Muriel Barbery"
+      "autor": "Muriel Barbery",
+      "genero": "Narrativa",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000177",
       "titulo": "La vida de Pi",
-      "autor": "Yann Martel"
+      "autor": "Yann Martel",
+      "genero": "Narrativa",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000178",
       "titulo": "El lector",
-      "autor": "Bernhard Schlink"
+      "autor": "Bernhard Schlink",
+      "genero": "Narrativa",
+      "editorial": "Debolsillo"
     },
     {
       "isbn": "9790000000179",
       "titulo": "Kafka en la orilla",
-      "autor": "Haruki Murakami"
+      "autor": "Haruki Murakami",
+      "genero": "Narrativa contemporánea",
+      "editorial": "Tusquets"
     },
     {
       "isbn": "9790000000180",
       "titulo": "Tokio blues (Norwegian Wood)",
-      "autor": "Haruki Murakami"
+      "autor": "Haruki Murakami",
+      "genero": "Narrativa contemporánea",
+      "editorial": "Tusquets"
     },
     {
       "isbn": "9790000000181",
       "titulo": "1Q84",
-      "autor": "Haruki Murakami"
+      "autor": "Haruki Murakami",
+      "genero": "Narrativa contemporánea",
+      "editorial": "Tusquets"
     },
     {
       "isbn": "9790000000182",
       "titulo": "Los versos satánicos",
-      "autor": "Salman Rushdie"
+      "autor": "Salman Rushdie",
+      "genero": "Poesía",
+      "editorial": "Visor"
     },
     {
       "isbn": "9790000000183",
       "titulo": "Hijos de la medianoche",
-      "autor": "Salman Rushdie"
+      "autor": "Salman Rushdie",
+      "genero": "Romance paranormal",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000184",
       "titulo": "El dios de las pequeñas cosas",
-      "autor": "Arundhati Roy"
+      "autor": "Arundhati Roy",
+      "genero": "Filosofía",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9790000000185",
       "titulo": "El paciente inglés",
-      "autor": "Michael Ondaatje"
+      "autor": "Michael Ondaatje",
+      "genero": "Narrativa",
+      "editorial": "Debolsillo"
     },
     {
       "isbn": "9790000000186",
       "titulo": "Expiación",
-      "autor": "Ian McEwan"
+      "autor": "Ian McEwan",
+      "genero": "Narrativa",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000187",
       "titulo": "No es país para viejos",
-      "autor": "Cormac McCarthy"
+      "autor": "Cormac McCarthy",
+      "genero": "Narrativa contemporánea",
+      "editorial": "Debolsillo"
     },
     {
       "isbn": "9790000000188",
       "titulo": "El guardés del faro",
-      "autor": "José Luis Sampedro"
+      "autor": "José Luis Sampedro",
+      "genero": "Narrativa",
+      "editorial": "Debolsillo"
     },
     {
       "isbn": "9790000000189",
       "titulo": "La sonrisa etrusca",
-      "autor": "José Luis Sampedro"
+      "autor": "José Luis Sampedro",
+      "genero": "Narrativa",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000190",
       "titulo": "Percy Jackson y el ladrón del rayo",
-      "autor": "Rick Riordan"
+      "autor": "Rick Riordan",
+      "genero": "Fantasía juvenil",
+      "editorial": "Salamandra"
     },
     {
       "isbn": "9790000000191",
       "titulo": "Percy Jackson y el mar de los monstruos",
-      "autor": "Rick Riordan"
+      "autor": "Rick Riordan",
+      "genero": "Fantasía juvenil",
+      "editorial": "Salamandra"
     },
     {
       "isbn": "9790000000192",
       "titulo": "Percy Jackson y la maldición del titán",
-      "autor": "Rick Riordan"
+      "autor": "Rick Riordan",
+      "genero": "Fantasía juvenil",
+      "editorial": "Salamandra"
     },
     {
       "isbn": "9790000000193",
       "titulo": "Percy Jackson y la batalla del laberinto",
-      "autor": "Rick Riordan"
+      "autor": "Rick Riordan",
+      "genero": "Fantasía juvenil",
+      "editorial": "Salamandra"
     },
     {
       "isbn": "9790000000194",
       "titulo": "Percy Jackson y el último héroe del Olimpo",
-      "autor": "Rick Riordan"
+      "autor": "Rick Riordan",
+      "genero": "Fantasía juvenil",
+      "editorial": "Salamandra"
     },
     {
       "isbn": "9790000000195",
       "titulo": "Los héroes del Olimpo: El héroe perdido",
-      "autor": "Rick Riordan"
+      "autor": "Rick Riordan",
+      "genero": "Fantasía juvenil",
+      "editorial": "Salamandra"
     },
     {
       "isbn": "9790000000196",
       "titulo": "Los héroes del Olimpo: El hijo de Neptuno",
-      "autor": "Rick Riordan"
+      "autor": "Rick Riordan",
+      "genero": "Fantasía juvenil",
+      "editorial": "Salamandra"
     },
     {
       "isbn": "9790000000197",
       "titulo": "Los héroes del Olimpo: La marca de Atenea",
-      "autor": "Rick Riordan"
+      "autor": "Rick Riordan",
+      "genero": "Fantasía juvenil",
+      "editorial": "Salamandra"
     },
     {
       "isbn": "9790000000198",
       "titulo": "Los héroes del Olimpo: La casa de Hades",
-      "autor": "Rick Riordan"
+      "autor": "Rick Riordan",
+      "genero": "Fantasía juvenil",
+      "editorial": "Salamandra"
     },
     {
       "isbn": "9790000000199",
       "titulo": "Los héroes del Olimpo: La sangre del Olimpo",
-      "autor": "Rick Riordan"
+      "autor": "Rick Riordan",
+      "genero": "Fantasía juvenil",
+      "editorial": "Salamandra"
     },
     {
       "isbn": "9790000000200",
       "titulo": "Los 100",
-      "autor": "Kass Morgan"
+      "autor": "Kass Morgan",
+      "genero": "Narrativa",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000201",
       "titulo": "Divergente",
-      "autor": "Veronica Roth"
+      "autor": "Veronica Roth",
+      "genero": "Distopía juvenil",
+      "editorial": "RBA Molino"
     },
     {
       "isbn": "9790000000202",
       "titulo": "Insurgente",
-      "autor": "Veronica Roth"
+      "autor": "Veronica Roth",
+      "genero": "Distopía juvenil",
+      "editorial": "RBA Molino"
     },
     {
       "isbn": "9790000000203",
       "titulo": "Leal",
-      "autor": "Veronica Roth"
+      "autor": "Veronica Roth",
+      "genero": "Distopía juvenil",
+      "editorial": "RBA Molino"
     },
     {
       "isbn": "9790000000204",
       "titulo": "El corredor del laberinto",
-      "autor": "James Dashner"
+      "autor": "James Dashner",
+      "genero": "Distopía juvenil",
+      "editorial": "Nocturna Ediciones"
     },
     {
       "isbn": "9790000000205",
       "titulo": "Las pruebas",
-      "autor": "James Dashner"
+      "autor": "James Dashner",
+      "genero": "Distopía juvenil",
+      "editorial": "Nocturna Ediciones"
     },
     {
       "isbn": "9790000000206",
       "titulo": "La cura mortal",
-      "autor": "James Dashner"
+      "autor": "James Dashner",
+      "genero": "Distopía juvenil",
+      "editorial": "Nocturna Ediciones"
     },
     {
       "isbn": "9790000000207",
       "titulo": "La quinta ola",
-      "autor": "Rick Yancey"
+      "autor": "Rick Yancey",
+      "genero": "Narrativa",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000208",
       "titulo": "Si decido quedarme",
-      "autor": "Gayle Forman"
+      "autor": "Gayle Forman",
+      "genero": "Narrativa",
+      "editorial": "Debolsillo"
     },
     {
       "isbn": "9790000000209",
       "titulo": "Buscando a Alaska",
-      "autor": "John Green"
+      "autor": "John Green",
+      "genero": "Romance juvenil",
+      "editorial": "Nube de Tinta"
     },
     {
       "isbn": "9790000000210",
       "titulo": "Bajo la misma estrella",
-      "autor": "John Green"
+      "autor": "John Green",
+      "genero": "Romance juvenil",
+      "editorial": "Nube de Tinta"
     },
     {
       "isbn": "9790000000211",
       "titulo": "Ciudades de papel",
-      "autor": "John Green"
+      "autor": "John Green",
+      "genero": "Romance juvenil",
+      "editorial": "Nube de Tinta"
     },
     {
       "isbn": "9790000000212",
       "titulo": "Eleanor y Park",
-      "autor": "Rainbow Rowell"
+      "autor": "Rainbow Rowell",
+      "genero": "Narrativa",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000213",
       "titulo": "Fangirl",
-      "autor": "Rainbow Rowell"
+      "autor": "Rainbow Rowell",
+      "genero": "Narrativa",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000214",
       "titulo": "Carry On",
-      "autor": "Rainbow Rowell"
+      "autor": "Rainbow Rowell",
+      "genero": "Narrativa",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9790000000215",
       "titulo": "La brújula dorada",
-      "autor": "Philip Pullman"
+      "autor": "Philip Pullman",
+      "genero": "Narrativa",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000216",
       "titulo": "La daga",
-      "autor": "Philip Pullman"
+      "autor": "Philip Pullman",
+      "genero": "Narrativa",
+      "editorial": "Debolsillo"
     },
     {
       "isbn": "9790000000217",
       "titulo": "El catalejo lacado",
-      "autor": "Philip Pullman"
+      "autor": "Philip Pullman",
+      "genero": "Narrativa",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000218",
       "titulo": "Coraline",
-      "autor": "Neil Gaiman"
+      "autor": "Neil Gaiman",
+      "genero": "Fantasía",
+      "editorial": "Roca Editorial"
     },
     {
       "isbn": "9790000000219",
       "titulo": "American Gods",
-      "autor": "Neil Gaiman"
+      "autor": "Neil Gaiman",
+      "genero": "Fantasía",
+      "editorial": "Roca Editorial"
     },
     {
       "isbn": "9790000000220",
       "titulo": "Buenos presagios",
-      "autor": "Terry Pratchett y Neil Gaiman"
+      "autor": "Terry Pratchett y Neil Gaiman",
+      "genero": "Narrativa",
+      "editorial": "Debolsillo"
     },
     {
       "isbn": "9790000000221",
       "titulo": "La historia de la criada",
-      "autor": "Margaret Atwood"
+      "autor": "Margaret Atwood",
+      "genero": "Ensayo",
+      "editorial": "Debate"
     },
     {
       "isbn": "9790000000222",
       "titulo": "Los hijos de la sangre y el hueso",
-      "autor": "Tomi Adeyemi"
+      "autor": "Tomi Adeyemi",
+      "genero": "Fantasía",
+      "editorial": "Hidra"
     },
     {
       "isbn": "9790000000223",
       "titulo": "La vida invisible de Addie LaRue",
-      "autor": "V.E. Schwab"
+      "autor": "V.E. Schwab",
+      "genero": "Narrativa",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9790000000224",
       "titulo": "Una magia más oscura",
-      "autor": "V.E. Schwab"
+      "autor": "V.E. Schwab",
+      "genero": "Fantasía",
+      "editorial": "Hidra"
     },
     {
       "isbn": "9790000000225",
       "titulo": "La maldición del mar",
-      "autor": "Shea Ernshaw"
+      "autor": "Shea Ernshaw",
+      "genero": "Narrativa",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000226",
       "titulo": "La selección",
-      "autor": "Kiera Cass"
+      "autor": "Kiera Cass",
+      "genero": "Narrativa",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000227",
       "titulo": "La élite",
-      "autor": "Kiera Cass"
+      "autor": "Kiera Cass",
+      "genero": "Narrativa",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9790000000228",
       "titulo": "La elegida",
-      "autor": "Kiera Cass"
+      "autor": "Kiera Cass",
+      "genero": "Narrativa",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9790000000229",
       "titulo": "La heredera",
-      "autor": "Kiera Cass"
+      "autor": "Kiera Cass",
+      "genero": "Narrativa",
+      "editorial": "Debolsillo"
     },
     {
       "isbn": "9790000000230",
       "titulo": "La corona",
-      "autor": "Kiera Cass"
+      "autor": "Kiera Cass",
+      "genero": "Narrativa",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000231",
       "titulo": "Trono de cristal",
-      "autor": "Sarah J. Maas"
+      "autor": "Sarah J. Maas",
+      "genero": "Fantasía juvenil",
+      "editorial": "Hidra"
     },
     {
       "isbn": "9790000000232",
       "titulo": "Corona de medianoche",
-      "autor": "Sarah J. Maas"
+      "autor": "Sarah J. Maas",
+      "genero": "Fantasía juvenil",
+      "editorial": "Hidra"
     },
     {
       "isbn": "9790000000233",
       "titulo": "Heredera de fuego",
-      "autor": "Sarah J. Maas"
+      "autor": "Sarah J. Maas",
+      "genero": "Fantasía juvenil",
+      "editorial": "Hidra"
     },
     {
       "isbn": "9790000000234",
       "titulo": "Reina de sombras",
-      "autor": "Sarah J. Maas"
+      "autor": "Sarah J. Maas",
+      "genero": "Fantasía juvenil",
+      "editorial": "Hidra"
     },
     {
       "isbn": "9790000000235",
       "titulo": "Imperio de tormentas",
-      "autor": "Sarah J. Maas"
+      "autor": "Sarah J. Maas",
+      "genero": "Fantasía juvenil",
+      "editorial": "Hidra"
     },
     {
       "isbn": "9790000000236",
       "titulo": "Torre del alba",
-      "autor": "Sarah J. Maas"
+      "autor": "Sarah J. Maas",
+      "genero": "Fantasía juvenil",
+      "editorial": "Hidra"
     },
     {
       "isbn": "9790000000237",
       "titulo": "Reino de cenizas",
-      "autor": "Sarah J. Maas"
+      "autor": "Sarah J. Maas",
+      "genero": "Fantasía juvenil",
+      "editorial": "Hidra"
     },
     {
       "isbn": "9790000000238",
       "titulo": "Una corte de hielo y estrellas",
-      "autor": "Sarah J. Maas"
+      "autor": "Sarah J. Maas",
+      "genero": "Fantasía romántica",
+      "editorial": "Hidra"
     },
     {
       "isbn": "9790000000239",
       "titulo": "Una corte de plata y llamas",
-      "autor": "Sarah J. Maas"
+      "autor": "Sarah J. Maas",
+      "genero": "Fantasía romántica",
+      "editorial": "Hidra"
     },
     {
       "isbn": "9790000000240",
       "titulo": "Shadow and Bone",
-      "autor": "Leigh Bardugo"
+      "autor": "Leigh Bardugo",
+      "genero": "Fantasía juvenil",
+      "editorial": "Hidra"
     },
     {
       "isbn": "9790000000241",
       "titulo": "King of Scars",
-      "autor": "Leigh Bardugo"
+      "autor": "Leigh Bardugo",
+      "genero": "Romance contemporáneo",
+      "editorial": "Crossbooks"
     },
     {
       "isbn": "9790000000242",
       "titulo": "Rule of Wolves",
-      "autor": "Leigh Bardugo"
+      "autor": "Leigh Bardugo",
+      "genero": "Fantasía juvenil",
+      "editorial": "Hidra"
     },
     {
       "isbn": "9790000000243",
       "titulo": "Cazadores de sombras: Ciudad de hueso",
-      "autor": "Cassandra Clare"
+      "autor": "Cassandra Clare",
+      "genero": "Fantasía",
+      "editorial": "Hidra"
     },
     {
       "isbn": "9790000000244",
       "titulo": "Cazadores de sombras: Ciudad de ceniza",
-      "autor": "Cassandra Clare"
+      "autor": "Cassandra Clare",
+      "genero": "Fantasía",
+      "editorial": "Hidra"
     },
     {
       "isbn": "9790000000245",
       "titulo": "Cazadores de sombras: Ciudad de cristal",
-      "autor": "Cassandra Clare"
+      "autor": "Cassandra Clare",
+      "genero": "Fantasía",
+      "editorial": "Hidra"
     },
     {
       "isbn": "9790000000246",
       "titulo": "Cazadores de sombras: Ciudad de los ángeles caídos",
-      "autor": "Cassandra Clare"
+      "autor": "Cassandra Clare",
+      "genero": "Fantasía",
+      "editorial": "Hidra"
     },
     {
       "isbn": "9790000000247",
       "titulo": "Cazadores de sombras: Ciudad de las almas perdidas",
-      "autor": "Cassandra Clare"
+      "autor": "Cassandra Clare",
+      "genero": "Fantasía",
+      "editorial": "Hidra"
     },
     {
       "isbn": "9790000000248",
       "titulo": "Cazadores de sombras: Ciudad del fuego celestial",
-      "autor": "Cassandra Clare"
+      "autor": "Cassandra Clare",
+      "genero": "Fantasía",
+      "editorial": "Hidra"
     },
     {
       "isbn": "9790000000249",
       "titulo": "Cazadores de sombras: Ángel mecánico",
-      "autor": "Cassandra Clare"
+      "autor": "Cassandra Clare",
+      "genero": "Fantasía",
+      "editorial": "Hidra"
     },
     {
       "isbn": "9790000000250",
       "titulo": "Cazadores de sombras: Príncipe mecánico",
-      "autor": "Cassandra Clare"
+      "autor": "Cassandra Clare",
+      "genero": "Ensayo",
+      "editorial": "Debate"
     },
     {
       "isbn": "9790000000251",
       "titulo": "Cazadores de sombras: Princesa mecánica",
-      "autor": "Cassandra Clare"
+      "autor": "Cassandra Clare",
+      "genero": "Fantasía",
+      "editorial": "Hidra"
     },
     {
       "isbn": "9790000000252",
       "titulo": "La reina roja",
-      "autor": "Victoria Aveyard"
+      "autor": "Victoria Aveyard",
+      "genero": "Fantasía",
+      "editorial": "Hidra"
     },
     {
       "isbn": "9790000000253",
       "titulo": "La espada de cristal",
-      "autor": "Victoria Aveyard"
+      "autor": "Victoria Aveyard",
+      "genero": "Narrativa",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9790000000254",
       "titulo": "La jaula del rey",
-      "autor": "Victoria Aveyard"
+      "autor": "Victoria Aveyard",
+      "genero": "Fantasía",
+      "editorial": "Hidra"
     },
     {
       "isbn": "9790000000255",
       "titulo": "La tormenta de guerra",
-      "autor": "Victoria Aveyard"
+      "autor": "Victoria Aveyard",
+      "genero": "Narrativa",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9790000000256",
       "titulo": "La quinta estación",
-      "autor": "N.K. Jemisin"
+      "autor": "N.K. Jemisin",
+      "genero": "Narrativa",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000257",
       "titulo": "El portal de los obeliscos",
-      "autor": "N.K. Jemisin"
+      "autor": "N.K. Jemisin",
+      "genero": "Narrativa",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000258",
       "titulo": "El cielo de piedra",
-      "autor": "N.K. Jemisin"
+      "autor": "N.K. Jemisin",
+      "genero": "Narrativa",
+      "editorial": "Debolsillo"
     },
     {
       "isbn": "9790000000259",
       "titulo": "El priorato del naranjo",
-      "autor": "Samantha Shannon"
+      "autor": "Samantha Shannon",
+      "genero": "Narrativa",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000260",
       "titulo": "La reina de la nada",
-      "autor": "Holly Black"
+      "autor": "Holly Black",
+      "genero": "Fantasía juvenil",
+      "editorial": "Hidra"
     },
     {
       "isbn": "9790000000261",
       "titulo": "La biblioteca de la medianoche",
-      "autor": "Matt Haig"
+      "autor": "Matt Haig",
+      "genero": "Romance paranormal",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000262",
       "titulo": "El hombre que plantaba árboles",
-      "autor": "Jean Giono"
+      "autor": "Jean Giono",
+      "genero": "Narrativa",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9790000000263",
       "titulo": "La asistenta",
-      "autor": "Freida McFadden"
+      "autor": "Freida McFadden",
+      "genero": "Narrativa",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000264",
       "titulo": "La mujer en la ventana",
-      "autor": "A.J. Finn"
+      "autor": "A.J. Finn",
+      "genero": "Narrativa",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000265",
       "titulo": "La paciente silenciosa",
-      "autor": "Alex Michaelides"
+      "autor": "Alex Michaelides",
+      "genero": "Narrativa",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000266",
       "titulo": "La chica del tren",
-      "autor": "Paula Hawkins"
+      "autor": "Paula Hawkins",
+      "genero": "Narrativa",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000267",
       "titulo": "Perdida",
-      "autor": "Gillian Flynn"
+      "autor": "Gillian Flynn",
+      "genero": "Narrativa",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000268",
       "titulo": "La verdad sobre el caso Harry Quebert",
-      "autor": "Joël Dicker"
+      "autor": "Joël Dicker",
+      "genero": "Narrativa",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000269",
       "titulo": "El libro de los Baltimore",
-      "autor": "Joël Dicker"
+      "autor": "Joël Dicker",
+      "genero": "Narrativa",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000270",
       "titulo": "La desaparición de Stephanie Mailer",
-      "autor": "Joël Dicker"
+      "autor": "Joël Dicker",
+      "genero": "Narrativa",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9790000000271",
       "titulo": "Reina Roja",
-      "autor": "Juan Gómez-Jurado"
+      "autor": "Juan Gómez-Jurado",
+      "genero": "Fantasía",
+      "editorial": "Hidra"
     },
     {
       "isbn": "9790000000272",
       "titulo": "Loba Negra",
-      "autor": "Juan Gómez-Jurado"
+      "autor": "Juan Gómez-Jurado",
+      "genero": "Narrativa",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9790000000273",
       "titulo": "Rey Blanco",
-      "autor": "Juan Gómez-Jurado"
+      "autor": "Juan Gómez-Jurado",
+      "genero": "Fantasía",
+      "editorial": "Hidra"
     },
     {
       "isbn": "9790000000274",
       "titulo": "Todo arde",
-      "autor": "Juan Gómez-Jurado"
+      "autor": "Juan Gómez-Jurado",
+      "genero": "Narrativa",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000275",
       "titulo": "Cicatriz",
-      "autor": "Juan Gómez-Jurado"
+      "autor": "Juan Gómez-Jurado",
+      "genero": "Narrativa",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000276",
       "titulo": "El paciente",
-      "autor": "Juan Gómez-Jurado"
+      "autor": "Juan Gómez-Jurado",
+      "genero": "Narrativa",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9790000000277",
       "titulo": "La cara norte del corazón",
-      "autor": "Dolores Redondo"
+      "autor": "Dolores Redondo",
+      "genero": "Romance contemporáneo",
+      "editorial": "Suma de Letras"
     },
     {
       "isbn": "9790000000278",
       "titulo": "El guardián invisible",
-      "autor": "Dolores Redondo"
+      "autor": "Dolores Redondo",
+      "genero": "Narrativa",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9790000000279",
       "titulo": "Legado en los huesos",
-      "autor": "Dolores Redondo"
+      "autor": "Dolores Redondo",
+      "genero": "Fantasía",
+      "editorial": "Hidra"
     },
     {
       "isbn": "9790000000280",
       "titulo": "Ofrenda a la tormenta",
-      "autor": "Dolores Redondo"
+      "autor": "Dolores Redondo",
+      "genero": "Narrativa",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000281",
       "titulo": "Los ritos del agua",
-      "autor": "Eva García Sáenz de Urturi"
+      "autor": "Eva García Sáenz de Urturi",
+      "genero": "Narrativa",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000282",
       "titulo": "Los señores del tiempo",
-      "autor": "Eva García Sáenz de Urturi"
+      "autor": "Eva García Sáenz de Urturi",
+      "genero": "Narrativa",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000283",
       "titulo": "El silencio de la ciudad blanca",
-      "autor": "Eva García Sáenz de Urturi"
+      "autor": "Eva García Sáenz de Urturi",
+      "genero": "Narrativa",
+      "editorial": "Debolsillo"
     },
     {
       "isbn": "9790000000284",
       "titulo": "La chica de nieve",
-      "autor": "Javier Castillo"
+      "autor": "Javier Castillo",
+      "genero": "Narrativa",
+      "editorial": "Debolsillo"
     },
     {
       "isbn": "9790000000285",
       "titulo": "El juego del alma",
-      "autor": "Javier Castillo"
+      "autor": "Javier Castillo",
+      "genero": "Narrativa",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000286",
       "titulo": "Todo lo que sucedió con Miranda Huff",
-      "autor": "Javier Castillo"
+      "autor": "Javier Castillo",
+      "genero": "Narrativa",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9790000000287",
       "titulo": "El día que se perdió la cordura",
-      "autor": "Javier Castillo"
+      "autor": "Javier Castillo",
+      "genero": "Narrativa",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000288",
       "titulo": "El día que se perdió el amor",
-      "autor": "Javier Castillo"
+      "autor": "Javier Castillo",
+      "genero": "Romance contemporáneo",
+      "editorial": "Suma de Letras"
     },
     {
       "isbn": "9790000000289",
       "titulo": "La novia gitana",
-      "autor": "Carmen Mola"
+      "autor": "Carmen Mola",
+      "genero": "Narrativa",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000290",
       "titulo": "La red púrpura",
-      "autor": "Carmen Mola"
+      "autor": "Carmen Mola",
+      "genero": "Narrativa",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000291",
       "titulo": "La nena",
-      "autor": "Carmen Mola"
+      "autor": "Carmen Mola",
+      "genero": "Narrativa",
+      "editorial": "Debolsillo"
     },
     {
       "isbn": "9790000000292",
       "titulo": "Madrid",
-      "autor": "Andrés Trapiello"
+      "autor": "Andrés Trapiello",
+      "genero": "Narrativa",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000293",
       "titulo": "La ridícula idea de no volver a verte",
-      "autor": "Rosa Montero"
+      "autor": "Rosa Montero",
+      "genero": "Narrativa",
+      "editorial": "Debolsillo"
     },
     {
       "isbn": "9790000000294",
       "titulo": "La buena suerte",
-      "autor": "Rosa Montero"
+      "autor": "Rosa Montero",
+      "genero": "Narrativa",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000295",
       "titulo": "La hija del caníbal",
-      "autor": "Rosa Montero"
+      "autor": "Rosa Montero",
+      "genero": "Narrativa",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000296",
       "titulo": "El tiempo entre costuras",
-      "autor": "María Dueñas"
+      "autor": "María Dueñas",
+      "genero": "Narrativa",
+      "editorial": "Debolsillo"
     },
     {
       "isbn": "9790000000297",
       "titulo": "Sira",
-      "autor": "María Dueñas"
+      "autor": "María Dueñas",
+      "genero": "Narrativa",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000298",
       "titulo": "Las hijas del Capitán",
-      "autor": "María Dueñas"
+      "autor": "María Dueñas",
+      "genero": "Narrativa",
+      "editorial": "Debolsillo"
     },
     {
       "isbn": "9790000000299",
       "titulo": "La chica de los ojos color café",
-      "autor": "Lisa Kleypas"
+      "autor": "Lisa Kleypas",
+      "genero": "Narrativa",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000300",
       "titulo": "Una educación",
-      "autor": "Tara Westover"
+      "autor": "Tara Westover",
+      "genero": "Narrativa",
+      "editorial": "Debolsillo"
     },
     {
       "isbn": "9790000000301",
       "titulo": "Educated",
-      "autor": "Tara Westover"
+      "autor": "Tara Westover",
+      "genero": "Narrativa",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000302",
       "titulo": "El juego de Ender",
-      "autor": "Orson Scott Card"
+      "autor": "Orson Scott Card",
+      "genero": "Narrativa",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000303",
       "titulo": "La voz de los muertos",
-      "autor": "Orson Scott Card"
+      "autor": "Orson Scott Card",
+      "genero": "Narrativa",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000304",
       "titulo": "Xenocidio",
-      "autor": "Orson Scott Card"
+      "autor": "Orson Scott Card",
+      "genero": "Narrativa",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000305",
       "titulo": "Hijos de la mente",
-      "autor": "Orson Scott Card"
+      "autor": "Orson Scott Card",
+      "genero": "Narrativa",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000306",
       "titulo": "El nombre del viento",
-      "autor": "Patrick Rothfuss"
+      "autor": "Patrick Rothfuss",
+      "genero": "Narrativa",
+      "editorial": "Debolsillo"
     },
     {
       "isbn": "9790000000307",
       "titulo": "El temor de un hombre sabio",
-      "autor": "Patrick Rothfuss"
+      "autor": "Patrick Rothfuss",
+      "genero": "Narrativa",
+      "editorial": "Debolsillo"
     },
     {
       "isbn": "9790000000308",
       "titulo": "El archivo de las tormentas: El camino de los reyes",
-      "autor": "Brandon Sanderson"
+      "autor": "Brandon Sanderson",
+      "genero": "Fantasía",
+      "editorial": "Hidra"
     },
     {
       "isbn": "9790000000309",
       "titulo": "El archivo de las tormentas: Palabras radiantes",
-      "autor": "Brandon Sanderson"
+      "autor": "Brandon Sanderson",
+      "genero": "Narrativa",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000310",
       "titulo": "El archivo de las tormentas: Juramentada",
-      "autor": "Brandon Sanderson"
+      "autor": "Brandon Sanderson",
+      "genero": "Narrativa",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000311",
       "titulo": "El archivo de las tormentas: El ritmo de la guerra",
-      "autor": "Brandon Sanderson"
+      "autor": "Brandon Sanderson",
+      "genero": "Narrativa",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9790000000312",
       "titulo": "Nacidos de la bruma: El imperio final",
-      "autor": "Brandon Sanderson"
+      "autor": "Brandon Sanderson",
+      "genero": "Narrativa",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000313",
       "titulo": "Nacidos de la bruma: El pozo de la ascensión",
-      "autor": "Brandon Sanderson"
+      "autor": "Brandon Sanderson",
+      "genero": "Narrativa",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9790000000314",
       "titulo": "Nacidos de la bruma: El héroe de las eras",
-      "autor": "Brandon Sanderson"
+      "autor": "Brandon Sanderson",
+      "genero": "Narrativa",
+      "editorial": "Debolsillo"
     },
     {
       "isbn": "9790000000315",
       "titulo": "Elantris",
-      "autor": "Brandon Sanderson"
+      "autor": "Brandon Sanderson",
+      "genero": "Narrativa",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000316",
       "titulo": "El aliento de los dioses",
-      "autor": "Brandon Sanderson"
+      "autor": "Brandon Sanderson",
+      "genero": "Filosofía",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9790000000317",
       "titulo": "El imperio del vampiro",
-      "autor": "Jay Kristoff"
+      "autor": "Jay Kristoff",
+      "genero": "Romance paranormal",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000318",
       "titulo": "Nevernight",
-      "autor": "Jay Kristoff"
+      "autor": "Jay Kristoff",
+      "genero": "Narrativa",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000319",
       "titulo": "La casa en el mar cerúleo",
-      "autor": "T.J. Klune"
+      "autor": "T.J. Klune",
+      "genero": "Narrativa",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000320",
       "titulo": "Babel",
-      "autor": "R.F. Kuang"
+      "autor": "R.F. Kuang",
+      "genero": "Narrativa",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000321",
       "titulo": "La guerra de la amapola",
-      "autor": "R.F. Kuang"
+      "autor": "R.F. Kuang",
+      "genero": "Narrativa",
+      "editorial": "Debolsillo"
     },
     {
       "isbn": "9790000000322",
       "titulo": "La república del dragón",
-      "autor": "R.F. Kuang"
+      "autor": "R.F. Kuang",
+      "genero": "Fantasía",
+      "editorial": "Hidra"
     },
     {
       "isbn": "9790000000323",
       "titulo": "La reina en llamas",
-      "autor": "R.F. Kuang"
+      "autor": "R.F. Kuang",
+      "genero": "Fantasía",
+      "editorial": "Hidra"
     },
     {
       "isbn": "9790000000324",
       "titulo": "El problema de los tres cuerpos",
-      "autor": "Liu Cixin"
+      "autor": "Liu Cixin",
+      "genero": "Narrativa",
+      "editorial": "Debolsillo"
     },
     {
       "isbn": "9790000000325",
       "titulo": "El bosque oscuro",
-      "autor": "Liu Cixin"
+      "autor": "Liu Cixin",
+      "genero": "Narrativa",
+      "editorial": "Debolsillo"
     },
     {
       "isbn": "9790000000326",
       "titulo": "El fin de la muerte",
-      "autor": "Liu Cixin"
+      "autor": "Liu Cixin",
+      "genero": "Thriller",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000327",
       "titulo": "Proyecto Hail Mary",
-      "autor": "Andy Weir"
+      "autor": "Andy Weir",
+      "genero": "Narrativa",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000328",
       "titulo": "El marciano",
-      "autor": "Andy Weir"
+      "autor": "Andy Weir",
+      "genero": "Narrativa",
+      "editorial": "Debolsillo"
     },
     {
       "isbn": "9790000000329",
       "titulo": "Ready Player One",
-      "autor": "Ernest Cline"
+      "autor": "Ernest Cline",
+      "genero": "Narrativa",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000330",
       "titulo": "Ready Player Two",
-      "autor": "Ernest Cline"
+      "autor": "Ernest Cline",
+      "genero": "Narrativa",
+      "editorial": "Debolsillo"
     },
     {
       "isbn": "9790000000331",
       "titulo": "La bruja",
-      "autor": "Camilla Läckberg"
+      "autor": "Camilla Läckberg",
+      "genero": "Narrativa",
+      "editorial": "Debolsillo"
     },
     {
       "isbn": "9790000000332",
       "titulo": "Los hombres que no amaban a las mujeres",
-      "autor": "Stieg Larsson"
+      "autor": "Stieg Larsson",
+      "genero": "Narrativa",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000333",
       "titulo": "La chica que soñaba con una cerilla y un bidón de gasolina",
-      "autor": "Stieg Larsson"
+      "autor": "Stieg Larsson",
+      "genero": "Narrativa",
+      "editorial": "Debolsillo"
     },
     {
       "isbn": "9790000000334",
       "titulo": "La reina en el palacio de las corrientes de aire",
-      "autor": "Stieg Larsson"
+      "autor": "Stieg Larsson",
+      "genero": "Fantasía",
+      "editorial": "Hidra"
     },
     {
       "isbn": "9790000000335",
       "titulo": "El psicoanalista",
-      "autor": "John Katzenbach"
+      "autor": "John Katzenbach",
+      "genero": "Narrativa",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000336",
       "titulo": "La historia secreta",
-      "autor": "Donna Tartt"
+      "autor": "Donna Tartt",
+      "genero": "Ensayo",
+      "editorial": "Debate"
     },
     {
       "isbn": "9790000000337",
       "titulo": "El jilguero",
-      "autor": "Donna Tartt"
+      "autor": "Donna Tartt",
+      "genero": "Narrativa",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000338",
       "titulo": "El fantasma de la ópera",
-      "autor": "Gaston Leroux"
+      "autor": "Gaston Leroux",
+      "genero": "Narrativa",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000339",
       "titulo": "La guerra de los mundos",
-      "autor": "H.G. Wells"
+      "autor": "H.G. Wells",
+      "genero": "Narrativa",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000340",
       "titulo": "La máquina del tiempo",
-      "autor": "H.G. Wells"
+      "autor": "H.G. Wells",
+      "genero": "Narrativa",
+      "editorial": "Debolsillo"
     },
     {
       "isbn": "9790000000341",
       "titulo": "El hombre invisible",
-      "autor": "H.G. Wells"
+      "autor": "H.G. Wells",
+      "genero": "Narrativa",
+      "editorial": "Debolsillo"
     },
     {
       "isbn": "9790000000342",
       "titulo": "La importancia de llamarse Ernesto",
-      "autor": "Oscar Wilde"
+      "autor": "Oscar Wilde",
+      "genero": "Narrativa",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000343",
       "titulo": "Cándido",
-      "autor": "Voltaire"
+      "autor": "Voltaire",
+      "genero": "Narrativa",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000344",
       "titulo": "Cartas persas",
-      "autor": "Montesquieu"
+      "autor": "Montesquieu",
+      "genero": "Narrativa",
+      "editorial": "Debolsillo"
     },
     {
       "isbn": "9790000000345",
       "titulo": "Ensayo sobre la ceguera",
-      "autor": "José Saramago"
+      "autor": "José Saramago",
+      "genero": "Ensayo",
+      "editorial": "Debate"
     },
     {
       "isbn": "9790000000346",
       "titulo": "El Evangelio según Jesucristo",
-      "autor": "José Saramago"
+      "autor": "José Saramago",
+      "genero": "Narrativa",
+      "editorial": "Debolsillo"
     },
     {
       "isbn": "9790000000347",
       "titulo": "Todos los nombres",
-      "autor": "José Saramago"
+      "autor": "José Saramago",
+      "genero": "Narrativa",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9790000000348",
       "titulo": "La balsa de piedra",
-      "autor": "José Saramago"
+      "autor": "José Saramago",
+      "genero": "Narrativa",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000349",
       "titulo": "El mundo de Sofía",
-      "autor": "Jostein Gaarder"
+      "autor": "Jostein Gaarder",
+      "genero": "Narrativa",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000350",
       "titulo": "Los renglones torcidos de Dios",
-      "autor": "Torcuato Luca de Tena"
+      "autor": "Torcuato Luca de Tena",
+      "genero": "Filosofía",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9790000000351",
       "titulo": "La casa de papel",
-      "autor": "Carlos María Domínguez"
+      "autor": "Carlos María Domínguez",
+      "genero": "Narrativa",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000352",
       "titulo": "El tiempo es un canalla",
-      "autor": "Jennifer Egan"
+      "autor": "Jennifer Egan",
+      "genero": "Narrativa",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000353",
       "titulo": "Las correcciones",
-      "autor": "Jonathan Franzen"
+      "autor": "Jonathan Franzen",
+      "genero": "Narrativa",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000354",
       "titulo": "El club de la lucha",
-      "autor": "Chuck Palahniuk"
+      "autor": "Chuck Palahniuk",
+      "genero": "Narrativa",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9790000000355",
       "titulo": "La isla de las tormentas",
-      "autor": "Ken Follett"
+      "autor": "Ken Follett",
+      "genero": "Novela histórica",
+      "editorial": "Plaza & Janés"
     },
     {
       "isbn": "9790000000356",
       "titulo": "El monje que vendió su Ferrari",
-      "autor": "Robin Sharma"
+      "autor": "Robin Sharma",
+      "genero": "Narrativa",
+      "editorial": "Debolsillo"
     },
     {
       "isbn": "9790000000357",
       "titulo": "El hombre en busca de sentido",
-      "autor": "Viktor E. Frankl"
+      "autor": "Viktor E. Frankl",
+      "genero": "Narrativa",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9790000000358",
       "titulo": "Los cuatro acuerdos",
-      "autor": "Don Miguel Ruiz"
+      "autor": "Don Miguel Ruiz",
+      "genero": "Narrativa",
+      "editorial": "Debolsillo"
     },
     {
       "isbn": "9790000000359",
       "titulo": "El monje y el filósofo",
-      "autor": "Jean-François Revel y Matthieu Ricard"
+      "autor": "Jean-François Revel y Matthieu Ricard",
+      "genero": "Narrativa",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9790000000360",
       "titulo": "El poder del ahora",
-      "autor": "Eckhart Tolle"
+      "autor": "Eckhart Tolle",
+      "genero": "Narrativa",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9790000000361",
       "titulo": "Padre rico, padre pobre",
-      "autor": "Robert T. Kiyosaki"
+      "autor": "Robert T. Kiyosaki",
+      "genero": "Narrativa",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000362",
       "titulo": "Cómo hacer amigos e influir sobre las personas",
-      "autor": "Dale Carnegie"
+      "autor": "Dale Carnegie",
+      "genero": "Narrativa",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9790000000363",
       "titulo": "El club de las 5 de la mañana",
-      "autor": "Robin Sharma"
+      "autor": "Robin Sharma",
+      "genero": "Narrativa",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9790000000364",
       "titulo": "Hábitos atómicos",
-      "autor": "James Clear"
+      "autor": "James Clear",
+      "genero": "Narrativa",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000365",
       "titulo": "El sutil arte de que (casi todo) te importe una mierda",
-      "autor": "Mark Manson"
+      "autor": "Mark Manson",
+      "genero": "Narrativa",
+      "editorial": "Debolsillo"
     },
     {
       "isbn": "9790000000366",
       "titulo": "El poder de los hábitos",
-      "autor": "Charles Duhigg"
+      "autor": "Charles Duhigg",
+      "genero": "Narrativa",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9790000000367",
       "titulo": "Grit",
-      "autor": "Angela Duckworth"
+      "autor": "Angela Duckworth",
+      "genero": "Narrativa",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000368",
       "titulo": "Mindset: La actitud del éxito",
-      "autor": "Carol S. Dweck"
+      "autor": "Carol S. Dweck",
+      "genero": "Narrativa",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000369",
       "titulo": "El cisne negro",
-      "autor": "Nassim Nicholas Taleb"
+      "autor": "Nassim Nicholas Taleb",
+      "genero": "Narrativa",
+      "editorial": "Debolsillo"
     },
     {
       "isbn": "9790000000370",
       "titulo": "Antifrágil",
-      "autor": "Nassim Nicholas Taleb"
+      "autor": "Nassim Nicholas Taleb",
+      "genero": "Narrativa",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9790000000371",
       "titulo": "Breves respuestas a las grandes preguntas",
-      "autor": "Stephen Hawking"
+      "autor": "Stephen Hawking",
+      "genero": "Narrativa",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9790000000372",
       "titulo": "Una breve historia del tiempo",
-      "autor": "Stephen Hawking"
+      "autor": "Stephen Hawking",
+      "genero": "Ensayo",
+      "editorial": "Debate"
     },
     {
       "isbn": "9790000000373",
       "titulo": "El universo en una cáscara de nuez",
-      "autor": "Stephen Hawking"
+      "autor": "Stephen Hawking",
+      "genero": "Narrativa",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000374",
       "titulo": "El gen egoísta",
-      "autor": "Richard Dawkins"
+      "autor": "Richard Dawkins",
+      "genero": "Narrativa",
+      "editorial": "Debolsillo"
     },
     {
       "isbn": "9790000000375",
       "titulo": "El espejismo de Dios",
-      "autor": "Richard Dawkins"
+      "autor": "Richard Dawkins",
+      "genero": "Filosofía",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9790000000376",
       "titulo": "Armas, gérmenes y acero",
-      "autor": "Jared Diamond"
+      "autor": "Jared Diamond",
+      "genero": "Narrativa",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000377",
       "titulo": "Colapso",
-      "autor": "Jared Diamond"
+      "autor": "Jared Diamond",
+      "genero": "Narrativa",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9790000000378",
       "titulo": "El dilema del omnívoro",
-      "autor": "Michael Pollan"
+      "autor": "Michael Pollan",
+      "genero": "Narrativa",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000379",
       "titulo": "El poder de la vulnerabilidad",
-      "autor": "Brené Brown"
+      "autor": "Brené Brown",
+      "genero": "Narrativa",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000380",
       "titulo": "Atrévete a liderar",
-      "autor": "Brené Brown"
+      "autor": "Brené Brown",
+      "genero": "Narrativa",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000381",
       "titulo": "Los 7 hábitos de la gente altamente efectiva",
-      "autor": "Stephen R. Covey"
+      "autor": "Stephen R. Covey",
+      "genero": "Narrativa",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000382",
       "titulo": "El inversor inteligente",
-      "autor": "Benjamin Graham"
+      "autor": "Benjamin Graham",
+      "genero": "Narrativa",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000383",
       "titulo": "El pequeño libro para invertir con sentido común",
-      "autor": "John C. Bogle"
+      "autor": "John C. Bogle",
+      "genero": "Narrativa",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000384",
       "titulo": "Principios",
-      "autor": "Ray Dalio"
+      "autor": "Ray Dalio",
+      "genero": "Narrativa",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000385",
       "titulo": "Outliers (Fueras de serie)",
-      "autor": "Malcolm Gladwell"
+      "autor": "Malcolm Gladwell",
+      "genero": "Narrativa",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000386",
       "titulo": "David y Goliat",
-      "autor": "Malcolm Gladwell"
+      "autor": "Malcolm Gladwell",
+      "genero": "Narrativa",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9790000000387",
       "titulo": "Háblame y te escucharé",
-      "autor": "Adele Faber y Elaine Mazlish"
+      "autor": "Adele Faber y Elaine Mazlish",
+      "genero": "Narrativa",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000388",
       "titulo": "Los siete maridos de Evelyn Hugo",
-      "autor": "Taylor Jenkins Reid"
+      "autor": "Taylor Jenkins Reid",
+      "genero": "Narrativa",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000389",
       "titulo": "Daisy Jones & The Six",
-      "autor": "Taylor Jenkins Reid"
+      "autor": "Taylor Jenkins Reid",
+      "genero": "Narrativa",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000390",
       "titulo": "Malibu renace",
-      "autor": "Taylor Jenkins Reid"
+      "autor": "Taylor Jenkins Reid",
+      "genero": "Narrativa",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000391",
       "titulo": "Una segunda oportunidad",
-      "autor": "Colleen Hoover"
+      "autor": "Colleen Hoover",
+      "genero": "Romance contemporáneo",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000392",
       "titulo": "Normal People",
-      "autor": "Sally Rooney"
+      "autor": "Sally Rooney",
+      "genero": "Narrativa",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000393",
       "titulo": "Conversaciones entre amigos",
-      "autor": "Sally Rooney"
+      "autor": "Sally Rooney",
+      "genero": "Narrativa",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000394",
       "titulo": "La canción de los vivos y los muertos",
-      "autor": "Jesmyn Ward"
+      "autor": "Jesmyn Ward",
+      "genero": "Narrativa",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000395",
       "titulo": "La vida mentirosa de los adultos",
-      "autor": "Elena Ferrante"
+      "autor": "Elena Ferrante",
+      "genero": "Narrativa",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000396",
       "titulo": "La amiga estupenda",
-      "autor": "Elena Ferrante"
+      "autor": "Elena Ferrante",
+      "genero": "Narrativa",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9790000000397",
       "titulo": "Un hombre llamado Ove",
-      "autor": "Fredrik Backman"
+      "autor": "Fredrik Backman",
+      "genero": "Narrativa",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9790000000398",
       "titulo": "Mi abuela me pidió que te dijera que lo siente",
-      "autor": "Fredrik Backman"
+      "autor": "Fredrik Backman",
+      "genero": "Narrativa",
+      "editorial": "Alianza Editorial"
     },
     {
       "isbn": "9790000000399",
       "titulo": "Beartown",
-      "autor": "Fredrik Backman"
+      "autor": "Fredrik Backman",
+      "genero": "Narrativa",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000400",
       "titulo": "El odio que das",
-      "autor": "Angie Thomas"
+      "autor": "Angie Thomas",
+      "genero": "Narrativa",
+      "editorial": "Debolsillo"
     },
     {
       "isbn": "9790000000401",
       "titulo": "Simon vs. la agenda Homo Sapiens",
-      "autor": "Becky Albertalli"
+      "autor": "Becky Albertalli",
+      "genero": "Ensayo",
+      "editorial": "Debate"
     },
     {
       "isbn": "9790000000402",
       "titulo": "Love, Simon",
-      "autor": "Becky Albertalli"
+      "autor": "Becky Albertalli",
+      "genero": "Romance contemporáneo",
+      "editorial": "Suma de Letras"
     },
     {
       "isbn": "9790000000403",
       "titulo": "Yo antes de ti",
-      "autor": "Jojo Moyes"
+      "autor": "Jojo Moyes",
+      "genero": "Narrativa",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000404",
       "titulo": "Después de ti",
-      "autor": "Jojo Moyes"
+      "autor": "Jojo Moyes",
+      "genero": "Narrativa",
+      "editorial": "Debolsillo"
     },
     {
       "isbn": "9790000000405",
       "titulo": "Sigo siendo yo",
-      "autor": "Jojo Moyes"
+      "autor": "Jojo Moyes",
+      "genero": "Narrativa",
+      "editorial": "Debolsillo"
     },
     {
       "isbn": "9790000000406",
       "titulo": "Después",
-      "autor": "Anna Todd"
+      "autor": "Anna Todd",
+      "genero": "Narrativa",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000407",
       "titulo": "Antes de ella",
-      "autor": "Anna Todd"
+      "autor": "Anna Todd",
+      "genero": "Narrativa",
+      "editorial": "Alfaguara"
     },
     {
       "isbn": "9790000000408",
       "titulo": "La balada del nunca jamás",
-      "autor": "Stephanie Garber"
+      "autor": "Stephanie Garber",
+      "genero": "Narrativa",
+      "editorial": "Planeta"
     },
     {
       "isbn": "9790000000409",
       "titulo": "Love on the Brain",
-      "autor": "Ali Hazelwood"
+      "autor": "Ali Hazelwood",
+      "genero": "Romance contemporáneo",
+      "editorial": "Suma de Letras"
     },
     {
       "isbn": "9790000000410",
       "titulo": "Amor en juego",
-      "autor": "Hannah Grace"
+      "autor": "Hannah Grace",
+      "genero": "Romance contemporáneo",
+      "editorial": "Suma de Letras"
     },
     {
       "isbn": "9790000000411",
       "titulo": "Heartstopper",
-      "autor": "Alice Oseman"
+      "autor": "Alice Oseman",
+      "genero": "Novela gráfica (YA)",
+      "editorial": "Hodder Children's Books"
     },
     {
       "isbn": "9790000000412",
       "titulo": "Gente normal",
-      "autor": "Sally Rooney"
+      "autor": "Sally Rooney",
+      "genero": "Narrativa",
+      "editorial": "Alianza Editorial"
     }
   ],
   "ejemplares": [

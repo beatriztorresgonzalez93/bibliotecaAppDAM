@@ -15,7 +15,7 @@ import com.DAM.bibliotecaapp.data.entities.Libro;
 import com.DAM.bibliotecaapp.data.entities.Prestamo;
 import com.DAM.bibliotecaapp.data.entities.Usuario;
 
-@Database(entities = {Usuario.class, Libro.class, Ejemplar.class, Prestamo.class}, version = 7)
+@Database(entities = {Usuario.class, Libro.class, Ejemplar.class, Prestamo.class}, version = 8)
 public abstract class AppDatabase extends RoomDatabase {
 
     public abstract UsuarioDao usuarioDao();

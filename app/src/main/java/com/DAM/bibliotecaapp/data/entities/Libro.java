@@ -12,4 +12,7 @@ public class Libro {
     public String isbn;
     public String titulo;
     public String autor;
+    public String editorial;
+    public String genero;
+
 }

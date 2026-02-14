@@ -42,6 +42,10 @@ public class LibroAdapter extends RecyclerView.Adapter<LibroAdapter.LibroViewHol
         holder.tvTitulo.setText(libro.titulo);
         holder.tvAutor.setText("Autor: " + libro.autor);
         holder.tvIsbn.setText("ISBN: " + libro.isbn);
+        holder.tvEditorial.setText("Editorial: " + (libro.editorial != null ? libro.editorial : ""));
+        holder.tvGenero.setText("Género: " + (libro.genero != null ? libro.genero : ""));
+
+
 
         int total = db.ejemplarDao().countTotal(libro.id);
         int disp = db.ejemplarDao().countDisponibles(libro.id);
@@ -65,7 +69,7 @@ public class LibroAdapter extends RecyclerView.Adapter<LibroAdapter.LibroViewHol
 
     static class LibroViewHolder extends RecyclerView.ViewHolder {
 
-        TextView tvTitulo, tvAutor, tvIsbn, tvDisponibles;
+        TextView tvTitulo, tvAutor, tvIsbn, tvEditorial, tvGenero, tvDisponibles;
         Button btnPrestar;
 
         public LibroViewHolder(@NonNull View itemView) {
@@ -73,6 +77,9 @@ public class LibroAdapter extends RecyclerView.Adapter<LibroAdapter.LibroViewHol
             tvTitulo = itemView.findViewById(R.id.tvTitulo);
             tvAutor = itemView.findViewById(R.id.tvAutor);
             tvIsbn = itemView.findViewById(R.id.tvIsbn);
+            tvEditorial = itemView.findViewById(R.id.tvEditorial);
+            tvGenero = itemView.findViewById(R.id.tvGenero);
+
             tvDisponibles = itemView.findViewById(R.id.tvDisponibles);
             btnPrestar = itemView.findViewById(R.id.btnPrestar);
         }

@@ -1,6 +1,7 @@
 package com.DAM.bibliotecaapp.ui.libro;
 
 import android.os.Bundle;
+import android.view.Menu;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -28,6 +29,10 @@ public class LibrosActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_libros);
+
+        androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.toolbarLibros);
+        setSupportActionBar(toolbar);
+
 
         svLibros = findViewById(R.id.svLibros);
 
@@ -82,4 +87,11 @@ public class LibrosActivity extends AppCompatActivity {
         // Al volver de NuevoPrestamoActivity, refresca disponibles
         cargarLibros();
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_libros, menu);
+        return true;
+    }
+
 }

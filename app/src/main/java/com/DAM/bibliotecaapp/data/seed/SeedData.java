@@ -72,6 +72,9 @@ public class SeedData {
                     libro.isbn = l.getString("isbn");
                     libro.titulo = l.getString("titulo");
                     libro.autor = l.getString("autor");
+                    libro.editorial = l.optString("editorial", "");
+                    libro.genero = l.optString("genero", "");
+
                     libros.add(libro);
                 }
                 db.libroDao().insertAll(libros);
