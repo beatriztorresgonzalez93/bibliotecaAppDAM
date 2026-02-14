@@ -21,8 +21,9 @@ public interface LibroDao {
 
     @Query("SELECT * FROM libro WHERE isbn = :isbn LIMIT 1")
     Libro getByIsbn(String isbn);
-    @Query("SELECT * FROM libro WHERE titulo LIKE :q OR autor LIKE :q OR isbn LIKE :q ORDER BY titulo")
+    @Query("SELECT * FROM libro WHERE titulo LIKE :q OR autor LIKE :q OR isbn LIKE :q OR editorial LIKE :q OR genero LIKE :q ORDER BY titulo")
     List<Libro> search(String q);
+
 
 
 

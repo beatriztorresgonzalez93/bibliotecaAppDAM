@@ -2,6 +2,7 @@ package com.DAM.bibliotecaapp.ui.libro;
 
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -10,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.DAM.bibliotecaapp.data.db.AppDatabase;
 import com.DAM.bibliotecaapp.R;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -23,6 +26,10 @@ public class LibrosActivity extends AppCompatActivity {
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
     private androidx.appcompat.widget.SearchView svLibros;
     private String queryActual = "";
+
+    private String ordenActual = "titulo";
+
+    private LibroAdapter adapter;
 
 
     @Override
@@ -58,6 +65,9 @@ public class LibrosActivity extends AppCompatActivity {
 
         db = AppDatabase.getInstance(this);
 
+        adapter = new LibroAdapter(db, new ArrayList<>(), -1);
+        rvLibros.setAdapter(adapter);
+
         // Primera carga
         cargarLibros();
     }
@@ -73,12 +83,43 @@ public class LibrosActivity extends AppCompatActivity {
                 libros = db.libroDao().search(q);
             }
 
-            runOnUiThread(() -> {
-                LibroAdapter adapter = new LibroAdapter(db, libros);
-                rvLibros.setAdapter(adapter);
-            });
+            ordenarEnMemoria(libros);
+
+            runOnUiThread(() -> adapter.setData(libros));
         });
     }
+
+    private void ordenarEnMemoria(List<Libro> libros) {
+        if (libros == null) return;
+
+        Collections.sort(libros, (a, b) -> {
+            String sa, sb;
+
+            switch (ordenActual) {
+                case "autor":
+                    sa = safe(a.autor);
+                    sb = safe(b.autor);
+                    break;
+                case "editorial":
+                    sa = safe(a.editorial);
+                    sb = safe(b.editorial);
+                    break;
+                case "genero":
+                    sa = safe(a.genero);
+                    sb = safe(b.genero);
+                    break;
+                default:
+                    sa = safe(a.titulo);
+                    sb = safe(b.titulo);
+            }
+            return sa.compareTo(sb);
+        });
+    }
+
+    private String safe(String s) {
+        return s == null ? "" : s.toLowerCase();
+    }
+
 
 
     @Override
@@ -93,5 +134,31 @@ public class LibrosActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_libros, menu);
         return true;
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.orden_titulo) {
+            ordenActual = "titulo";
+            cargarLibros();
+            return true;
+        } else if (id == R.id.orden_autor) {
+            ordenActual = "autor";
+            cargarLibros();
+            return true;
+        } else if (id == R.id.orden_editorial) {
+            ordenActual = "editorial";
+            cargarLibros();
+            return true;
+        } else if (id == R.id.orden_genero) {
+            ordenActual = "genero";
+            cargarLibros();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
 
 }

@@ -16,17 +16,22 @@ import com.DAM.bibliotecaapp.data.entities.Libro;
 import com.DAM.bibliotecaapp.ui.prestamo.NuevoPrestamoActivity;
 import com.DAM.bibliotecaapp.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class LibroAdapter extends RecyclerView.Adapter<LibroAdapter.LibroViewHolder> {
 
     private final AppDatabase db;
-    private final List<Libro> libros;
+    private final List<Libro> libros = new ArrayList<>();
+    private final int idUsuario;
 
-    public LibroAdapter(AppDatabase db, List<Libro> libros) {
+
+    public LibroAdapter(AppDatabase db, List<Libro> inicial, int idUsuario) {
         this.db = db;
-        this.libros = libros;
+        this.idUsuario = idUsuario;
+        if (inicial != null) libros.addAll(inicial);
     }
+
 
     @NonNull
     @Override
@@ -84,4 +89,11 @@ public class LibroAdapter extends RecyclerView.Adapter<LibroAdapter.LibroViewHol
             btnPrestar = itemView.findViewById(R.id.btnPrestar);
         }
     }
+
+    public void setData(List<Libro> list) {
+        libros.clear();
+        if (list != null) libros.addAll(list);
+        notifyDataSetChanged();
+    }
+
 }
