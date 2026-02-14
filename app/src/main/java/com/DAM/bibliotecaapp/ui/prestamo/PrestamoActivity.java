@@ -40,8 +40,12 @@ public class PrestamoActivity extends AppCompatActivity {
         RecyclerView rv = findViewById(R.id.rvPrestamos); // <- revisa si tu id se llama distinto
         rv.setLayoutManager(new LinearLayoutManager(this));
 
-        adapter = new PrestamoGlobalAdapter(prestamo -> mostrarDialogoDevolucion(prestamo.idPrestamo));
+        adapter = new PrestamoGlobalAdapter(
+                prestamo -> mostrarDialogoDevolucion(prestamo.idPrestamo),
+                prestamo -> mostrarDialogoAmpliar(prestamo.idPrestamo)
+        );
         rv.setAdapter(adapter);
+
 
         // 2) Spinner filtro
         spFiltro = findViewById(R.id.spFiltroPrestamos); // <- asegúrate de añadir este Spinner al XML
@@ -118,4 +122,37 @@ public class PrestamoActivity extends AppCompatActivity {
             });
         });
     }
+
+    private void mostrarDialogoAmpliar(int idPrestamo) {
+        final String[] opciones = {"7 días", "14 días", "30 días"};
+        final int[] dias = {7, 14, 30};
+
+        new androidx.appcompat.app.AlertDialog.Builder(this)
+                .setTitle("Ampliar plazo")
+                .setItems(opciones, (dialog, which) -> {
+                    int d = dias[which];
+                    ampliarPlazo(idPrestamo, d);
+                })
+                .setNegativeButton("Cancelar", (d, w) -> d.dismiss())
+                .show();
+    }
+
+    private void ampliarPlazo(int idPrestamo, int diasExtra) {
+        executor.execute(() -> {
+            long msExtra = diasExtra * 24L * 60 * 60 * 1000;
+
+            int updated = db.prestamoDao().ampliarPlazo(idPrestamo, msExtra);
+
+            runOnUiThread(() -> {
+                if (updated > 0) {
+                    Toast.makeText(this, "Plazo ampliado +" + diasExtra + " días", Toast.LENGTH_SHORT).show();
+                    cargarPrestamos();
+                } else {
+                    Toast.makeText(this, "No se puede ampliar: préstamo vencido o ya devuelto", Toast.LENGTH_LONG).show();
+                }
+
+            });
+        });
+    }
+
 }

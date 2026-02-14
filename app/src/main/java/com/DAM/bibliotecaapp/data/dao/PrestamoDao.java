@@ -127,4 +127,13 @@ public interface PrestamoDao {
                     "ORDER BY p.fechaVencimiento ASC"
     )
     List<PrestamoGlobal> getPrestamosSoloActivosGlobal();
+
+    @Query("UPDATE prestamo " +
+            "SET fechaVencimiento = fechaVencimiento + :msExtra " +
+            "WHERE id = :idPrestamo " +
+            "AND fechaDevolucion IS NULL " +
+            "AND estado = 'ACTIVO'")
+    int ampliarPlazo(int idPrestamo, long msExtra);
+
+
 }
