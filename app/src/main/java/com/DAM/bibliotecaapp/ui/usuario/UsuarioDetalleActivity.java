@@ -27,6 +27,9 @@ public class UsuarioDetalleActivity extends AppCompatActivity {
 
     private TextView tvNombre, tvEmail, tvRol, tvPrestamosActivos, tvSinPrestamos;
     private PrestamoInfoAdapter adapter;
+    private TextView tvMultasPendientes;
+    private TextView tvNumMultasPendientes;
+
 
     public static final String EXTRA_USUARIO_ID = "usuarioId";
 
@@ -47,6 +50,10 @@ public class UsuarioDetalleActivity extends AppCompatActivity {
         RecyclerView rv = findViewById(R.id.rvPrestamosActivos);
         rv.setLayoutManager(new LinearLayoutManager(this));
 
+        tvMultasPendientes = findViewById(R.id.tvMultasPendientes);
+        tvNumMultasPendientes = findViewById(R.id.tvNumMultasPendientes);
+
+
         adapter = new PrestamoInfoAdapter(prestamoInfo ->
                 mostrarDialogoDevolucion(prestamoInfo.idPrestamo)
         );
@@ -64,17 +71,19 @@ public class UsuarioDetalleActivity extends AppCompatActivity {
         cargarDatos(usuarioId);
     }
 
+
     private void cargarDatos(int usuarioId) {
         executor.execute(() -> {
             // 1) Actualiza vencidos antes de leer
             db.prestamoDao().marcarVencidos(System.currentTimeMillis());
 
+            // 2) Usuario
             Usuario usuario = db.usuarioDao().getById(usuarioId);
 
-            // 2) Lista NO DEVUELTOS (activos + vencidos)
+            // 3) Lista NO DEVUELTOS (activos + vencidos)
             List<PrestamoInfo> lista = db.prestamoDao().getNoDevueltosByUsuario(usuarioId);
 
-            // 3) Contadores
+            // 4) Contadores préstamos
             int activos = 0;
             int vencidos = 0;
 
@@ -85,8 +94,24 @@ public class UsuarioDetalleActivity extends AppCompatActivity {
                 }
             }
 
+            // 5) Multas (✅ BD aquí, NO en runOnUiThread)
+            double totalMultasPendientes = db.multaDao().totalPendienteUsuario(usuarioId);
+
+            List<com.DAM.bibliotecaapp.data.entities.Multa> multasUsuario =
+                    db.multaDao().getByUsuario(usuarioId);
+
+            int numPendientes = 0;
+            if (multasUsuario != null) {
+                for (com.DAM.bibliotecaapp.data.entities.Multa m : multasUsuario) {
+                    if ("PENDIENTE".equals(m.estado)) numPendientes++;
+                }
+            }
+
+            // 6) Copias finales para UI
             int finalActivos = activos;
             int finalVencidos = vencidos;
+            double finalTotalMultasPendientes = totalMultasPendientes;
+            int finalNumPendientes = numPendientes;
 
             runOnUiThread(() -> {
                 if (usuario == null) {
@@ -98,7 +123,7 @@ public class UsuarioDetalleActivity extends AppCompatActivity {
                 tvEmail.setText(usuario.email);
                 tvRol.setText("Rol: " + usuario.rol);
 
-                // Aquí ya puedes mostrar ambos si quieres:
+                // Préstamos
                 tvPrestamosActivos.setText("Activos: " + finalActivos + " · Vencidos: " + finalVencidos);
 
                 adapter.setData(lista);
@@ -108,9 +133,23 @@ public class UsuarioDetalleActivity extends AppCompatActivity {
                 } else {
                     tvSinPrestamos.setVisibility(View.GONE);
                 }
+
+                // Multas (✅ solo pintar aquí)
+                if (tvMultasPendientes != null) {
+                    tvMultasPendientes.setText(
+                            "Multas pendientes: " +
+                                    String.format(java.util.Locale.getDefault(), "%.2f", finalTotalMultasPendientes) +
+                                    " €"
+                    );
+                }
+
+                if (tvNumMultasPendientes != null) {
+                    tvNumMultasPendientes.setText("Nº multas pendientes: " + finalNumPendientes);
+                }
             });
         });
     }
+
 
     @Override
     protected void onResume() {

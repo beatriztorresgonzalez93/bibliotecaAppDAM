@@ -32,6 +32,21 @@
         android:layout_marginTop="12dp" />
 
     <TextView
+        android:id="@+id/tvNumMultasPendientes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="Multas pendientes: 0"/>
+
+    <TextView
+        android:id="@+id/tvMultasPendientes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textStyle="bold"
+        android:text="Multas pendientes: 0,00 €"/>
+
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Listado de préstamos activos"
@@ -46,6 +61,10 @@
         android:textStyle="italic"
         android:visibility="gone"
         android:layout_marginTop="8dp"/>
+
+
+
+
 
 
 

@@ -7,6 +7,8 @@ import androidx.room.Query;
 import com.DAM.bibliotecaapp.data.entities.Multa;
 
 import java.util.List;
+import com.DAM.bibliotecaapp.data.pojo.MultaGlobal;
+
 
 @Dao
 public interface MultaDao {
@@ -31,4 +33,35 @@ public interface MultaDao {
 
     @Query("UPDATE multa SET estado = 'CONDONADA', fechaCierre = :ahora WHERE id = :idMulta AND estado = 'PENDIENTE'")
     int condonar(int idMulta, long ahora);
+
+    @Query(
+            "SELECT " +
+                    " m.id AS idMulta, " +
+                    " m.idUsuario AS idUsuario, " +
+                    " u.nombre AS nombreUsuario, " +
+                    " u.email AS emailUsuario, " +
+                    " m.idPrestamo AS idPrestamo, " +
+                    " m.diasRetraso AS diasRetraso, " +
+                    " m.importe AS importe, " +
+                    " m.fechaCreacion AS fechaCreacion, " +
+                    " m.fechaCierre AS fechaCierre, " +
+                    " m.estado AS estado " +
+                    "FROM multa m " +
+                    "JOIN Usuario u ON u.id = m.idUsuario " +
+                    "ORDER BY (m.estado = 'PENDIENTE') DESC, m.fechaCreacion DESC"
+    )
+    List<MultaGlobal> getAllGlobal();
+
+    @Query(
+            "SELECT " +
+                    " m.id AS idMulta, m.idUsuario AS idUsuario, u.nombre AS nombreUsuario, u.email AS emailUsuario, " +
+                    " m.idPrestamo AS idPrestamo, m.diasRetraso AS diasRetraso, m.importe AS importe, " +
+                    " m.fechaCreacion AS fechaCreacion, m.fechaCierre AS fechaCierre, m.estado AS estado " +
+                    "FROM multa m " +
+                    "JOIN Usuario u ON u.id = m.idUsuario " +
+                    "WHERE m.estado = 'PENDIENTE' " +
+                    "ORDER BY m.fechaCreacion DESC"
+    )
+    List<MultaGlobal> getPendientesGlobal();
+
 }

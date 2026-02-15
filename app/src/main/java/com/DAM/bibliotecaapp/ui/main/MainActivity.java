@@ -77,5 +77,11 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, PrestamoActivity.class))
         );
 
+        Button btnMultas = findViewById(R.id.btnMultas);
+        btnMultas.setOnClickListener(v ->
+                startActivity(new android.content.Intent(MainActivity.this, com.DAM.bibliotecaapp.ui.multa.MultasActivity.class))
+        );
+
+
     }
 }
