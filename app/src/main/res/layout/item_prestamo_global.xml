@@ -13,17 +13,44 @@
         android:textStyle="bold"/>
 
     <TextView
-        android:id="@+id/tvLinea2"
+        android:id="@+id/tvLinea3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"/>
+        android:layout_marginTop="4dp"
+        android:maxLines="2"
+        android:ellipsize="end"/>
+    <TextView
+        android:id="@+id/tvLinea4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:maxLines="2"
+        android:ellipsize="end"/>
+    <TextView
+        android:id="@+id/tvLinea5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:maxLines="2"
+        android:ellipsize="end"/>
 
     <TextView
-        android:id="@+id/tvEstado"
-        android:layout_width="wrap_content"
+        android:id="@+id/tvVence"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
-        android:textStyle="bold" />
+        android:layout_marginTop="4dp"
+        android:textStyle="italic"
+        android:maxLines="1"
+        android:ellipsize="end"/>
+
+    <TextView
+    android:id="@+id/tvEstado"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="6dp"
+    android:textStyle="bold" />
+
+
 
     <LinearLayout
         android:layout_width="match_parent"

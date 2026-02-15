@@ -14,8 +14,15 @@ import com.DAM.bibliotecaapp.data.pojo.PrestamoGlobal;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 
 public class PrestamoGlobalAdapter extends RecyclerView.Adapter<PrestamoGlobalAdapter.VH> {
+
+    private final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+
 
     // Click en la fila (opcional, por si luego quieres abrir detalle)
     public interface OnItemClickListener {
@@ -65,8 +72,15 @@ public class PrestamoGlobalAdapter extends RecyclerView.Adapter<PrestamoGlobalAd
     public void onBindViewHolder(@NonNull VH h, int position) {
         PrestamoGlobal p = data.get(position);
 
+        String vence = sdf.format(new Date(p.fechaVencimiento));
+        h.tvVence.setText("Vence: " + vence);
+
+
         h.tvLinea1.setText(p.titulo + " · " + p.autor);
-        h.tvLinea2.setText(p.nombreUsuario + " (" + p.emailUsuario + ") · Ejemplar: " + p.codigoInventario);
+        h.tvLinea3.setText(p.nombreUsuario);
+        h.tvLinea4.setText(p.emailUsuario);
+        h.tvLinea5.setText(p.codigoInventario);
+
 
         h.tvEstado.setText(p.estado);
 
@@ -110,20 +124,29 @@ public class PrestamoGlobalAdapter extends RecyclerView.Adapter<PrestamoGlobalAd
     }
 
     static class VH extends RecyclerView.ViewHolder {
-        TextView tvLinea1, tvLinea2, tvEstado;
-        Button btnAmpliar, btnDevolver;
+
+        TextView tvLinea1, tvEstado, tvVence;
+
+        TextView tvLinea3, tvLinea4, tvLinea5;
+        Button btnAmpliar;
+        Button btnDevolver;
         View container;
+
 
         VH(@NonNull View itemView) {
             super(itemView);
-            tvLinea1 = itemView.findViewById(R.id.tvLinea1);
-            tvLinea2 = itemView.findViewById(R.id.tvLinea2);
+            tvLinea1 = itemView.findViewById(R.id.tvLinea1);;
+            tvLinea3 = itemView.findViewById(R.id.tvLinea3);
+            tvLinea4 = itemView.findViewById(R.id.tvLinea4);
+            tvLinea5 = itemView.findViewById(R.id.tvLinea5);
             tvEstado = itemView.findViewById(R.id.tvEstado);
 
             btnAmpliar = itemView.findViewById(R.id.btnAmpliar);
             btnDevolver = itemView.findViewById(R.id.btnDevolver);
 
             container = itemView.findViewById(R.id.container);
+            tvVence = itemView.findViewById(R.id.tvVence);
+
         }
     }
 }
