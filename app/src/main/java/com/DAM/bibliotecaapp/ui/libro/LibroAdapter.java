@@ -6,12 +6,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.DAM.bibliotecaapp.data.db.AppDatabase;
 
+import com.DAM.bibliotecaapp.data.entities.Ejemplar;
 import com.DAM.bibliotecaapp.data.entities.Libro;
 import com.DAM.bibliotecaapp.ui.prestamo.NuevoPrestamoActivity;
 import com.DAM.bibliotecaapp.R;
@@ -54,6 +56,9 @@ public class LibroAdapter extends RecyclerView.Adapter<LibroAdapter.LibroViewHol
 
         int total = db.ejemplarDao().countTotal(libro.id);
         int disp = db.ejemplarDao().countDisponibles(libro.id);
+        int prestados = total - disp;
+        holder.btnDevolver.setEnabled(prestados > 0);
+
         holder.tvDisponibles.setText("Disponibles: " + disp + " / " + total);
 
         holder.btnPrestar.setEnabled(disp > 0);
@@ -65,6 +70,32 @@ public class LibroAdapter extends RecyclerView.Adapter<LibroAdapter.LibroViewHol
             i.putExtra("titulo", libro.titulo);
             v.getContext().startActivity(i);
         });
+
+        holder.btnDevolver.setOnClickListener(view -> {
+
+            Ejemplar ej = db.ejemplarDao().getPrimerPrestado(libro.id);
+
+            if (ej == null) {
+                Toast.makeText(view.getContext(), "No hay ejemplares prestados", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            int idPrestamo = db.prestamoDao().getPrestamoActivoByEjemplar(ej.id);
+
+            long ahora = System.currentTimeMillis();
+
+            db.runInTransaction(() -> {
+                db.prestamoDao().marcarDevuelto(idPrestamo, ahora);
+                db.ejemplarDao().actualizarEstado(ej.id, "DISPONIBLE");
+            });
+
+            Toast.makeText(view.getContext(), "Libro devuelto", Toast.LENGTH_SHORT).show();
+
+            notifyDataSetChanged();
+        });
+
+
+
     }
 
     @Override
@@ -75,7 +106,7 @@ public class LibroAdapter extends RecyclerView.Adapter<LibroAdapter.LibroViewHol
     static class LibroViewHolder extends RecyclerView.ViewHolder {
 
         TextView tvTitulo, tvAutor, tvIsbn, tvEditorial, tvGenero, tvDisponibles;
-        Button btnPrestar;
+        Button btnPrestar; Button btnDevolver;
 
         public LibroViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -87,6 +118,7 @@ public class LibroAdapter extends RecyclerView.Adapter<LibroAdapter.LibroViewHol
 
             tvDisponibles = itemView.findViewById(R.id.tvDisponibles);
             btnPrestar = itemView.findViewById(R.id.btnPrestar);
+            btnDevolver = itemView.findViewById(R.id.btnDevolver);
         }
     }
 

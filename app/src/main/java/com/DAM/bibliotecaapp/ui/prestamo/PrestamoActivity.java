@@ -32,23 +32,31 @@ public class PrestamoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_prestamo); // <- revisa si tu layout se llama distinto
+        setContentView(R.layout.activity_prestamo);
 
         db = AppDatabase.getInstance(this);
 
-        // 1) Recycler
-        RecyclerView rv = findViewById(R.id.rvPrestamos); // <- revisa si tu id se llama distinto
+        RecyclerView rv = findViewById(R.id.rvPrestamos);
         rv.setLayoutManager(new LinearLayoutManager(this));
 
         adapter = new PrestamoGlobalAdapter(
-                prestamo -> mostrarDialogoDevolucion(prestamo.idPrestamo),
-                prestamo -> mostrarDialogoAmpliar(prestamo.idPrestamo)
+                prestamo -> {
+                    // Click en la fila (opcional). Si no quieres que haga nada:
+                    // no pongas nada aquí.
+                },
+                prestamo -> {
+                    // Click en ampliar
+                    mostrarDialogoAmpliar(prestamo.idPrestamo);
+                },
+                prestamo -> {
+                    // Click en devolver
+                    mostrarDialogoDevolucion(prestamo.idPrestamo);
+                }
         );
         rv.setAdapter(adapter);
 
 
-        // 2) Spinner filtro
-        spFiltro = findViewById(R.id.spFiltroPrestamos); // <- asegúrate de añadir este Spinner al XML
+        spFiltro = findViewById(R.id.spFiltroPrestamos);
 
         ArrayAdapter<String> filtroAdapter = new ArrayAdapter<>(
                 this,
@@ -69,7 +77,6 @@ public class PrestamoActivity extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> parent) {}
         });
 
-        // Primera carga
         cargarPrestamos();
     }
 
@@ -81,7 +88,6 @@ public class PrestamoActivity extends AppCompatActivity {
 
     private void cargarPrestamos() {
         executor.execute(() -> {
-            // Marca vencidos automáticamente
             db.prestamoDao().marcarVencidos(System.currentTimeMillis());
 
             List<PrestamoGlobal> lista;
@@ -127,12 +133,9 @@ public class PrestamoActivity extends AppCompatActivity {
         final String[] opciones = {"7 días", "14 días", "30 días"};
         final int[] dias = {7, 14, 30};
 
-        new androidx.appcompat.app.AlertDialog.Builder(this)
+        new AlertDialog.Builder(this)
                 .setTitle("Ampliar plazo")
-                .setItems(opciones, (dialog, which) -> {
-                    int d = dias[which];
-                    ampliarPlazo(idPrestamo, d);
-                })
+                .setItems(opciones, (dialog, which) -> ampliarPlazo(idPrestamo, dias[which]))
                 .setNegativeButton("Cancelar", (d, w) -> d.dismiss())
                 .show();
     }
@@ -150,9 +153,7 @@ public class PrestamoActivity extends AppCompatActivity {
                 } else {
                     Toast.makeText(this, "No se puede ampliar: préstamo vencido o ya devuelto", Toast.LENGTH_LONG).show();
                 }
-
             });
         });
     }
-
 }

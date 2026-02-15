@@ -17,23 +17,34 @@ import java.util.List;
 
 public class PrestamoGlobalAdapter extends RecyclerView.Adapter<PrestamoGlobalAdapter.VH> {
 
+    // Click en la fila (opcional, por si luego quieres abrir detalle)
     public interface OnItemClickListener {
-        void onClick(PrestamoGlobal p); // devolver (o acción principal)
+        void onClick(PrestamoGlobal p);
     }
 
+    // Click en ampliar
     public interface OnAmpliarClickListener {
         void onAmpliarClick(PrestamoGlobal p);
+    }
+
+    // Click en devolver
+    public interface OnDevolverClickListener {
+        void onDevolverClick(PrestamoGlobal p);
     }
 
     private final List<PrestamoGlobal> data = new ArrayList<>();
 
     private final OnItemClickListener onItemClick;
     private final OnAmpliarClickListener onAmpliarClick;
+    private final OnDevolverClickListener onDevolverClick;
 
+    // ✅ Constructor ÚNICO (así no hay "might not have been initialized")
     public PrestamoGlobalAdapter(OnItemClickListener onItemClick,
-                                 OnAmpliarClickListener onAmpliarClick) {
+                                 OnAmpliarClickListener onAmpliarClick,
+                                 OnDevolverClickListener onDevolverClick) {
         this.onItemClick = onItemClick;
         this.onAmpliarClick = onAmpliarClick;
+        this.onDevolverClick = onDevolverClick;
     }
 
     public void setData(List<PrestamoGlobal> list) {
@@ -48,15 +59,12 @@ public class PrestamoGlobalAdapter extends RecyclerView.Adapter<PrestamoGlobalAd
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_prestamo_global, parent, false);
         return new VH(v);
-
-
     }
 
     @Override
     public void onBindViewHolder(@NonNull VH h, int position) {
         PrestamoGlobal p = data.get(position);
 
-        // Ajusta esto a cómo lo muestras tú
         h.tvLinea1.setText(p.titulo + " · " + p.autor);
         h.tvLinea2.setText(p.nombreUsuario + " (" + p.emailUsuario + ") · Ejemplar: " + p.codigoInventario);
 
@@ -64,44 +72,36 @@ public class PrestamoGlobalAdapter extends RecyclerView.Adapter<PrestamoGlobalAd
 
         boolean esVencido = "VENCIDO".equals(p.estado);
 
+        // Colores estado (si tienes los colores definidos)
+        if (esVencido) {
+            h.tvEstado.setTextColor(h.itemView.getResources().getColor(R.color.estado_vencido));
+            h.container.setBackgroundColor(h.itemView.getResources().getColor(R.color.fondo_vencido));
+        } else if ("ACTIVO".equals(p.estado)) {
+            h.tvEstado.setTextColor(h.itemView.getResources().getColor(R.color.estado_activo));
+            h.container.setBackgroundColor(h.itemView.getResources().getColor(android.R.color.transparent));
+        } else {
+            h.tvEstado.setTextColor(h.itemView.getResources().getColor(android.R.color.black));
+            h.container.setBackgroundColor(h.itemView.getResources().getColor(android.R.color.transparent));
+        }
 
+        // ✅ Ampliar: deshabilitado si vencido
         h.btnAmpliar.setEnabled(!esVencido);
         h.btnAmpliar.setAlpha(esVencido ? 0.4f : 1f);
 
-        if (esVencido) {
-            h.container.setBackgroundColor(
-                    h.itemView.getResources().getColor(R.color.fondo_vencido)
-            );
-        } else {
-            h.container.setBackgroundColor(
-                    h.itemView.getResources().getColor(android.R.color.transparent)
-            );
-        }
-
-
-// (opcional) si prefieres ocultarlo en vez de desactivarlo:
-// h.btnAmpliar.setVisibility(esVencido ? View.GONE : View.VISIBLE);
-
-
-        if ("VENCIDO".equals(p.estado)) {
-            h.tvEstado.setTextColor(h.itemView.getResources().getColor(R.color.estado_vencido));
-        } else if ("ACTIVO".equals(p.estado)) {
-            h.tvEstado.setTextColor(h.itemView.getResources().getColor(R.color.estado_activo));
-        } else {
-            h.tvEstado.setTextColor(h.itemView.getResources().getColor(android.R.color.black));
-        }
-
-        // Click en fila (devolver)
-        h.itemView.setOnClickListener(v -> {
-            if (onItemClick != null) onItemClick.onClick(p);
-        });
-
-        // Botón ampliar
         h.btnAmpliar.setOnClickListener(v -> {
-            if ("VENCIDO".equals(p.estado)) return; // seguridad extra
+            if (esVencido) return;
             if (onAmpliarClick != null) onAmpliarClick.onAmpliarClick(p);
         });
 
+        // ✅ Devolver: SIEMPRE visible
+        h.btnDevolver.setOnClickListener(v -> {
+            if (onDevolverClick != null) onDevolverClick.onDevolverClick(p);
+        });
+
+        // ✅ Click en la fila (opcional). No devuelve, solo lo que tú quieras.
+        h.itemView.setOnClickListener(v -> {
+            if (onItemClick != null) onItemClick.onClick(p);
+        });
     }
 
     @Override
@@ -111,18 +111,19 @@ public class PrestamoGlobalAdapter extends RecyclerView.Adapter<PrestamoGlobalAd
 
     static class VH extends RecyclerView.ViewHolder {
         TextView tvLinea1, tvLinea2, tvEstado;
-        Button btnAmpliar;
+        Button btnAmpliar, btnDevolver;
         View container;
-
 
         VH(@NonNull View itemView) {
             super(itemView);
             tvLinea1 = itemView.findViewById(R.id.tvLinea1);
             tvLinea2 = itemView.findViewById(R.id.tvLinea2);
             tvEstado = itemView.findViewById(R.id.tvEstado);
-            btnAmpliar = itemView.findViewById(R.id.btnAmpliar);
-            container = itemView.findViewById(R.id.container);
 
+            btnAmpliar = itemView.findViewById(R.id.btnAmpliar);
+            btnDevolver = itemView.findViewById(R.id.btnDevolver);
+
+            container = itemView.findViewById(R.id.container);
         }
     }
 }

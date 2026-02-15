@@ -43,6 +43,10 @@ public interface EjemplarDao {
     @Query("UPDATE ejemplar SET estado = :estado WHERE id = :idEjemplar")
     int updateEstado(int idEjemplar, String estado);
 
+    @Query("SELECT * FROM ejemplar WHERE idLibro = :idLibro AND estado = 'PRESTADO' LIMIT 1")
+    Ejemplar getPrimerPrestado(int idLibro);
+
+
 
 
 

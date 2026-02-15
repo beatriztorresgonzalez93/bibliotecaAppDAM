@@ -155,5 +155,9 @@ public interface PrestamoDao {
     )
     List<PrestamoInfo> getNoDevueltosByUsuario(int idUsuario);
 
+    @Query("SELECT id FROM prestamo WHERE idEjemplar = :idEjemplar AND fechaDevolucion IS NULL LIMIT 1")
+    int getPrestamoActivoByEjemplar(int idEjemplar);
+
+
 
 }
