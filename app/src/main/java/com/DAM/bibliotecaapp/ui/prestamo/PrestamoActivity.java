@@ -21,6 +21,9 @@ import java.util.concurrent.Executors;
 
 public class PrestamoActivity extends AppCompatActivity {
 
+    private static final double TARIFA_DIA = 0.50; // 50 céntimos por día
+    private static final double TOPE = 20.0;       // máximo 20€
+
     private AppDatabase db;
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
@@ -90,6 +93,17 @@ public class PrestamoActivity extends AppCompatActivity {
         executor.execute(() -> {
             db.prestamoDao().marcarVencidos(System.currentTimeMillis());
 
+            // 1) marcar vencidos
+            db.prestamoDao().marcarVencidos(System.currentTimeMillis());
+
+// 2) crear/actualizar multas para vencidos
+            actualizarMultas(System.currentTimeMillis(), TARIFA_DIA, TOPE);
+
+
+            final double TARIFA_DIA = 0.50;
+            final double TOPE = 20.0;
+
+
             List<PrestamoGlobal> lista;
             if ("Activos".equals(filtroActual)) {
                 lista = db.prestamoDao().getPrestamosSoloActivosGlobal();
@@ -156,4 +170,33 @@ public class PrestamoActivity extends AppCompatActivity {
             });
         });
     }
+    private void actualizarMultas(long ahora, double tarifaDia, double tope) {
+        List<com.DAM.bibliotecaapp.data.pojo.PrestamoVencidoMini> vencidos = db.prestamoDao().getVencidosMini();
+
+        for (com.DAM.bibliotecaapp.data.pojo.PrestamoVencidoMini p : vencidos) {
+
+            // días completos de retraso
+            long diff = ahora - p.fechaVencimiento;
+            int dias = (int) Math.max(0, diff / (24L * 60 * 60 * 1000));
+
+            double importe = Math.min(tope, dias * tarifaDia);
+
+            // si no existe multa, crearla
+            if (db.multaDao().existePorPrestamo(p.idPrestamo) == 0) {
+                com.DAM.bibliotecaapp.data.entities.Multa m = new com.DAM.bibliotecaapp.data.entities.Multa();
+                m.idPrestamo = p.idPrestamo;
+                m.idUsuario = p.idUsuario;
+                m.fechaCreacion = ahora;
+                m.fechaCierre = null;
+                m.diasRetraso = dias;
+                m.importe = importe;
+                m.estado = "PENDIENTE";
+                db.multaDao().insert(m);
+            } else {
+                // si ya existe, actualizarla (solo si está pendiente)
+                db.multaDao().actualizarPendiente(p.idPrestamo, dias, importe);
+            }
+        }
+    }
+
 }

@@ -111,8 +111,8 @@ public class NuevoPrestamoActivity extends AppCompatActivity {
 
             // 3) Crear préstamo
             long ahora = System.currentTimeMillis();
-            long catorceDias = 14L * 24 * 60 * 60 * 1000;
-//            long unDia = 24L * 60 * 60 * 1000;
+//            long catorceDias = 14L * 24 * 60 * 60 * 1000;
+            long unDia = 24L * 60 * 60 * 1000;
 //            prueba comprabar vencidos
 
 
@@ -121,8 +121,8 @@ public class NuevoPrestamoActivity extends AppCompatActivity {
             p.idUsuario = u.id;
             p.idEjemplar = ej.id;
             p.fechaPrestamo = ahora;
-            p.fechaVencimiento = ahora + catorceDias;
-//            p.fechaVencimiento = System.currentTimeMillis() - unDia;
+//            p.fechaVencimiento = ahora + catorceDias;
+            p.fechaVencimiento = System.currentTimeMillis() - unDia;
 //            prueba comprobar vencidos
             p.fechaDevolucion = null;
             p.estado = "ACTIVO";

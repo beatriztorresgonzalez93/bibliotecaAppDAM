@@ -9,6 +9,7 @@ import java.util.List;
 import com.DAM.bibliotecaapp.data.entities.Prestamo;
 import com.DAM.bibliotecaapp.data.pojo.PrestamoGlobal;
 import com.DAM.bibliotecaapp.data.pojo.PrestamoInfo;
+import com.DAM.bibliotecaapp.data.pojo.PrestamoVencidoMini;
 
 @Dao
 public interface PrestamoDao {
@@ -157,6 +158,14 @@ public interface PrestamoDao {
 
     @Query("SELECT id FROM prestamo WHERE idEjemplar = :idEjemplar AND fechaDevolucion IS NULL LIMIT 1")
     int getPrestamoActivoByEjemplar(int idEjemplar);
+
+    @Query(
+            "SELECT p.id AS idPrestamo, p.idUsuario AS idUsuario, p.fechaVencimiento AS fechaVencimiento " +
+                    "FROM prestamo p " +
+                    "WHERE p.fechaDevolucion IS NULL AND p.estado = 'VENCIDO'"
+    )
+    List<PrestamoVencidoMini> getVencidosMini();
+
 
 
 

@@ -8,14 +8,16 @@ import androidx.room.RoomDatabase;
 
 import com.DAM.bibliotecaapp.data.dao.EjemplarDao;
 import com.DAM.bibliotecaapp.data.dao.LibroDao;
+import com.DAM.bibliotecaapp.data.dao.MultaDao;
 import com.DAM.bibliotecaapp.data.dao.PrestamoDao;
 import com.DAM.bibliotecaapp.data.dao.UsuarioDao;
 import com.DAM.bibliotecaapp.data.entities.Ejemplar;
 import com.DAM.bibliotecaapp.data.entities.Libro;
+import com.DAM.bibliotecaapp.data.entities.Multa;
 import com.DAM.bibliotecaapp.data.entities.Prestamo;
 import com.DAM.bibliotecaapp.data.entities.Usuario;
 
-@Database(entities = {Usuario.class, Libro.class, Ejemplar.class, Prestamo.class}, version = 8)
+@Database(entities = {Usuario.class, Libro.class, Ejemplar.class, Prestamo.class, Multa.class}, version = 8)
 public abstract class AppDatabase extends RoomDatabase {
 
     public abstract UsuarioDao usuarioDao();
@@ -24,6 +26,8 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract EjemplarDao ejemplarDao();
 
     public abstract PrestamoDao prestamoDao();
+
+    public abstract MultaDao multaDao();
 
     private static volatile AppDatabase INSTANCE;
 
