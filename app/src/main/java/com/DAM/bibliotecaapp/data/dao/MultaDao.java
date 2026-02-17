@@ -8,6 +8,7 @@ import com.DAM.bibliotecaapp.data.entities.Multa;
 
 import java.util.List;
 import com.DAM.bibliotecaapp.data.pojo.MultaGlobal;
+import com.DAM.bibliotecaapp.data.pojo.MultaInfo;
 
 
 @Dao
@@ -63,5 +64,34 @@ public interface MultaDao {
                     "ORDER BY m.fechaCreacion DESC"
     )
     List<MultaGlobal> getPendientesGlobal();
+
+    @Query(
+            "SELECT m.id, m.idUsuario, u.nombre AS nombreUsuario, " +
+                    "m.idPrestamo, l.titulo AS tituloLibro, " +
+                    "m.diasRetraso, m.importe, m.estado, m.fechaCreacion, m.fechaCierre " +
+                    "FROM multa m " +
+                    "JOIN usuario u ON u.id = m.idUsuario " +
+                    "JOIN prestamo p ON p.id = m.idPrestamo " +
+                    "JOIN ejemplar e ON e.id = p.idEjemplar " +
+                    "JOIN libro l ON l.id = e.idLibro " +
+                    "ORDER BY m.fechaCreacion DESC"
+    )
+    List<MultaInfo> getAllInfo();
+
+    @Query(
+            "SELECT m.id, m.idUsuario, u.nombre AS nombreUsuario, " +
+                    "m.idPrestamo, l.titulo AS tituloLibro, " +
+                    "m.diasRetraso, m.importe, m.estado, m.fechaCreacion, m.fechaCierre " +
+                    "FROM multa m " +
+                    "JOIN usuario u ON u.id = m.idUsuario " +
+                    "JOIN prestamo p ON p.id = m.idPrestamo " +
+                    "JOIN ejemplar e ON e.id = p.idEjemplar " +
+                    "JOIN libro l ON l.id = e.idLibro " +
+                    "WHERE m.estado = 'PENDIENTE' " +
+                    "ORDER BY m.fechaCreacion DESC"
+    )
+    List<MultaInfo> getPendientesInfo();
+
+
 
 }

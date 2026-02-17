@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.DAM.bibliotecaapp.R;
 import com.DAM.bibliotecaapp.data.db.AppDatabase;
-import com.DAM.bibliotecaapp.data.pojo.MultaGlobal;
+import com.DAM.bibliotecaapp.data.pojo.MultaInfo;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -24,7 +24,7 @@ public class MultasActivity extends AppCompatActivity {
     private AppDatabase db;
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
-    private MultaGlobalAdapter adapter;
+    private MultaAdapter adapter;
 
     private Spinner spFiltro;
     private String filtroActual = "Todas";
@@ -36,15 +36,25 @@ public class MultasActivity extends AppCompatActivity {
 
         db = AppDatabase.getInstance(this);
 
+        // Recycler
         RecyclerView rv = findViewById(R.id.rvMultas);
         rv.setLayoutManager(new LinearLayoutManager(this));
 
-        adapter = new MultaGlobalAdapter(
-                multa -> mostrarDialogoPagar(multa.idMulta),
-                multa -> mostrarDialogoCondonar(multa.idMulta)
-        );
+        adapter = new MultaAdapter(new MultaAdapter.OnMultaActionListener() {
+            @Override
+            public void onPagar(MultaInfo m) {
+                mostrarDialogoPagar(m.id);
+            }
+
+            @Override
+            public void onCondonar(MultaInfo m) {
+                mostrarDialogoCondonar(m.id);
+            }
+        });
         rv.setAdapter(adapter);
 
+
+        // Spinner filtro
         spFiltro = findViewById(R.id.spFiltroMultas);
         ArrayAdapter<String> filtroAdapter = new ArrayAdapter<>(
                 this,
@@ -60,7 +70,9 @@ public class MultasActivity extends AppCompatActivity {
                 filtroActual = parent.getItemAtPosition(position).toString();
                 cargarMultas();
             }
-            @Override public void onNothingSelected(AdapterView<?> parent) {}
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
         });
 
         cargarMultas();
@@ -74,16 +86,16 @@ public class MultasActivity extends AppCompatActivity {
 
     private void cargarMultas() {
         executor.execute(() -> {
-            List<MultaGlobal> lista;
+            List<MultaInfo> lista;
             if ("Pendientes".equals(filtroActual)) {
-                lista = db.multaDao().getPendientesGlobal();
+                lista = db.multaDao().getPendientesInfo();
             } else {
-                lista = db.multaDao().getAllGlobal();
+                lista = db.multaDao().getAllInfo();
             }
-
             runOnUiThread(() -> adapter.setData(lista));
         });
     }
+
 
     private void mostrarDialogoPagar(int idMulta) {
         new AlertDialog.Builder(this)
@@ -104,6 +116,7 @@ public class MultasActivity extends AppCompatActivity {
         });
     }
 
+    // Si quieres mantener condonar (opcional)
     private void mostrarDialogoCondonar(int idMulta) {
         new AlertDialog.Builder(this)
                 .setTitle("Condonar multa")
