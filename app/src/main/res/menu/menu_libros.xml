@@ -2,29 +2,25 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <!-- Ordenar -->
     <item
-        android:id="@+id/action_ordenar"
+        android:id="@+id/menu_ordenar"
         android:title="Ordenar"
         android:icon="@android:drawable/ic_menu_sort_alphabetically"
         app:showAsAction="ifRoom">
 
         <menu>
-            <item
-                android:id="@+id/orden_titulo"
-                android:title="Título (A-Z)" />
-
-            <item
-                android:id="@+id/orden_autor"
-                android:title="Autor (A-Z)" />
-
-            <item
-                android:id="@+id/orden_editorial"
-                android:title="Editorial (A-Z)" />
-
-            <item
-                android:id="@+id/orden_genero"
-                android:title="Género (A-Z)" />
+            <item android:id="@+id/orden_titulo" android:title="Título (A-Z)"/>
+            <item android:id="@+id/orden_autor" android:title="Autor (A-Z)"/>
+            <item android:id="@+id/orden_genero" android:title="Género"/>
+            <item android:id="@+id/orden_editorial" android:title="Editorial"/>
         </menu>
     </item>
 
+    <!-- Añadir libro -->
+    <item
+        android:id="@+id/menu_add_libro"
+        android:title="Añadir"
+        android:icon="@android:drawable/ic_input_add"
+        app:showAsAction="ifRoom"/>
 </menu>

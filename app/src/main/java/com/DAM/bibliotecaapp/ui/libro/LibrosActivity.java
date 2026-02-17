@@ -1,8 +1,10 @@
 package com.DAM.bibliotecaapp.ui.libro;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -18,6 +20,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import com.DAM.bibliotecaapp.data.entities.Libro;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class LibrosActivity extends AppCompatActivity {
 
@@ -59,7 +62,6 @@ public class LibrosActivity extends AppCompatActivity {
             }
         });
 
-
         rvLibros = findViewById(R.id.rvLibros);
         rvLibros.setLayoutManager(new LinearLayoutManager(this));
 
@@ -67,6 +69,9 @@ public class LibrosActivity extends AppCompatActivity {
 
         adapter = new LibroAdapter(db, new ArrayList<>(), -1);
         rvLibros.setAdapter(adapter);
+
+        adapter.setOnLibroDeleteListener(libro -> borrarLibro(libro));
+
 
         // Primera carga
         cargarLibros();
@@ -156,9 +161,52 @@ public class LibrosActivity extends AppCompatActivity {
             cargarLibros();
             return true;
         }
+        if (id == R.id.menu_add_libro) {
+            startActivity(new Intent(this, NuevoLibroActivity.class));
+            return true;
+        }
+
 
         return super.onOptionsItemSelected(item);
     }
+
+    private void borrarLibro(Libro libro) {
+
+        executor.execute(() -> {
+
+            int prestados = db.ejemplarDao().countPrestadosByLibro(libro.id);
+
+            if (prestados > 0) {
+
+                runOnUiThread(() ->
+                        Toast.makeText(this,
+                                "No se puede borrar: hay ejemplares prestados",
+                                Toast.LENGTH_LONG).show()
+                );
+
+                return;
+            }
+
+            db.runInTransaction(() -> {
+
+                db.ejemplarDao().deleteByLibro(libro.id);
+
+                db.libroDao().deleteById(libro.id);
+
+            });
+
+            runOnUiThread(() -> {
+
+                Toast.makeText(this, "Libro borrado", Toast.LENGTH_SHORT).show();
+
+                cargarLibros();
+
+            });
+
+        });
+
+    }
+
 
 
 }

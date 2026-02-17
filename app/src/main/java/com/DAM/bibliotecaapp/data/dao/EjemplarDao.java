@@ -46,6 +46,15 @@ public interface EjemplarDao {
     @Query("SELECT * FROM ejemplar WHERE idLibro = :idLibro AND estado = 'PRESTADO' LIMIT 1")
     Ejemplar getPrimerPrestado(int idLibro);
 
+    @Query("SELECT COUNT(*) FROM ejemplar WHERE idLibro = :idLibro AND estado = 'PRESTADO'")
+    int countPrestadosByLibro(int idLibro);
+
+    @Query("DELETE FROM ejemplar WHERE idLibro = :idLibro")
+    void deleteByLibro(int idLibro);
+
+
+
+
 
 
 

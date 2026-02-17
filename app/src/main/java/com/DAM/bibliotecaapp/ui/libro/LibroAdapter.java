@@ -1,5 +1,6 @@
 package com.DAM.bibliotecaapp.ui.libro;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +24,7 @@ import java.util.List;
 
 public class LibroAdapter extends RecyclerView.Adapter<LibroAdapter.LibroViewHolder> {
 
+
     private final AppDatabase db;
     private final List<Libro> libros = new ArrayList<>();
     private final int idUsuario;
@@ -32,6 +34,7 @@ public class LibroAdapter extends RecyclerView.Adapter<LibroAdapter.LibroViewHol
         this.db = db;
         this.idUsuario = idUsuario;
         if (inicial != null) libros.addAll(inicial);
+
     }
 
 
@@ -57,7 +60,6 @@ public class LibroAdapter extends RecyclerView.Adapter<LibroAdapter.LibroViewHol
         int total = db.ejemplarDao().countTotal(libro.id);
         int disp = db.ejemplarDao().countDisponibles(libro.id);
         int prestados = total - disp;
-        holder.btnDevolver.setEnabled(prestados > 0);
 
         holder.tvDisponibles.setText("Disponibles: " + disp + " / " + total);
 
@@ -71,30 +73,23 @@ public class LibroAdapter extends RecyclerView.Adapter<LibroAdapter.LibroViewHol
             v.getContext().startActivity(i);
         });
 
-        holder.btnDevolver.setOnClickListener(view -> {
 
-            Ejemplar ej = db.ejemplarDao().getPrimerPrestado(libro.id);
+        holder.btnBorrar.setOnClickListener(v -> {
 
-            if (ej == null) {
-                Toast.makeText(view.getContext(), "No hay ejemplares prestados", Toast.LENGTH_SHORT).show();
-                return;
-            }
+            new AlertDialog.Builder(v.getContext())
+                    .setTitle("Borrar libro")
+                    .setMessage("¿Seguro que quieres borrar este libro?")
+                    .setNegativeButton("Cancelar", null)
+                    .setPositiveButton("Borrar", (d, w) -> {
 
-            int idPrestamo = db.prestamoDao().getPrestamoActivoByEjemplar(ej.id);
+                        if (deleteListener != null)
+                            deleteListener.onDelete(libro);
 
-            long ahora = System.currentTimeMillis();
 
-            db.runInTransaction(() -> {
-                db.prestamoDao().marcarDevuelto(idPrestamo, ahora);
-                db.ejemplarDao().actualizarEstado(ej.id, "DISPONIBLE");
-            });
+                    })
+                    .show();
 
-            Toast.makeText(view.getContext(), "Libro devuelto", Toast.LENGTH_SHORT).show();
-
-            notifyDataSetChanged();
         });
-
-
 
     }
 
@@ -106,7 +101,7 @@ public class LibroAdapter extends RecyclerView.Adapter<LibroAdapter.LibroViewHol
     static class LibroViewHolder extends RecyclerView.ViewHolder {
 
         TextView tvTitulo, tvAutor, tvIsbn, tvEditorial, tvGenero, tvDisponibles;
-        Button btnPrestar; Button btnDevolver;
+        Button btnPrestar; Button btnBorrar;
 
         public LibroViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -118,7 +113,8 @@ public class LibroAdapter extends RecyclerView.Adapter<LibroAdapter.LibroViewHol
 
             tvDisponibles = itemView.findViewById(R.id.tvDisponibles);
             btnPrestar = itemView.findViewById(R.id.btnPrestar);
-            btnDevolver = itemView.findViewById(R.id.btnDevolver);
+            btnBorrar = itemView.findViewById(R.id.btnBorrar);
+
         }
     }
 
@@ -127,5 +123,16 @@ public class LibroAdapter extends RecyclerView.Adapter<LibroAdapter.LibroViewHol
         if (list != null) libros.addAll(list);
         notifyDataSetChanged();
     }
+    public interface OnLibroDeleteListener {
+        void onDelete(Libro libro);
+    }
+
+    private OnLibroDeleteListener deleteListener;
+
+    public void setOnLibroDeleteListener(OnLibroDeleteListener listener) {
+        this.deleteListener = listener;
+    }
+
+
 
 }

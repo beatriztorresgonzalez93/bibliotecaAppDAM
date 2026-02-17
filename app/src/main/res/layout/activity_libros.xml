@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -13,28 +14,25 @@
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
         app:title="Libros"
-        app:titleTextColor="@android:color/white"/>
+        app:titleTextColor="@android:color/white" />
 
-    <!-- CONTENIDO -->
-    <LinearLayout
+    <!-- SEARCH -->
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/svLibros"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:iconifiedByDefault="false"
+        android:queryHint="Buscar por título, autor o ISBN" />
 
-        <androidx.appcompat.widget.SearchView
-            android:id="@+id/svLibros"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:iconifiedByDefault="false"
-            android:queryHint="Buscar por título, autor o ISBN" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvLibros"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="12dp"/>
-
-    </LinearLayout>
+    <!-- LISTA -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvLibros"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="16dp"/>
 
 </LinearLayout>

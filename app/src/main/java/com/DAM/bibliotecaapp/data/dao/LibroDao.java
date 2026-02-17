@@ -24,6 +24,17 @@ public interface LibroDao {
     @Query("SELECT * FROM libro WHERE titulo LIKE :q OR autor LIKE :q OR isbn LIKE :q OR editorial LIKE :q OR genero LIKE :q ORDER BY titulo")
     List<Libro> search(String q);
 
+    @Insert
+    long insert(Libro libro);
+
+    @Query("SELECT COUNT(*) FROM libro WHERE isbn = :isbn")
+    int countByIsbn(String isbn);
+
+    @Query("DELETE FROM libro WHERE id = :idLibro")
+    void deleteById(int idLibro);
+
+
+
 
 
 
