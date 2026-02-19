@@ -59,7 +59,7 @@ public class MultasActivity extends AppCompatActivity {
         ArrayAdapter<String> filtroAdapter = new ArrayAdapter<>(
                 this,
                 android.R.layout.simple_spinner_item,
-                new String[]{"Todas", "Pendientes"}
+                new String[]{"Todas", "Pendientes", "Pagadas", "Condonadas"}
         );
         filtroAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spFiltro.setAdapter(filtroAdapter);
@@ -86,15 +86,32 @@ public class MultasActivity extends AppCompatActivity {
 
     private void cargarMultas() {
         executor.execute(() -> {
+
             List<MultaInfo> lista;
-            if ("Pendientes".equals(filtroActual)) {
-                lista = db.multaDao().getPendientesInfo();
-            } else {
-                lista = db.multaDao().getAllInfo();
+
+            switch (filtroActual) {
+                case "Pendientes":
+                    lista = db.multaDao().getPendientesInfo();
+                    break;
+
+                case "Pagadas":
+                    lista = db.multaDao().getPagadasInfo();
+                    break;
+
+                case "Condonadas":
+                    lista = db.multaDao().getCondonadasInfo();
+                    break;
+
+                default:
+                    lista = db.multaDao().getAllInfo();
+                    break;
             }
+
             runOnUiThread(() -> adapter.setData(lista));
         });
     }
+
+
 
 
     private void mostrarDialogoPagar(int idMulta) {

@@ -16,6 +16,8 @@ import com.DAM.bibliotecaapp.R;
 import com.DAM.bibliotecaapp.ui.usuario.UsuarioActivity;
 
 import com.DAM.bibliotecaapp.ui.login.LoginActivity;
+import com.DAM.bibliotecaapp.ui.devolucion.DevolucionesActivity;
+
 
 
 public class MainActivity extends AppCompatActivity {
@@ -81,6 +83,14 @@ public class MainActivity extends AppCompatActivity {
         btnMultas.setOnClickListener(v ->
                 startActivity(new android.content.Intent(MainActivity.this, com.DAM.bibliotecaapp.ui.multa.MultasActivity.class))
         );
+
+        Button btnDevoluciones = findViewById(R.id.btnDevolucion);
+
+        btnDevoluciones.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, DevolucionesActivity.class);
+            startActivity(intent);
+        });
+
 
 
     }

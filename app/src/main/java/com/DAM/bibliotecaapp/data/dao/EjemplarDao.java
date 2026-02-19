@@ -52,6 +52,15 @@ public interface EjemplarDao {
     @Query("DELETE FROM ejemplar WHERE idLibro = :idLibro")
     void deleteByLibro(int idLibro);
 
+    @Query("UPDATE ejemplar SET estado = 'DISPONIBLE' WHERE estado != 'BAJA'")
+    void marcarTodosDisponiblesExceptoBaja();
+
+    @Query("UPDATE ejemplar SET estado = 'PRESTADO' WHERE id IN (:ids)")
+    void marcarPrestados(List<Integer> ids);
+
+
+
+
 
 
 

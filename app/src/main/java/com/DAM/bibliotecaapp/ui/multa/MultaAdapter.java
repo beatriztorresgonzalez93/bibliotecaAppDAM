@@ -55,13 +55,19 @@ public class MultaAdapter extends RecyclerView.Adapter<MultaAdapter.VH> {
         boolean pendiente = "PENDIENTE".equals(m.estado);
 
         // Estilo simple por estado
-        if (pendiente) {
+        if ("PENDIENTE".equals(m.estado)) {
             h.tvEstado.setTextColor(Color.parseColor("#C62828")); // rojo
-        } else if ("PAGADA".equals(m.estado)) {
-            h.tvEstado.setTextColor(Color.parseColor("#2E7D32")); // verde
-        } else {
-            h.tvEstado.setTextColor(Color.parseColor("#616161")); // gris
         }
+        else if ("PAGADA".equals(m.estado)) {
+            h.tvEstado.setTextColor(Color.parseColor("#2E7D32")); // verde
+        }
+        else if ("CONDONADA".equals(m.estado)) {
+            h.tvEstado.setTextColor(Color.parseColor("#1565C0")); // azul elegante
+        }
+        else {
+            h.tvEstado.setTextColor(Color.DKGRAY);
+        }
+
 
         // Botones solo si pendiente
         h.btnPagar.setEnabled(pendiente);

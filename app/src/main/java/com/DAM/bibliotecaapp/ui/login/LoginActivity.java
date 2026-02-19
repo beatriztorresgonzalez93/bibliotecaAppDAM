@@ -9,6 +9,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.DAM.bibliotecaapp.data.db.AppDatabase;
+import com.DAM.bibliotecaapp.data.seed.HistorySeedData;
 import com.DAM.bibliotecaapp.ui.main.MainActivity;
 import com.DAM.bibliotecaapp.R;
 import com.DAM.bibliotecaapp.data.seed.SeedData;
@@ -26,6 +27,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         SeedData.seedIfEmpty(this);
+        HistorySeedData.seedHistoryIfEmpty(this);
+
 
         setContentView(R.layout.activity_login);
 

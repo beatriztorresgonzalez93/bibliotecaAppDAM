@@ -92,6 +92,49 @@ public interface MultaDao {
     )
     List<MultaInfo> getPendientesInfo();
 
+    @Query("SELECT COUNT(*) FROM multa")
+    int count();
+
+    @Insert
+    void insertAll(List<Multa> multas);
+
+    @Query(
+            "SELECT m.id AS id, " +
+                    "u.id AS idUsuario, u.nombre AS nombreUsuario, " +
+                    "p.id AS idPrestamo, l.titulo AS tituloLibro, " +
+                    "m.diasRetraso AS diasRetraso, m.importe AS importe, " +
+                    "m.estado AS estado, " +
+                    "m.fechaCreacion AS fechaCreacion, m.fechaCierre AS fechaCierre " +
+                    "FROM multa m " +
+                    "JOIN usuario u ON u.id = m.idUsuario " +
+                    "JOIN prestamo p ON p.id = m.idPrestamo " +
+                    "JOIN ejemplar e ON e.id = p.idEjemplar " +
+                    "JOIN libro l ON l.id = e.idLibro " +
+                    "WHERE m.estado = 'PAGADA' " +
+                    "ORDER BY m.fechaCreacion DESC"
+    )
+    List<MultaInfo> getPagadasInfo();
+
+    @Query(
+            "SELECT m.id AS id, " +
+                    "u.id AS idUsuario, u.nombre AS nombreUsuario, " +
+                    "p.id AS idPrestamo, l.titulo AS tituloLibro, " +
+                    "m.diasRetraso AS diasRetraso, m.importe AS importe, " +
+                    "m.estado AS estado, " +
+                    "m.fechaCreacion AS fechaCreacion, m.fechaCierre AS fechaCierre " +
+                    "FROM multa m " +
+                    "JOIN usuario u ON u.id = m.idUsuario " +
+                    "JOIN prestamo p ON p.id = m.idPrestamo " +
+                    "JOIN ejemplar e ON e.id = p.idEjemplar " +
+                    "JOIN libro l ON l.id = e.idLibro " +
+                    "WHERE m.estado = 'CONDONADA' " +
+                    "ORDER BY m.fechaCreacion DESC"
+    )
+    List<MultaInfo> getCondonadasInfo();
+
+
+
+
 
 
 }

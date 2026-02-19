@@ -13,6 +13,9 @@
         android:theme="@style/Theme.BibliotecaApp"
         tools:targetApi="31">
         <activity
+            android:name=".ui.devolucion.DevolucionesActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.libro.NuevoLibroActivity"
             android:exported="false" />
         <activity

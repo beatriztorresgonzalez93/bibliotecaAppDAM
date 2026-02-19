@@ -10,6 +10,8 @@ import com.DAM.bibliotecaapp.data.entities.Prestamo;
 import com.DAM.bibliotecaapp.data.pojo.PrestamoGlobal;
 import com.DAM.bibliotecaapp.data.pojo.PrestamoInfo;
 import com.DAM.bibliotecaapp.data.pojo.PrestamoVencidoMini;
+import com.DAM.bibliotecaapp.data.dto.DevolucionItem;
+
 
 @Dao
 public interface PrestamoDao {
@@ -165,6 +167,35 @@ public interface PrestamoDao {
                     "WHERE p.fechaDevolucion IS NULL AND p.estado = 'VENCIDO'"
     )
     List<PrestamoVencidoMini> getVencidosMini();
+
+    @Query("SELECT COUNT(*) FROM prestamo")
+    int count();
+
+    @Insert
+    void insertAll(List<Prestamo> prestamos);
+    @Query("SELECT DISTINCT idEjemplar FROM prestamo WHERE estado IN ('ACTIVO','VENCIDO')")
+    List<Integer> getEjemplaresPrestados();
+
+    @Query(
+            "SELECT p.id AS prestamoId, " +
+                    "l.titulo AS titulo, l.autor AS autor, " +
+                    "e.codigoInventario AS codigoInventario, " +
+                    "u.nombre AS usuarioNombre, u.email AS usuarioEmail, " +
+                    "p.fechaDevolucion AS fechaDevolucion, p.fechaPrestamo AS fechaPrestamo " +
+                    "FROM prestamo p " +
+                    "JOIN ejemplar e ON e.id = p.idEjemplar " +
+                    "JOIN libro l ON l.id = e.idLibro " +
+                    "JOIN usuario u ON u.id = p.idUsuario " +
+                    "WHERE p.estado = 'DEVUELTO' AND p.fechaDevolucion IS NOT NULL " +
+                    "ORDER BY p.fechaDevolucion DESC"
+    )
+    List<DevolucionItem> getDevoluciones();
+
+    @Query("SELECT * FROM prestamo WHERE estado='DEVUELTO' AND fechaDevolucion > fechaVencimiento")
+    List<Prestamo> getDevueltosFueraDePlazo();
+
+    @Query("SELECT * FROM prestamo WHERE estado='VENCIDO' AND fechaDevolucion IS NULL")
+    List<Prestamo> getVencidosSinDevolver();
 
 
 
