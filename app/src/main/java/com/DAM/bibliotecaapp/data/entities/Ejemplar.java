@@ -1,5 +1,4 @@
 package com.DAM.bibliotecaapp.data.entities;
-
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Index;
