@@ -19,7 +19,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private EditText etUsuario, etPassword;
     private Button btnLogin;
-
     private AppDatabase db;
 
     @Override
