@@ -4,21 +4,18 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import androidx.appcompat.widget.SearchView;
-
-import com.DAM.bibliotecaapp.data.db.AppDatabase;
 import com.DAM.bibliotecaapp.R;
+import com.DAM.bibliotecaapp.data.db.AppDatabase;
+import com.DAM.bibliotecaapp.data.entities.Usuario;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-import com.DAM.bibliotecaapp.data.entities.Usuario;
 
 public class UsuarioActivity extends AppCompatActivity {
 
@@ -47,11 +44,10 @@ public class UsuarioActivity extends AppCompatActivity {
         });
         rv.setAdapter(adapter);
 
-
-        rv.setAdapter(adapter);
-
+        // Carga inicial
         cargarUsuarios();
 
+        // Búsqueda
         search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override public boolean onQueryTextSubmit(String query) { return true; }
 
@@ -62,9 +58,16 @@ public class UsuarioActivity extends AppCompatActivity {
             }
         });
 
-        fab.setOnClickListener(v -> {
-            // Próximo paso: crear usuario
-        });
+        // ✅ Abrir pantalla de añadir usuario
+        fab.setOnClickListener(v ->
+                startActivity(new Intent(UsuarioActivity.this, AddUsuarioActivity.class))
+        );
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        cargarUsuarios(); // al volver de AddUsuarioActivity, refresca lista
     }
 
     private void cargarUsuarios() {
@@ -85,5 +88,11 @@ public class UsuarioActivity extends AppCompatActivity {
             }
             runOnUiThread(() -> adapter.setData(lista));
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        executor.shutdown();
     }
 }
