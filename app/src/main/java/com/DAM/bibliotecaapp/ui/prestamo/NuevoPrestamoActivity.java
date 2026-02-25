@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.DAM.bibliotecaapp.RoleGuard;
 import com.DAM.bibliotecaapp.data.db.AppDatabase;
 import com.DAM.bibliotecaapp.R;
 
@@ -33,6 +34,7 @@ public class NuevoPrestamoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        RoleGuard.requireBibliotecario(this);
         setContentView(R.layout.activity_nuevo_prestamo);
 
         db = AppDatabase.getInstance(this);

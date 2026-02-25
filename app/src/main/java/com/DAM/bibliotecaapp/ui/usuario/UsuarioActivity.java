@@ -2,6 +2,7 @@ package com.DAM.bibliotecaapp.ui.usuario;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
@@ -9,8 +10,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.DAM.bibliotecaapp.R;
+import com.DAM.bibliotecaapp.RoleGuard;
+import com.DAM.bibliotecaapp.SessionManager;
 import com.DAM.bibliotecaapp.data.db.AppDatabase;
 import com.DAM.bibliotecaapp.data.entities.Usuario;
+import com.DAM.bibliotecaapp.ui.login.LoginActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
@@ -26,7 +30,32 @@ public class UsuarioActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        RoleGuard.requireLogin(this);
+
+        SessionManager s = new SessionManager(this);
+
+        if (s.isLector()) {
+            long miId = s.getUsuarioId();
+
+            if (miId == -1L) {
+                Toast.makeText(this, "Sesión inválida. Vuelve a iniciar sesión.", Toast.LENGTH_SHORT).show();
+                s.logout();
+                startActivity(new Intent(this, LoginActivity.class));
+                finish();
+                return;
+            }
+
+            Intent i = new Intent(this, UsuarioDetalleActivity.class);
+            // opcional: puedes pasar el id, pero ya no hace falta
+            i.putExtra("usuario_id", s.getUsuarioId());
+            startActivity(i);
+            finish();
+            return;
+        }
+
+
         setContentView(R.layout.activity_usuario);
+
 
         db = AppDatabase.getInstance(this);
 

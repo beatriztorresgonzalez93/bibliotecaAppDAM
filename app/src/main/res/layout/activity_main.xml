@@ -12,7 +12,7 @@
         android:id="@+id/tvTitulo"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Biblioteca (Modo Bibliotecario)"
+        android:text="Biblioteca"
         android:textSize="20sp"
         android:textStyle="bold"
         android:paddingBottom="16dp"
@@ -68,6 +68,28 @@
         app:layout_constraintTop_toBottomOf="@id/btnMultas"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/btnAddBibliotecario"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="+ Añadir bibliotecario"
+        android:textSize="14sp"
+        android:textColor="#666666"
+        android:textStyle="italic"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:textAlignment="center"
+        android:visibility="gone"
+
+        app:layout_constraintTop_toBottomOf="@id/btnDevolucion"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+
+        android:layout_marginTop="12dp"/>
 
     <Button
         android:id="@+id/btnLogout"

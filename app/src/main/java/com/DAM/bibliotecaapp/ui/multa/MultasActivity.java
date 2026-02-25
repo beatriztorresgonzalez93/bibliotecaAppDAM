@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.DAM.bibliotecaapp.R;
+import com.DAM.bibliotecaapp.RoleGuard;
 import com.DAM.bibliotecaapp.data.db.AppDatabase;
 import com.DAM.bibliotecaapp.data.pojo.MultaInfo;
 
@@ -32,6 +33,7 @@ public class MultasActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        RoleGuard.requireBibliotecario(this);
         setContentView(R.layout.activity_multas);
 
         db = AppDatabase.getInstance(this);

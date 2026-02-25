@@ -45,7 +45,7 @@
             android:id="@+id/etRol"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Rol (ej: USER / ADMIN)"
+            android:hint="Rol (ej: LECTOR / ADMIN)"
             android:inputType="text"
             android:layout_marginTop="12dp"/>
 

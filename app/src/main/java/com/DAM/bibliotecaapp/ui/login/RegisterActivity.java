@@ -10,6 +10,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.DAM.bibliotecaapp.R;
+import com.DAM.bibliotecaapp.RoleGuard;
 import com.DAM.bibliotecaapp.data.db.AppDatabase;
 import com.DAM.bibliotecaapp.data.entities.Bibliotecario;
 
@@ -29,6 +30,7 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        RoleGuard.requireBibliotecario(this);
         setContentView(R.layout.activity_register);
 
         etNombre = findViewById(R.id.etNombre);

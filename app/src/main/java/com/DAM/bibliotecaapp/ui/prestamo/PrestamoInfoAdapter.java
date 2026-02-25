@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.DAM.bibliotecaapp.R;
+import com.DAM.bibliotecaapp.SessionManager;
 import com.DAM.bibliotecaapp.data.pojo.PrestamoInfo;
 
 import java.text.SimpleDateFormat;
@@ -29,8 +30,24 @@ public class PrestamoInfoAdapter extends RecyclerView.Adapter<PrestamoInfoAdapte
     private final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
     private final OnDevolverClickListener listener;
 
+    private final boolean isAdmin; // ✅ rol
+
+    public PrestamoInfoAdapter(@NonNull ViewGroup parentForContext, OnDevolverClickListener listener) {
+        this.listener = listener;
+        this.isAdmin = new SessionManager(parentForContext.getContext()).isBibliotecario();
+    }
+
+    // ✅ Constructor compatible con tu uso actual: PrestamoInfoAdapter(listener)
+    public PrestamoInfoAdapter(OnDevolverClickListener listener, android.content.Context context) {
+        this.listener = listener;
+        this.isAdmin = new SessionManager(context).isBibliotecario();
+    }
+
+    // ✅ Mantengo tu constructor original, pero por seguridad lo dejo como admin=false si no pasas context.
+    // Te recomiendo usar el de abajo desde UsuarioDetalleActivity.
     public PrestamoInfoAdapter(OnDevolverClickListener listener) {
         this.listener = listener;
+        this.isAdmin = false; // si no me pasas contexto, no puedo saber rol => oculto devolver
     }
 
     public void setData(List<PrestamoInfo> list) {
@@ -56,10 +73,10 @@ public class PrestamoInfoAdapter extends RecyclerView.Adapter<PrestamoInfoAdapte
         if (esVencido) {
             h.tvEstado.setText("VENCIDO");
             h.tvEstado.setTextColor(Color.RED);
-            h.container.setBackgroundColor(Color.parseColor("#FFEBEE")); // rojo suave
+            h.container.setBackgroundColor(Color.parseColor("#FFEBEE"));
         } else {
             h.tvEstado.setText("ACTIVO");
-            h.tvEstado.setTextColor(Color.parseColor("#2E7D32")); // verde
+            h.tvEstado.setTextColor(Color.parseColor("#2E7D32"));
             h.container.setBackgroundColor(Color.TRANSPARENT);
         }
 
@@ -69,10 +86,17 @@ public class PrestamoInfoAdapter extends RecyclerView.Adapter<PrestamoInfoAdapte
         h.tvLinea1.setText(p.titulo + " · " + p.autor);
         h.tvLinea2.setText("Ejemplar: " + p.codigoInventario + " · Prestado: " + fPrestamo + " · Vence: " + fVence);
 
-        h.btnDevolver.setOnClickListener(v -> {
-            if (listener != null) listener.onDevolverClick(p);
-        });
+        // ✅ Control de rol: solo bibliotecario ve y usa "Devolver"
+        h.btnDevolver.setVisibility(isAdmin ? View.VISIBLE : View.GONE);
 
+        if (isAdmin) {
+            h.btnDevolver.setOnClickListener(v -> {
+                if (listener != null) listener.onDevolverClick(p);
+            });
+        } else {
+            // evita clicks reciclados
+            h.btnDevolver.setOnClickListener(null);
+        }
     }
 
     @Override
@@ -81,8 +105,9 @@ public class PrestamoInfoAdapter extends RecyclerView.Adapter<PrestamoInfoAdapte
     }
 
     static class VH extends RecyclerView.ViewHolder {
-        TextView tvLinea1, tvLinea2; TextView tvEstado; View container;
-
+        TextView tvLinea1, tvLinea2;
+        TextView tvEstado;
+        View container;
         Button btnDevolver;
 
         VH(@NonNull View itemView) {

@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.DAM.bibliotecaapp.R;
+import com.DAM.bibliotecaapp.RoleGuard;
 import com.DAM.bibliotecaapp.data.db.AppDatabase;
 import com.DAM.bibliotecaapp.data.dto.DevolucionItem;
 
@@ -21,6 +22,7 @@ public class DevolucionesActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        RoleGuard.requireBibliotecario(this);
         setContentView(R.layout.activity_devoluciones);
 
         recyclerView = findViewById(R.id.recyclerViewDevoluciones);

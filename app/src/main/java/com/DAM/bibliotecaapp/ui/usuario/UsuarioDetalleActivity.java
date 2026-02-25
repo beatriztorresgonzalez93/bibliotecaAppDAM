@@ -3,12 +3,15 @@ package com.DAM.bibliotecaapp.ui.usuario;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.DAM.bibliotecaapp.R;
+import com.DAM.bibliotecaapp.RoleGuard;
+import com.DAM.bibliotecaapp.SessionManager;
 import com.DAM.bibliotecaapp.data.db.AppDatabase;
 import com.DAM.bibliotecaapp.data.entities.Usuario;
 import com.DAM.bibliotecaapp.data.pojo.PrestamoInfo;
@@ -20,23 +23,49 @@ import java.util.concurrent.Executors;
 
 public class UsuarioDetalleActivity extends AppCompatActivity {
 
+    public static final String EXTRA_USUARIO_ID = "usuario_id"; // ✅ una sola clave
+
     private AppDatabase db;
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
-    private int usuarioId;
+    private int usuarioId = -1; // ✅ solo 1 usuarioId y es int (tu DAO usa int)
 
     private TextView tvNombre, tvEmail, tvRol, tvPrestamosActivos, tvSinPrestamos;
     private PrestamoInfoAdapter adapter;
     private TextView tvMultasPendientes;
     private TextView tvNumMultasPendientes;
 
-
-    public static final String EXTRA_USUARIO_ID = "usuarioId";
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        RoleGuard.requireLogin(this);
+
+        SessionManager s = new SessionManager(this);
+
+        // 1) Intent (si viene)
+        long idIntent = getIntent().getLongExtra(EXTRA_USUARIO_ID, -1L);
+
+        // 2) Sesión (para lector)
+        long idSesion = s.getUsuarioId();
+
+        // 3) Elegir id
+        if (idIntent != -1L) usuarioId = (int) idIntent;
+        else if (idSesion != -1L) usuarioId = (int) idSesion;
+
+        // 4) Validación
+        if (usuarioId == -1) {
+            Toast.makeText(this, "Error: usuario no recibido", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
+
+        // 5) Seguridad: lector solo puede ver su propio perfil
+        if (s.isLector() && usuarioId != (int) s.getUsuarioId()) {
+            Toast.makeText(this, "Acceso restringido", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
+
         setContentView(R.layout.activity_usuario_detalle);
 
         db = AppDatabase.getInstance(this);
@@ -53,37 +82,20 @@ public class UsuarioDetalleActivity extends AppCompatActivity {
         tvMultasPendientes = findViewById(R.id.tvMultasPendientes);
         tvNumMultasPendientes = findViewById(R.id.tvNumMultasPendientes);
 
-
-        adapter = new PrestamoInfoAdapter(prestamoInfo ->
-                mostrarDialogoDevolucion(prestamoInfo.idPrestamo)
-        );
+        adapter = new PrestamoInfoAdapter(prestamoInfo -> mostrarDialogoDevolucion(prestamoInfo.idPrestamo));
         rv.setAdapter(adapter);
-
-        // OJO: clave consistente "usuarioId"
-        usuarioId = getIntent().getIntExtra(EXTRA_USUARIO_ID, -1);
-
-
-        if (usuarioId == -1) {
-            tvNombre.setText("Error: usuario no recibido");
-            return;
-        }
 
         cargarDatos(usuarioId);
     }
 
-
     private void cargarDatos(int usuarioId) {
         executor.execute(() -> {
-            // 1) Actualiza vencidos antes de leer
             db.prestamoDao().marcarVencidos(System.currentTimeMillis());
 
-            // 2) Usuario
             Usuario usuario = db.usuarioDao().getById(usuarioId);
 
-            // 3) Lista NO DEVUELTOS (activos + vencidos)
             List<PrestamoInfo> lista = db.prestamoDao().getNoDevueltosByUsuario(usuarioId);
 
-            // 4) Contadores préstamos
             int activos = 0;
             int vencidos = 0;
 
@@ -94,7 +106,6 @@ public class UsuarioDetalleActivity extends AppCompatActivity {
                 }
             }
 
-            // 5) Multas (✅ BD aquí, NO en runOnUiThread)
             double totalMultasPendientes = db.multaDao().totalPendienteUsuario(usuarioId);
 
             List<com.DAM.bibliotecaapp.data.entities.Multa> multasUsuario =
@@ -107,7 +118,6 @@ public class UsuarioDetalleActivity extends AppCompatActivity {
                 }
             }
 
-            // 6) Copias finales para UI
             int finalActivos = activos;
             int finalVencidos = vencidos;
             double finalTotalMultasPendientes = totalMultasPendientes;
@@ -123,18 +133,12 @@ public class UsuarioDetalleActivity extends AppCompatActivity {
                 tvEmail.setText(usuario.email);
                 tvRol.setText("Rol: " + usuario.rol);
 
-                // Préstamos
                 tvPrestamosActivos.setText("Activos: " + finalActivos + " · Vencidos: " + finalVencidos);
 
                 adapter.setData(lista);
 
-                if (lista == null || lista.isEmpty()) {
-                    tvSinPrestamos.setVisibility(View.VISIBLE);
-                } else {
-                    tvSinPrestamos.setVisibility(View.GONE);
-                }
+                tvSinPrestamos.setVisibility((lista == null || lista.isEmpty()) ? View.VISIBLE : View.GONE);
 
-                // Multas (✅ solo pintar aquí)
                 if (tvMultasPendientes != null) {
                     tvMultasPendientes.setText(
                             "Multas pendientes: " +
@@ -150,7 +154,6 @@ public class UsuarioDetalleActivity extends AppCompatActivity {
         });
     }
 
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -158,6 +161,12 @@ public class UsuarioDetalleActivity extends AppCompatActivity {
     }
 
     private void mostrarDialogoDevolucion(int idPrestamo) {
+        // ✅ Solo bibliotecario debería poder devolver
+        if (!new SessionManager(this).isBibliotecario()) {
+            Toast.makeText(this, "Solo bibliotecario puede devolver", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         new androidx.appcompat.app.AlertDialog.Builder(this)
                 .setTitle("Confirmar devolución")
                 .setMessage("¿Quieres marcar este préstamo como devuelto?")
@@ -177,7 +186,7 @@ public class UsuarioDetalleActivity extends AppCompatActivity {
             });
 
             runOnUiThread(() -> {
-                android.widget.Toast.makeText(this, "Devolución registrada", android.widget.Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Devolución registrada", Toast.LENGTH_SHORT).show();
                 cargarDatos(usuarioId);
             });
         });

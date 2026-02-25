@@ -7,36 +7,30 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.DAM.bibliotecaapp.R;
+import com.DAM.bibliotecaapp.SessionManager;
 import com.DAM.bibliotecaapp.data.db.AppDatabase;
-
-import com.DAM.bibliotecaapp.data.entities.Ejemplar;
 import com.DAM.bibliotecaapp.data.entities.Libro;
 import com.DAM.bibliotecaapp.ui.prestamo.NuevoPrestamoActivity;
-import com.DAM.bibliotecaapp.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class LibroAdapter extends RecyclerView.Adapter<LibroAdapter.LibroViewHolder> {
 
-
     private final AppDatabase db;
     private final List<Libro> libros = new ArrayList<>();
-    private final int idUsuario;
+    private final boolean isAdmin;
 
-
-    public LibroAdapter(AppDatabase db, List<Libro> inicial, int idUsuario) {
+    public LibroAdapter(AppDatabase db, List<Libro> inicial, boolean isAdmin) {
         this.db = db;
-        this.idUsuario = idUsuario;
+        this.isAdmin = isAdmin;
         if (inicial != null) libros.addAll(inicial);
-
     }
-
 
     @NonNull
     @Override
@@ -55,53 +49,61 @@ public class LibroAdapter extends RecyclerView.Adapter<LibroAdapter.LibroViewHol
         holder.tvEditorial.setText("Editorial: " + (libro.editorial != null ? libro.editorial : ""));
         holder.tvGenero.setText("Género: " + (libro.genero != null ? libro.genero : ""));
 
-
-
         int total = db.ejemplarDao().countTotal(libro.id);
         int disp = db.ejemplarDao().countDisponibles(libro.id);
-        int prestados = total - disp;
-
         holder.tvDisponibles.setText("Disponibles: " + disp + " / " + total);
+
+        // ===== CONTROL DE ROLES =====
+        if (!isAdmin) {
+            // LECTOR: no puede prestar ni borrar (ni verlos)
+            holder.btnPrestar.setVisibility(View.GONE);
+            holder.btnBorrar.setVisibility(View.GONE);
+
+            // evita “clicks reciclados” del RecyclerView
+            holder.btnPrestar.setOnClickListener(null);
+            holder.btnBorrar.setOnClickListener(null);
+            return;
+        }
+
+        // ADMIN
+        holder.btnPrestar.setVisibility(View.VISIBLE);
+        holder.btnBorrar.setVisibility(View.VISIBLE);
 
         holder.btnPrestar.setEnabled(disp > 0);
 
-        // NUEVO FLUJO: abrir pantalla de nuevo préstamo
         holder.btnPrestar.setOnClickListener(v -> {
+            // seguridad extra por si acaso
+            if (!new SessionManager(v.getContext()).isBibliotecario()) return;
+
             Intent i = new Intent(v.getContext(), NuevoPrestamoActivity.class);
             i.putExtra("idLibro", libro.id);
             i.putExtra("titulo", libro.titulo);
             v.getContext().startActivity(i);
         });
 
-
         holder.btnBorrar.setOnClickListener(v -> {
+            if (!new SessionManager(v.getContext()).isBibliotecario()) return;
 
             new AlertDialog.Builder(v.getContext())
                     .setTitle("Borrar libro")
                     .setMessage("¿Seguro que quieres borrar este libro?")
                     .setNegativeButton("Cancelar", null)
                     .setPositiveButton("Borrar", (d, w) -> {
-
-                        if (deleteListener != null)
-                            deleteListener.onDelete(libro);
-
-
+                        if (deleteListener != null) deleteListener.onDelete(libro);
                     })
                     .show();
-
         });
-
     }
 
     @Override
     public int getItemCount() {
-        return libros != null ? libros.size() : 0;
+        return libros.size();
     }
 
     static class LibroViewHolder extends RecyclerView.ViewHolder {
 
         TextView tvTitulo, tvAutor, tvIsbn, tvEditorial, tvGenero, tvDisponibles;
-        Button btnPrestar; Button btnBorrar;
+        Button btnPrestar, btnBorrar;
 
         public LibroViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -110,11 +112,9 @@ public class LibroAdapter extends RecyclerView.Adapter<LibroAdapter.LibroViewHol
             tvIsbn = itemView.findViewById(R.id.tvIsbn);
             tvEditorial = itemView.findViewById(R.id.tvEditorial);
             tvGenero = itemView.findViewById(R.id.tvGenero);
-
             tvDisponibles = itemView.findViewById(R.id.tvDisponibles);
             btnPrestar = itemView.findViewById(R.id.btnPrestar);
             btnBorrar = itemView.findViewById(R.id.btnBorrar);
-
         }
     }
 
@@ -123,6 +123,7 @@ public class LibroAdapter extends RecyclerView.Adapter<LibroAdapter.LibroViewHol
         if (list != null) libros.addAll(list);
         notifyDataSetChanged();
     }
+
     public interface OnLibroDeleteListener {
         void onDelete(Libro libro);
     }
@@ -132,7 +133,4 @@ public class LibroAdapter extends RecyclerView.Adapter<LibroAdapter.LibroViewHol
     public void setOnLibroDeleteListener(OnLibroDeleteListener listener) {
         this.deleteListener = listener;
     }
-
-
-
 }
