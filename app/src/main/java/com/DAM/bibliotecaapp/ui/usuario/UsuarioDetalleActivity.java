@@ -42,24 +42,41 @@ public class UsuarioDetalleActivity extends AppCompatActivity {
 
         SessionManager s = new SessionManager(this);
 
-        // 1) Intent (si viene)
-        long idIntent = getIntent().getLongExtra(EXTRA_USUARIO_ID, -1L);
+// ✅ leer id desde intent con compatibilidad
+        long idIntent = -1L;
+        Bundle extras = getIntent().getExtras();
 
-        // 2) Sesión (para lector)
+        if (extras != null) {
+            // caso nuevo: "usuario_id"
+            if (extras.containsKey("usuario_id")) {
+                Object v = extras.get("usuario_id");
+                if (v instanceof Long) idIntent = (Long) v;
+                else if (v instanceof Integer) idIntent = ((Integer) v).longValue();
+            }
+            // caso antiguo: "usuarioId"
+            else if (extras.containsKey("usuarioId")) {
+                Object v = extras.get("usuarioId");
+                if (v instanceof Long) idIntent = (Long) v;
+                else if (v instanceof Integer) idIntent = ((Integer) v).longValue();
+            }
+        }
+
+// ✅ lector: si no viene por intent, usar sesión
         long idSesion = s.getUsuarioId();
 
-        // 3) Elegir id
-        if (idIntent != -1L) usuarioId = (int) idIntent;
-        else if (idSesion != -1L) usuarioId = (int) idSesion;
+// decidir id final
+        long elegido = (idIntent != -1L) ? idIntent : idSesion;
 
-        // 4) Validación
-        if (usuarioId == -1) {
+// validar
+        if (elegido == -1L) {
             Toast.makeText(this, "Error: usuario no recibido", Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
 
-        // 5) Seguridad: lector solo puede ver su propio perfil
+        usuarioId = (int) elegido;
+
+// seguridad lector
         if (s.isLector() && usuarioId != (int) s.getUsuarioId()) {
             Toast.makeText(this, "Acceso restringido", Toast.LENGTH_SHORT).show();
             finish();
