@@ -7,7 +7,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.WindowCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,12 +15,13 @@ import com.DAM.bibliotecaapp.R;
 import com.DAM.bibliotecaapp.RoleGuard;
 import com.DAM.bibliotecaapp.data.db.AppDatabase;
 import com.DAM.bibliotecaapp.data.pojo.MultaInfo;
+import com.DAM.bibliotecaapp.ui.base.BaseActivity;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class MultasActivity extends AppCompatActivity {
+public class MultasActivity extends BaseActivity {
 
     private AppDatabase db;
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -34,7 +35,9 @@ public class MultasActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         RoleGuard.requireBibliotecario(this);
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), true);
         setContentView(R.layout.activity_multas);
+        applySystemBarsPadding(R.id.main);
 
         db = AppDatabase.getInstance(this);
 

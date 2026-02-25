@@ -7,7 +7,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.WindowCompat;
 
 import com.DAM.bibliotecaapp.RoleGuard;
 import com.DAM.bibliotecaapp.data.db.AppDatabase;
@@ -21,8 +21,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import com.DAM.bibliotecaapp.data.entities.Ejemplar;
+import com.DAM.bibliotecaapp.ui.base.BaseActivity;
 
-public class NuevoPrestamoActivity extends AppCompatActivity {
+public class NuevoPrestamoActivity extends BaseActivity {
 
     private AppDatabase db;
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -35,7 +36,9 @@ public class NuevoPrestamoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         RoleGuard.requireBibliotecario(this);
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), true);
         setContentView(R.layout.activity_nuevo_prestamo);
+        applySystemBarsPadding(R.id.main);
 
         db = AppDatabase.getInstance(this);
 

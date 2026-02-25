@@ -6,8 +6,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.DAM.bibliotecaapp.R;
 import com.DAM.bibliotecaapp.SessionManager;
 import com.DAM.bibliotecaapp.data.db.AppDatabase;
@@ -15,13 +13,14 @@ import com.DAM.bibliotecaapp.data.entities.Bibliotecario;
 import com.DAM.bibliotecaapp.data.entities.Usuario;
 import com.DAM.bibliotecaapp.data.seed.HistorySeedData;
 import com.DAM.bibliotecaapp.data.seed.SeedData;
+import com.DAM.bibliotecaapp.ui.base.BaseActivity;
 import com.DAM.bibliotecaapp.ui.main.MainActivity;
 
 import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends BaseActivity {
 
     private EditText etUsuario, etPassword;
     private Button btnLogin;
@@ -41,6 +40,7 @@ public class LoginActivity extends AppCompatActivity {
         HistorySeedData.seedHistoryIfEmpty(this);
 
         setContentView(R.layout.activity_login);
+        applySystemBarsPadding(R.id.main);
 
         etUsuario = findViewById(R.id.etUsuario);
         etPassword = findViewById(R.id.etPassword);

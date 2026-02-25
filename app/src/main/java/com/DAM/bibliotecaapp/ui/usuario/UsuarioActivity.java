@@ -4,8 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
+import androidx.core.view.WindowCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -14,6 +14,7 @@ import com.DAM.bibliotecaapp.RoleGuard;
 import com.DAM.bibliotecaapp.SessionManager;
 import com.DAM.bibliotecaapp.data.db.AppDatabase;
 import com.DAM.bibliotecaapp.data.entities.Usuario;
+import com.DAM.bibliotecaapp.ui.base.BaseActivity;
 import com.DAM.bibliotecaapp.ui.login.LoginActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -21,7 +22,7 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class UsuarioActivity extends AppCompatActivity {
+public class UsuarioActivity extends BaseActivity {
 
     private UsuarioAdapter adapter;
     private AppDatabase db;
@@ -31,6 +32,7 @@ public class UsuarioActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         RoleGuard.requireLogin(this);
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), true);
 
         SessionManager s = new SessionManager(this);
 
@@ -55,6 +57,7 @@ public class UsuarioActivity extends AppCompatActivity {
 
 
         setContentView(R.layout.activity_usuario);
+        applySystemBarsPadding(R.id.main);
 
 
         db = AppDatabase.getInstance(this);

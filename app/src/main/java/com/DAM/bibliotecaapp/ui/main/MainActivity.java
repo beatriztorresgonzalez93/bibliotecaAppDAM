@@ -6,15 +6,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.DAM.bibliotecaapp.R;
 import com.DAM.bibliotecaapp.RoleGuard;
 import com.DAM.bibliotecaapp.SessionManager;
+import com.DAM.bibliotecaapp.ui.base.BaseActivity;
 import com.DAM.bibliotecaapp.ui.devolucion.DevolucionesActivity;
 import com.DAM.bibliotecaapp.ui.libro.LibrosActivity;
 import com.DAM.bibliotecaapp.ui.login.LoginActivity;
@@ -23,7 +23,7 @@ import com.DAM.bibliotecaapp.ui.multa.MultasActivity;
 import com.DAM.bibliotecaapp.ui.prestamo.PrestamoActivity;
 import com.DAM.bibliotecaapp.ui.usuario.UsuarioActivity;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     private TextView tvTitulo;
     private TextView btnAddBibliotecario;
@@ -35,9 +35,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         RoleGuard.requireLogin(this);
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), true);
 
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+        applySystemBarsPadding(R.id.main);
 
         // Sesión
         SessionManager session = new SessionManager(this);

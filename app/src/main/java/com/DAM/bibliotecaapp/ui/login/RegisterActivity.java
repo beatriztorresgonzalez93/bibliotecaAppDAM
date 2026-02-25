@@ -7,18 +7,19 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.WindowCompat;
 
 import com.DAM.bibliotecaapp.R;
 import com.DAM.bibliotecaapp.RoleGuard;
 import com.DAM.bibliotecaapp.data.db.AppDatabase;
 import com.DAM.bibliotecaapp.data.entities.Bibliotecario;
+import com.DAM.bibliotecaapp.ui.base.BaseActivity;
 
 import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterActivity extends BaseActivity {
 
     private EditText etNombre, etEmail, etPassword, etPassword2;
     private Button btnCrear;
@@ -31,7 +32,9 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         RoleGuard.requireBibliotecario(this);
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), true);
         setContentView(R.layout.activity_register);
+        applySystemBarsPadding(R.id.main);
 
         etNombre = findViewById(R.id.etNombre);
         etEmail = findViewById(R.id.etEmail);

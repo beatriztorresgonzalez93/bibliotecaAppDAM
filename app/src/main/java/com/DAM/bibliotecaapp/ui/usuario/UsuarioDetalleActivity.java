@@ -5,7 +5,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.WindowCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,13 +15,14 @@ import com.DAM.bibliotecaapp.SessionManager;
 import com.DAM.bibliotecaapp.data.db.AppDatabase;
 import com.DAM.bibliotecaapp.data.entities.Usuario;
 import com.DAM.bibliotecaapp.data.pojo.PrestamoInfo;
+import com.DAM.bibliotecaapp.ui.base.BaseActivity;
 import com.DAM.bibliotecaapp.ui.prestamo.PrestamoInfoAdapter;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class UsuarioDetalleActivity extends AppCompatActivity {
+public class UsuarioDetalleActivity extends BaseActivity {
 
     public static final String EXTRA_USUARIO_ID = "usuario_id"; // ✅ una sola clave
 
@@ -39,6 +40,7 @@ public class UsuarioDetalleActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         RoleGuard.requireLogin(this);
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), true);
 
         SessionManager s = new SessionManager(this);
 
@@ -84,6 +86,7 @@ public class UsuarioDetalleActivity extends AppCompatActivity {
         }
 
         setContentView(R.layout.activity_usuario_detalle);
+        applySystemBarsPadding(R.id.main);
 
         db = AppDatabase.getInstance(this);
 

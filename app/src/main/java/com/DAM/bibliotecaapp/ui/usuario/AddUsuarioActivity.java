@@ -8,18 +8,19 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.WindowCompat;
 
 import com.DAM.bibliotecaapp.R;
 import com.DAM.bibliotecaapp.RoleGuard;
 import com.DAM.bibliotecaapp.data.db.AppDatabase;
 import com.DAM.bibliotecaapp.data.entities.Usuario;
+import com.DAM.bibliotecaapp.ui.base.BaseActivity;
 
 import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class AddUsuarioActivity extends AppCompatActivity {
+public class AddUsuarioActivity extends BaseActivity {
 
     private EditText etNombre, etEmail, etPassword;
     private EditText etRol; // puede existir aún en tu XML
@@ -33,7 +34,9 @@ public class AddUsuarioActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         RoleGuard.requireBibliotecario(this);
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), true);
         setContentView(R.layout.activity_add_usuario);
+        applySystemBarsPadding(R.id.main);
 
         etNombre = findViewById(R.id.etNombre);
         etEmail = findViewById(R.id.etEmail);

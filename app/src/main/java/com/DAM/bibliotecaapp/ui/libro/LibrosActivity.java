@@ -6,7 +6,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.WindowCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,6 +15,7 @@ import com.DAM.bibliotecaapp.RoleGuard;
 import com.DAM.bibliotecaapp.SessionManager;
 import com.DAM.bibliotecaapp.data.db.AppDatabase;
 import com.DAM.bibliotecaapp.data.entities.Libro;
+import com.DAM.bibliotecaapp.ui.base.BaseActivity;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,7 +23,7 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class LibrosActivity extends AppCompatActivity {
+public class LibrosActivity extends BaseActivity {
 
     private RecyclerView rvLibros;
     private AppDatabase db;
@@ -41,7 +42,9 @@ public class LibrosActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         RoleGuard.requireLogin(this);
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), true);
         setContentView(R.layout.activity_libros);
+        applySystemBarsPadding(R.id.main);
 
         // Rol
         SessionManager session = new SessionManager(this);
