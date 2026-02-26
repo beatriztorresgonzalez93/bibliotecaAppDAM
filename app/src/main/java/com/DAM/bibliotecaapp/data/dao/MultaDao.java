@@ -132,8 +132,70 @@ public interface MultaDao {
     )
     List<MultaInfo> getCondonadasInfo();
 
+    @Query(
+            "SELECT m.id, m.idUsuario, u.nombre AS nombreUsuario, " +
+                    "m.idPrestamo, l.titulo AS tituloLibro, " +
+                    "m.diasRetraso, m.importe, m.estado, m.fechaCreacion, m.fechaCierre " +
+                    "FROM multa m " +
+                    "JOIN usuario u ON u.id = m.idUsuario " +
+                    "JOIN prestamo p ON p.id = m.idPrestamo " +
+                    "JOIN ejemplar e ON e.id = p.idEjemplar " +
+                    "JOIN libro l ON l.id = e.idLibro " +
+                    "WHERE (:idUsuario IS NULL OR m.idUsuario = :idUsuario) " +
+                    "ORDER BY m.fechaCreacion DESC"
+    )
+    List<MultaInfo> getAllInfoFiltrado(Integer idUsuario);
 
+    @Query(
+            "SELECT m.id, m.idUsuario, u.nombre AS nombreUsuario, " +
+                    "m.idPrestamo, l.titulo AS tituloLibro, " +
+                    "m.diasRetraso, m.importe, m.estado, m.fechaCreacion, m.fechaCierre " +
+                    "FROM multa m " +
+                    "JOIN usuario u ON u.id = m.idUsuario " +
+                    "JOIN prestamo p ON p.id = m.idPrestamo " +
+                    "JOIN ejemplar e ON e.id = p.idEjemplar " +
+                    "JOIN libro l ON l.id = e.idLibro " +
+                    "WHERE m.estado = 'PENDIENTE' " +
+                    "AND (:idUsuario IS NULL OR m.idUsuario = :idUsuario) " +
+                    "ORDER BY m.fechaCreacion DESC"
+    )
+    List<MultaInfo> getPendientesInfoFiltrado(Integer idUsuario);
 
+    @Query(
+            "SELECT m.id AS id, " +
+                    "u.id AS idUsuario, u.nombre AS nombreUsuario, " +
+                    "p.id AS idPrestamo, l.titulo AS tituloLibro, " +
+                    "m.diasRetraso AS diasRetraso, m.importe AS importe, " +
+                    "m.estado AS estado, " +
+                    "m.fechaCreacion AS fechaCreacion, m.fechaCierre AS fechaCierre " +
+                    "FROM multa m " +
+                    "JOIN usuario u ON u.id = m.idUsuario " +
+                    "JOIN prestamo p ON p.id = m.idPrestamo " +
+                    "JOIN ejemplar e ON e.id = p.idEjemplar " +
+                    "JOIN libro l ON l.id = e.idLibro " +
+                    "WHERE m.estado = 'PAGADA' " +
+                    "AND (:idUsuario IS NULL OR m.idUsuario = :idUsuario) " +
+                    "ORDER BY m.fechaCreacion DESC"
+    )
+    List<MultaInfo> getPagadasInfoFiltrado(Integer idUsuario);
+
+    @Query(
+            "SELECT m.id AS id, " +
+                    "u.id AS idUsuario, u.nombre AS nombreUsuario, " +
+                    "p.id AS idPrestamo, l.titulo AS tituloLibro, " +
+                    "m.diasRetraso AS diasRetraso, m.importe AS importe, " +
+                    "m.estado AS estado, " +
+                    "m.fechaCreacion AS fechaCreacion, m.fechaCierre AS fechaCierre " +
+                    "FROM multa m " +
+                    "JOIN usuario u ON u.id = m.idUsuario " +
+                    "JOIN prestamo p ON p.id = m.idPrestamo " +
+                    "JOIN ejemplar e ON e.id = p.idEjemplar " +
+                    "JOIN libro l ON l.id = e.idLibro " +
+                    "WHERE m.estado = 'CONDONADA' " +
+                    "AND (:idUsuario IS NULL OR m.idUsuario = :idUsuario) " +
+                    "ORDER BY m.fechaCreacion DESC"
+    )
+    List<MultaInfo> getCondonadasInfoFiltrado(Integer idUsuario);
 
 
 

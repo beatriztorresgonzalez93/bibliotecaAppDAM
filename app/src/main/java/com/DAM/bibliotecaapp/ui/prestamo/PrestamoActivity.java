@@ -1,22 +1,30 @@
 package com.DAM.bibliotecaapp.ui.prestamo;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.core.view.WindowCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.DAM.bibliotecaapp.R;
 import com.DAM.bibliotecaapp.RoleGuard;
 import com.DAM.bibliotecaapp.data.db.AppDatabase;
+import com.DAM.bibliotecaapp.data.entities.Multa;
+import com.DAM.bibliotecaapp.data.entities.Usuario;
 import com.DAM.bibliotecaapp.data.pojo.PrestamoGlobal;
+import com.DAM.bibliotecaapp.data.pojo.PrestamoVencidoMini;
 import com.DAM.bibliotecaapp.ui.base.BaseActivity;
+import com.google.android.material.button.MaterialButton;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -34,11 +42,23 @@ public class PrestamoActivity extends BaseActivity {
     private Spinner spFiltro;
     private String filtroActual = "Todos";
 
+    // NUEVO: filtro usuario
+    private AutoCompleteTextView actUsuarioFiltro;
+    private MaterialButton btnLimpiarFiltro;
+    private Integer selectedUsuarioId = null;
+
+    // Helper para el autocompletar
+    static class UserChoice {
+        final int id;
+        final String label;
+        UserChoice(int id, String label) { this.id = id; this.label = label; }
+        @Override public String toString() { return label; }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         RoleGuard.requireBibliotecario(this);
-        WindowCompat.setDecorFitsSystemWindows(getWindow(), true);
         setContentView(R.layout.activity_prestamo);
         applySystemBarsPadding(R.id.main);
 
@@ -49,23 +69,21 @@ public class PrestamoActivity extends BaseActivity {
 
         adapter = new PrestamoGlobalAdapter(
                 prestamo -> {
-                    // Click en la fila (opcional). Si no quieres que haga nada:
-                    // no pongas nada aquí.
+                    // Click fila (opcional)
                 },
                 prestamo -> {
-                    // Click en ampliar
+                    // ampliar
                     mostrarDialogoAmpliar(prestamo.idPrestamo);
                 },
                 prestamo -> {
-                    // Click en devolver
+                    // devolver
                     mostrarDialogoDevolucion(prestamo.idPrestamo);
                 }
         );
         rv.setAdapter(adapter);
 
-
+        // Spinner
         spFiltro = findViewById(R.id.spFiltroPrestamos);
-
         ArrayAdapter<String> filtroAdapter = new ArrayAdapter<>(
                 this,
                 android.R.layout.simple_spinner_item,
@@ -80,10 +98,15 @@ public class PrestamoActivity extends BaseActivity {
                 filtroActual = parent.getItemAtPosition(position).toString();
                 cargarPrestamos();
             }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
+            @Override public void onNothingSelected(AdapterView<?> parent) {}
         });
+
+        // NUEVO: Autocomplete usuario + limpiar
+        actUsuarioFiltro = findViewById(R.id.actUsuarioFiltroPrestamos);
+        btnLimpiarFiltro = findViewById(R.id.btnLimpiarFiltroPrestamos);
+
+        setupUserAutocomplete();
+        setupClearButton();
 
         cargarPrestamos();
     }
@@ -94,28 +117,76 @@ public class PrestamoActivity extends BaseActivity {
         cargarPrestamos();
     }
 
+    private void setupUserAutocomplete() {
+        executor.execute(() -> {
+            List<Usuario> list = db.usuarioDao().getAllOrderByNombre();
+
+            List<UserChoice> choices = new ArrayList<>();
+            for (Usuario u : list) {
+                choices.add(new UserChoice(u.id, u.nombre + " (" + u.email + ")"));
+            }
+
+            runOnUiThread(() -> {
+                ArrayAdapter<UserChoice> aa = new ArrayAdapter<>(
+                        this,
+                        android.R.layout.simple_dropdown_item_1line,
+                        choices
+                );
+
+                actUsuarioFiltro.setAdapter(aa);
+                actUsuarioFiltro.setThreshold(1);
+
+                actUsuarioFiltro.setOnItemClickListener((parent, view, position, id) -> {
+                    Object obj = parent.getItemAtPosition(position);
+                    if (obj instanceof UserChoice) {
+                        selectedUsuarioId = ((UserChoice) obj).id;
+                        cargarPrestamos();
+                    }
+                });
+
+                actUsuarioFiltro.addTextChangedListener(new SimpleTextWatcher() {
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        if (s == null || s.length() == 0) {
+                            selectedUsuarioId = null;
+                            cargarPrestamos();
+                        }
+                    }
+                });
+            });
+        });
+    }
+
+    private void setupClearButton() {
+        btnLimpiarFiltro.setOnClickListener(v -> {
+            selectedUsuarioId = null;
+            actUsuarioFiltro.setText("");
+            cargarPrestamos();
+        });
+    }
+
     private void cargarPrestamos() {
         executor.execute(() -> {
-            db.prestamoDao().marcarVencidos(System.currentTimeMillis());
+            long ahora = System.currentTimeMillis();
 
             // 1) marcar vencidos
-            db.prestamoDao().marcarVencidos(System.currentTimeMillis());
+            db.prestamoDao().marcarVencidos(ahora);
 
-// 2) crear/actualizar multas para vencidos
-            actualizarMultas(System.currentTimeMillis(), TARIFA_DIA, TOPE);
-
-
-            final double TARIFA_DIA = 0.50;
-            final double TOPE = 20.0;
-
+            // 2) crear/actualizar multas para vencidos
+            actualizarMultas(ahora, TARIFA_DIA, TOPE);
 
             List<PrestamoGlobal> lista;
             if ("Activos".equals(filtroActual)) {
-                lista = db.prestamoDao().getPrestamosSoloActivosGlobal();
+                if (selectedUsuarioId == null) lista = db.prestamoDao().getPrestamosSoloActivosGlobal();
+                else lista = db.prestamoDao().getPrestamosSoloActivosGlobalFiltrado(selectedUsuarioId);
+
             } else if ("Vencidos".equals(filtroActual)) {
-                lista = db.prestamoDao().getPrestamosVencidosGlobal();
+                if (selectedUsuarioId == null) lista = db.prestamoDao().getPrestamosVencidosGlobal();
+                else lista = db.prestamoDao().getPrestamosVencidosGlobalFiltrado(selectedUsuarioId);
+
             } else {
-                lista = db.prestamoDao().getPrestamosNoDevueltosGlobal();
+                if (selectedUsuarioId == null) lista = db.prestamoDao().getPrestamosNoDevueltosGlobal();
+                else lista = db.prestamoDao().getPrestamosNoDevueltosGlobalFiltrado(selectedUsuarioId);
             }
 
             runOnUiThread(() -> adapter.setData(lista));
@@ -162,7 +233,6 @@ public class PrestamoActivity extends BaseActivity {
     private void ampliarPlazo(int idPrestamo, int diasExtra) {
         executor.execute(() -> {
             long msExtra = diasExtra * 24L * 60 * 60 * 1000;
-
             int updated = db.prestamoDao().ampliarPlazo(idPrestamo, msExtra);
 
             runOnUiThread(() -> {
@@ -175,20 +245,17 @@ public class PrestamoActivity extends BaseActivity {
             });
         });
     }
+
     private void actualizarMultas(long ahora, double tarifaDia, double tope) {
-        List<com.DAM.bibliotecaapp.data.pojo.PrestamoVencidoMini> vencidos = db.prestamoDao().getVencidosMini();
+        List<PrestamoVencidoMini> vencidos = db.prestamoDao().getVencidosMini();
 
-        for (com.DAM.bibliotecaapp.data.pojo.PrestamoVencidoMini p : vencidos) {
-
-            // días completos de retraso
+        for (PrestamoVencidoMini p : vencidos) {
             long diff = ahora - p.fechaVencimiento;
             int dias = (int) Math.max(0, diff / (24L * 60 * 60 * 1000));
-
             double importe = Math.min(tope, dias * tarifaDia);
 
-            // si no existe multa, crearla
             if (db.multaDao().existePorPrestamo(p.idPrestamo) == 0) {
-                com.DAM.bibliotecaapp.data.entities.Multa m = new com.DAM.bibliotecaapp.data.entities.Multa();
+                Multa m = new Multa();
                 m.idPrestamo = p.idPrestamo;
                 m.idUsuario = p.idUsuario;
                 m.fechaCreacion = ahora;
@@ -198,10 +265,14 @@ public class PrestamoActivity extends BaseActivity {
                 m.estado = "PENDIENTE";
                 db.multaDao().insert(m);
             } else {
-                // si ya existe, actualizarla (solo si está pendiente)
                 db.multaDao().actualizarPendiente(p.idPrestamo, dias, importe);
             }
         }
     }
 
+    // TextWatcher simple local
+    public abstract static class SimpleTextWatcher implements TextWatcher {
+        @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+        @Override public void afterTextChanged(Editable s) {}
+    }
 }

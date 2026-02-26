@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main"
-    android:paddingStart="20dp"
-    android:paddingEnd="20dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:paddingStart="20dp"
+    android:paddingEnd="20dp">
 
+    <!-- TÍTULO -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -15,16 +17,44 @@
         android:textStyle="bold"
         android:textSize="20sp"/>
 
+    <!-- SPINNER ACTIVO / VENCIDO / TODOS -->
     <Spinner
         android:id="@+id/spFiltroPrestamos"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"/>
 
+    <!-- FILTRO POR USUARIO (AUTOCOMPLETE) -->
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:hint="Filtrar por usuario">
+
+        <AutoCompleteTextView
+            android:id="@+id/actUsuarioFiltroPrestamos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:importantForAutofill="no" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- BOTÓN LIMPIAR -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnLimpiarFiltroPrestamos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Limpiar filtro usuario"
+        android:layout_marginTop="8dp" />
+
+    <!-- LISTA -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvPrestamos"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingTop="12dp"/>
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:paddingTop="12dp"
+        android:overScrollMode="never"/>
 
 </LinearLayout>

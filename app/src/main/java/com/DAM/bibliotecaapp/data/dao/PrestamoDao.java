@@ -197,6 +197,87 @@ public interface PrestamoDao {
     @Query("SELECT * FROM prestamo WHERE estado='VENCIDO' AND fechaDevolucion IS NULL")
     List<Prestamo> getVencidosSinDevolver();
 
+    @Query(
+            "SELECT p.id AS prestamoId, " +
+                    "l.titulo AS titulo, l.autor AS autor, " +
+                    "e.codigoInventario AS codigoInventario, " +
+                    "u.nombre AS usuarioNombre, u.email AS usuarioEmail, " +
+                    "p.fechaDevolucion AS fechaDevolucion, p.fechaPrestamo AS fechaPrestamo " +
+                    "FROM prestamo p " +
+                    "JOIN ejemplar e ON e.id = p.idEjemplar " +
+                    "JOIN libro l ON l.id = e.idLibro " +
+                    "JOIN usuario u ON u.id = p.idUsuario " +
+                    "WHERE p.estado = 'DEVUELTO' AND p.fechaDevolucion IS NOT NULL " +
+                    "AND (:idUsuario IS NULL OR p.idUsuario = :idUsuario) " +
+                    "AND (:desde IS NULL OR p.fechaDevolucion >= :desde) " +
+                    "AND (:hasta IS NULL OR p.fechaDevolucion <= :hasta) " +
+                    "ORDER BY p.fechaDevolucion DESC"
+    )
+    List<DevolucionItem> getDevolucionesFiltradas(Integer idUsuario, Long desde, Long hasta);
+
+    @Query(
+            "SELECT " +
+                    " p.id AS idPrestamo, " +
+                    " l.titulo AS titulo, " +
+                    " l.autor AS autor, " +
+                    " u.nombre AS nombreUsuario, " +
+                    " u.email AS emailUsuario, " +
+                    " e.codigoInventario AS codigoInventario, " +
+                    " p.fechaPrestamo AS fechaPrestamo, " +
+                    " p.fechaVencimiento AS fechaVencimiento, " +
+                    " p.estado AS estado " +
+                    "FROM prestamo p " +
+                    "JOIN ejemplar e ON e.id = p.idEjemplar " +
+                    "JOIN libro l ON l.id = e.idLibro " +
+                    "JOIN Usuario u ON u.id = p.idUsuario " +
+                    "WHERE p.fechaDevolucion IS NULL " +
+                    "AND (:idUsuario IS NULL OR p.idUsuario = :idUsuario) " +
+                    "ORDER BY p.fechaVencimiento ASC"
+    )
+    List<PrestamoGlobal> getPrestamosNoDevueltosGlobalFiltrado(Integer idUsuario);
+
+    @Query(
+            "SELECT " +
+                    " p.id AS idPrestamo, " +
+                    " l.titulo AS titulo, " +
+                    " l.autor AS autor, " +
+                    " u.nombre AS nombreUsuario, " +
+                    " u.email AS emailUsuario, " +
+                    " e.codigoInventario AS codigoInventario, " +
+                    " p.fechaPrestamo AS fechaPrestamo, " +
+                    " p.fechaVencimiento AS fechaVencimiento, " +
+                    " p.estado AS estado " +
+                    "FROM prestamo p " +
+                    "JOIN ejemplar e ON e.id = p.idEjemplar " +
+                    "JOIN libro l ON l.id = e.idLibro " +
+                    "JOIN Usuario u ON u.id = p.idUsuario " +
+                    "WHERE p.fechaDevolucion IS NULL AND p.estado = 'ACTIVO' " +
+                    "AND (:idUsuario IS NULL OR p.idUsuario = :idUsuario) " +
+                    "ORDER BY p.fechaVencimiento ASC"
+    )
+    List<PrestamoGlobal> getPrestamosSoloActivosGlobalFiltrado(Integer idUsuario);
+
+    @Query(
+            "SELECT " +
+                    " p.id AS idPrestamo, " +
+                    " l.titulo AS titulo, " +
+                    " l.autor AS autor, " +
+                    " u.nombre AS nombreUsuario, " +
+                    " u.email AS emailUsuario, " +
+                    " e.codigoInventario AS codigoInventario, " +
+                    " p.fechaPrestamo AS fechaPrestamo, " +
+                    " p.fechaVencimiento AS fechaVencimiento, " +
+                    " p.estado AS estado " +
+                    "FROM prestamo p " +
+                    "JOIN ejemplar e ON e.id = p.idEjemplar " +
+                    "JOIN libro l ON l.id = e.idLibro " +
+                    "JOIN Usuario u ON u.id = p.idUsuario " +
+                    "WHERE p.fechaDevolucion IS NULL AND p.estado = 'VENCIDO' " +
+                    "AND (:idUsuario IS NULL OR p.idUsuario = :idUsuario) " +
+                    "ORDER BY p.fechaVencimiento ASC"
+    )
+    List<PrestamoGlobal> getPrestamosVencidosGlobalFiltrado(Integer idUsuario);
+
 
 
 
