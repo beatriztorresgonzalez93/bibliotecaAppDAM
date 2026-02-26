@@ -18,6 +18,7 @@ import com.DAM.bibliotecaapp.data.entities.Libro;
 import com.DAM.bibliotecaapp.data.entities.Multa;
 import com.DAM.bibliotecaapp.data.entities.Prestamo;
 import com.DAM.bibliotecaapp.data.entities.Usuario;
+import com.DAM.bibliotecaapp.data.dao.EstadisticasDao;
 
 @Database(entities = {Usuario.class, Libro.class, Ejemplar.class, Prestamo.class, Multa.class, Bibliotecario.class}, version = 10)
 public abstract class AppDatabase extends RoomDatabase {
@@ -32,6 +33,8 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract MultaDao multaDao();
 
     public abstract BibliotecarioDao bibliotecarioDao();
+
+    public abstract EstadisticasDao estadisticasDao();
 
 
     private static volatile AppDatabase INSTANCE;

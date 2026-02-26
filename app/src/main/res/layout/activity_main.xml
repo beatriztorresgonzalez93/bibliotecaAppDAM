@@ -74,6 +74,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <Button
+        android:id="@+id/btnEstadisticas"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Estadísticas"
+        android:layout_marginTop="12dp"
+        android:padding="14dp"
+        app:layout_constraintTop_toBottomOf="@id/btnDevolucion"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <TextView
         android:id="@+id/btnAddBibliotecario"
         android:layout_width="wrap_content"
@@ -90,7 +101,7 @@
         android:textAlignment="center"
         android:visibility="gone"
 
-        app:layout_constraintTop_toBottomOf="@id/btnDevolucion"
+        app:layout_constraintTop_toBottomOf="@id/btnEstadisticas"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
 

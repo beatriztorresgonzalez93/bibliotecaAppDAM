@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Estadísticas"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:paddingBottom="12dp"/>
+
+        <!-- Resumen -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="12dp"
+            android:background="@android:color/darker_gray">
+
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="Resumen global" android:textStyle="bold"/>
+
+            <TextView android:id="@+id/tvUsuarios" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="0" />
+            <TextView android:id="@+id/tvLibros" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="0" />
+            <TextView android:id="@+id/tvEjemplares" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="0" />
+
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="Préstamos (A/V/D)" android:paddingTop="8dp" />
+
+            <TextView android:id="@+id/tvPrestamosActivos" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="0" />
+            <TextView android:id="@+id/tvPrestamosVencidos" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="0" />
+            <TextView android:id="@+id/tvPrestamosDevueltos" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="0" />
+
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="Multas (PEND/PAG/COND)" android:paddingTop="8dp" />
+
+            <TextView android:id="@+id/tvMultasPendientes" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="0" />
+            <TextView android:id="@+id/tvMultasPagadas" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="0" />
+            <TextView android:id="@+id/tvMultasCondonadas" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="0" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Dinero recaudado:"
+                android:paddingTop="8dp" />
+
+            <TextView
+                android:id="@+id/tvRecaudado"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0,00 €"
+                android:textStyle="bold"/>
+        </LinearLayout>
+
+        <!-- Top libros -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Libros más prestados"
+            android:textStyle="bold"
+            android:paddingTop="16dp"
+            android:paddingBottom="8dp"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvTopLibros"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false" />
+
+        <!-- Top usuarios -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Lectores más activos"
+            android:textStyle="bold"
+            android:paddingTop="16dp"
+            android:paddingBottom="8dp"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvTopUsuarios"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false" />
+
+    </LinearLayout>
+</ScrollView>

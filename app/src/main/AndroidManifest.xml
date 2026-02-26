@@ -13,6 +13,9 @@
         android:theme="@style/Theme.BibliotecaApp"
         tools:targetApi="31">
         <activity
+            android:name=".ui.estadistica.EstadisticasActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.base.BaseActivity"
             android:exported="false" />
         <activity
