@@ -3,6 +3,8 @@ package com.DAM.bibliotecaapp.ui.estadistica;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -12,6 +14,7 @@ import com.DAM.bibliotecaapp.R;
 import com.DAM.bibliotecaapp.RoleGuard;
 import com.DAM.bibliotecaapp.data.db.AppDatabase;
 import com.DAM.bibliotecaapp.data.pojo.EstadoConteo;
+import com.DAM.bibliotecaapp.data.pojo.GeneroConteo;
 import com.DAM.bibliotecaapp.data.pojo.MesConteo;
 import com.DAM.bibliotecaapp.data.pojo.MesImporte;
 import com.DAM.bibliotecaapp.data.pojo.StatsResumen;
@@ -44,7 +47,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import com.DAM.bibliotecaapp.data.pojo.GeneroConteo;
 
 public class EstadisticasActivity extends BaseActivity {
 
@@ -66,13 +68,13 @@ public class EstadisticasActivity extends BaseActivity {
     private RecyclerView rvTopLibrosMultas;
     private android.widget.ProgressBar pbPrestados;
     private TextView tvPctPrestados;
-
     private TextView tvEstadoDisponibilidad;
 
     private PieChart chartPrestamosGenero;
     private TextView tvPrestamosGeneroTitulo;
 
-
+    private android.widget.Spinner spinnerYear;
+    private String selectedYearStr = null; // null = TODOS
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,39 +125,118 @@ public class EstadisticasActivity extends BaseActivity {
         rvTopLibros.setLayoutManager(new LinearLayoutManager(this));
         rvTopUsuarios.setLayoutManager(new LinearLayoutManager(this));
 
-        cargarDatos();
+        spinnerYear = findViewById(R.id.spinnerYear);
+
+        // ✅ Spinner desde BD y carga inicial incluida
+        setupYearSpinnerDesdeBD();
+    }
+
+    private void setupYearSpinnerDesdeBD() {
+        AppDatabase db = AppDatabase.getInstance(getApplicationContext());
+
+        executor.execute(() -> {
+            List<String> yearsDb = db.estadisticasDao().getYearsDisponibles();
+
+            List<String> years = new ArrayList<>();
+            years.add("TODOS");
+            if (yearsDb != null) years.addAll(yearsDb);
+
+            runOnUiThread(() -> {
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                        this,
+                        android.R.layout.simple_spinner_dropdown_item,
+                        years
+                );
+                spinnerYear.setAdapter(adapter);
+
+                spinnerYear.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        String value = years.get(position);
+                        selectedYearStr = value.equals("TODOS") ? null : value;
+                        cargarDatos();
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {}
+                });
+
+                spinnerYear.setSelection(0);
+            });
+        });
     }
 
     private void cargarDatos() {
         AppDatabase db = AppDatabase.getInstance(getApplicationContext());
 
         executor.execute(() -> {
-            StatsResumen r = db.estadisticasDao().getResumen();
-            List<TopLibro> topLibros = db.estadisticasDao().getTopLibros(5);
-            List<TopUsuario> topUsuarios = db.estadisticasDao().getTopUsuarios(5);
+
+            StatsResumen r;
+            List<TopLibro> topLibros;
+            List<TopUsuario> topUsuarios;
+
+            List<MesConteo> prestamosMesRaw;
+            List<MesImporte> multasMesRaw;
+
+            List<EstadoConteo> multasEstado;
+
+            double dineroPendiente;
+            int totalDevueltos;
+            int devueltosSinMulta;
+
+            List<GeneroConteo> porGenero;
+            List<TopLibro> topLibrosMultas;
+
+            // Disponibilidad "AHORA" (global)
+            int disponibles = db.estadisticasDao().getEjemplaresDisponibles();
+            int prestadosAhora = db.estadisticasDao().getEjemplaresPrestadosAhora();
 
             long desde = desdeUltimos12Meses();
 
-            // OJO: estas queries deben venir ORDER BY mes ASC (como ya las tienes)
-            List<MesConteo> prestamosMesRaw = db.estadisticasDao().getPrestamosPorMesDesde(desde);
-            List<MesImporte> multasMesRaw = db.estadisticasDao().getImporteMultasPorMesDesde(desde);
+            if (selectedYearStr == null) {
+                // ====== TODOS ======
+                r = db.estadisticasDao().getResumen();
+                topLibros = db.estadisticasDao().getTopLibros(5);
+                topUsuarios = db.estadisticasDao().getTopUsuarios(5);
+
+                // En TODOS usamos desde últimos 12 meses reales
+                prestamosMesRaw = db.estadisticasDao().getPrestamosPorMesDesde(desde);
+                multasMesRaw = db.estadisticasDao().getImporteMultasPorMesDesde(desde);
+
+                multasEstado = db.estadisticasDao().getMultasPorEstado();
+
+                dineroPendiente = db.estadisticasDao().getDineroPendiente();
+                totalDevueltos = db.estadisticasDao().getTotalDevueltos();
+                devueltosSinMulta = db.estadisticasDao().getDevueltosSinMulta();
+
+                porGenero = db.estadisticasDao().getPrestamosPorGenero();
+                topLibrosMultas = db.estadisticasDao().getTopLibrosConMultas(5);
+
+            } else {
+                // ====== FILTRADO POR AÑO ======
+                String y = selectedYearStr;
+
+                r = db.estadisticasDao().getResumenPorYear(y);
+                topLibros = db.estadisticasDao().getTopLibrosPorYear(y, 5);
+                topUsuarios = db.estadisticasDao().getTopUsuariosPorYear(y, 5);
+
+                // Para un año, ya vienen meses de ese año (máx 12)
+                prestamosMesRaw = db.estadisticasDao().getPrestamosUltimos12MesesPorYear(y);
+                multasMesRaw = db.estadisticasDao().getImporteMultasUltimos12MesesPorYear(y);
+
+                multasEstado = db.estadisticasDao().getMultasPorEstadoPorYear(y);
+
+                dineroPendiente = db.estadisticasDao().getDineroPendientePorYear(y);
+                totalDevueltos = db.estadisticasDao().getTotalDevueltosPorYear(y);
+                devueltosSinMulta = db.estadisticasDao().getDevueltosSinMultaPorYear(y);
+
+                porGenero = db.estadisticasDao().getPrestamosPorGeneroPorYear(y);
+                topLibrosMultas = db.estadisticasDao().getTopLibrosConMultasPorYear(y, 5);
+            }
 
             // Rellenar meses vacíos para que SIEMPRE haya 12
             List<MesConteo> prestamosMes = rellenar12MesesConteo(prestamosMesRaw);
             List<MesImporte> multasMes = rellenar12MesesImporte(multasMesRaw);
-
-            List<EstadoConteo> multasEstado = db.estadisticasDao().getMultasPorEstado();
-
-            double dineroPendiente = db.estadisticasDao().getDineroPendiente();
-            int totalDevueltos = db.estadisticasDao().getTotalDevueltos();
-            int devueltosSinMulta = db.estadisticasDao().getDevueltosSinMulta();
-
-            int disponibles = db.estadisticasDao().getEjemplaresDisponibles();
-            int prestadosAhora = db.estadisticasDao().getEjemplaresPrestadosAhora();
-
-            List<GeneroConteo> porGenero = db.estadisticasDao().getPrestamosPorGenero();
-
-            List<TopLibro> topLibrosMultas = db.estadisticasDao().getTopLibrosConMultas(5);
 
             runOnUiThread(() -> {
                 // Resumen
@@ -178,87 +259,45 @@ public class EstadisticasActivity extends BaseActivity {
                 double pctATiempo = (totalDevueltos == 0) ? 0 : (devueltosSinMulta * 100.0 / totalDevueltos);
                 tvPctATiempo.setText(String.format(Locale.getDefault(), "%.0f %%", pctATiempo));
 
+                // Disponibilidad
                 tvDisponibles.setText(String.valueOf(disponibles));
                 tvPrestadosAhora.setText(String.valueOf(prestadosAhora));
                 int total = disponibles + prestadosAhora;
                 int pctPrestados = (total == 0) ? 0 : (int) Math.round(prestadosAhora * 100.0 / total);
 
-                pbPrestados.setProgress(pctPrestados);
                 pbPrestados.setMax(100);
                 pbPrestados.setProgress(pctPrestados);
                 tvPctPrestados.setText(pctPrestados + "% prestados");
 
                 if (pctPrestados < 50) {
-
-                    pbPrestados.setProgressDrawable(
-                            getResources().getDrawable(R.drawable.progress_green)
-                    );
-
+                    pbPrestados.setProgressDrawable(getResources().getDrawable(R.drawable.progress_green));
                     tvEstadoDisponibilidad.setText("Estado: NORMAL");
-                    tvEstadoDisponibilidad.setTextColor(
-                            android.graphics.Color.parseColor("#388E3C")
-                    );
-
-                }
-                else if (pctPrestados < 80) {
-
-                    pbPrestados.setProgressDrawable(
-                            getResources().getDrawable(R.drawable.progress_orange)
-                    );
-
+                    tvEstadoDisponibilidad.setTextColor(Color.parseColor("#388E3C"));
+                } else if (pctPrestados < 80) {
+                    pbPrestados.setProgressDrawable(getResources().getDrawable(R.drawable.progress_orange));
                     tvEstadoDisponibilidad.setText("Estado: ALTO USO");
-                    tvEstadoDisponibilidad.setTextColor(
-                            android.graphics.Color.parseColor("#F57C00")
-                    );
-
-                }
-                else {
-
-                    pbPrestados.setProgressDrawable(
-                            getResources().getDrawable(R.drawable.progress_red)
-                    );
-
+                    tvEstadoDisponibilidad.setTextColor(Color.parseColor("#F57C00"));
+                } else {
+                    pbPrestados.setProgressDrawable(getResources().getDrawable(R.drawable.progress_red));
                     tvEstadoDisponibilidad.setText("Estado: SATURADO");
-                    tvEstadoDisponibilidad.setTextColor(
-                            android.graphics.Color.parseColor("#D32F2F")
-                    );
-
+                    tvEstadoDisponibilidad.setTextColor(Color.parseColor("#D32F2F"));
                 }
 
-                if (pctPrestados < 50) {
-                    pbPrestados.setProgressDrawable(
-                            getResources().getDrawable(R.drawable.progress_green)
-                    );
-                }
-                else if (pctPrestados < 80) {
-                    pbPrestados.setProgressDrawable(
-                            getResources().getDrawable(R.drawable.progress_orange)
-                    );
-                }
-                else {
-                    pbPrestados.setProgressDrawable(
-                            getResources().getDrawable(R.drawable.progress_red)
-                    );
-                }
-
-                tvMultasPend.setTextColor(android.graphics.Color.parseColor("#D32F2F"));   // rojo
-                tvMultasPag.setTextColor(android.graphics.Color.parseColor("#388E3C"));    // verde
-                tvMultasCond.setTextColor(android.graphics.Color.parseColor("#1976D2"));   // azul
-
-                tvPendiente.setTextColor(android.graphics.Color.parseColor("#D32F2F"));    // dinero pendiente en rojo
-
-// reutilizamos el mismo item_top.xml y adapter TopLibrosAdapter
-                rvTopLibrosMultas.setAdapter(new TopLibrosAdapter(topLibrosMultas));
+                // Colores de texto (como ya usabas)
+                tvMultasPend.setTextColor(Color.parseColor("#D32F2F"));  // rojo
+                tvMultasPag.setTextColor(Color.parseColor("#388E3C"));   // verde
+                tvMultasCond.setTextColor(Color.parseColor("#1976D2"));  // azul
+                tvPendiente.setTextColor(Color.parseColor("#D32F2F"));   // dinero pendiente rojo
 
                 // Listas
                 rvTopLibros.setAdapter(new TopLibrosAdapter(topLibros));
                 rvTopUsuarios.setAdapter(new TopUsuariosAdapter(topUsuarios));
+                rvTopLibrosMultas.setAdapter(new TopLibrosAdapter(topLibrosMultas));
 
                 // Charts
                 pintarLineaPrestamos(prestamosMes);
                 pintarBarrasMultas(multasMes);
                 pintarTartaMultasEstado(multasEstado);
-
                 pintarTartaPrestamosGenero(porGenero);
             });
         });
@@ -273,14 +312,14 @@ public class EstadisticasActivity extends BaseActivity {
         for (int i = 0; i < data12.size(); i++) {
             MesConteo m = data12.get(i);
             entries.add(new Entry(i, m.total));
-            labels.add(formatearMesYYYYMM(m.mes)); // "feb 2026"
+            labels.add(formatearMesYYYYMM(m.mes));
         }
 
         LineDataSet set = new LineDataSet(entries, "Préstamos por mes");
         set.setLineWidth(2f);
         set.setCircleRadius(3f);
         set.setDrawCircleHole(false);
-        set.setDrawValues(false); // ✅ sin números
+        set.setDrawValues(false);
 
         LineData lineData = new LineData(set);
         chartPrestamosMes.setData(lineData);
@@ -290,9 +329,7 @@ public class EstadisticasActivity extends BaseActivity {
         x.setGranularity(1f);
         x.setValueFormatter(new IndexAxisValueFormatter(labels));
         x.setLabelRotationAngle(-45);
-
-        // ✅ Para que no se pisen: muestra 6 etiquetas (cada ~2 meses)
-        x.setLabelCount(12, true);      // ✅ quiero 12 meses visibles
+        x.setLabelCount(12, true);
         x.setAvoidFirstLastClipping(true);
         x.setGranularityEnabled(true);
         x.setTextSize(8f);
@@ -317,7 +354,7 @@ public class EstadisticasActivity extends BaseActivity {
         }
 
         BarDataSet set = new BarDataSet(entries, "Importe multas por mes (€)");
-        set.setDrawValues(false); // ✅ sin números
+        set.setDrawValues(false);
 
         BarData barData = new BarData(set);
         barData.setBarWidth(0.9f);
@@ -331,14 +368,8 @@ public class EstadisticasActivity extends BaseActivity {
         x.setValueFormatter(new IndexAxisValueFormatter(labels));
         x.setLabelRotationAngle(-45);
         x.setAxisMinimum(0f);
-        x.setAxisMaximum(labels.size() - 1f); // debe ser 11 si hay 12 meses
-
-
-        x.setLabelCount(labels.size(), true); // 12
-        x.setAvoidFirstLastClipping(true);
-
-        // ✅ igual que arriba
-        x.setLabelCount(12, true);      // ✅ 12 meses visibles
+        x.setAxisMaximum(labels.size() - 1f);
+        x.setLabelCount(12, true);
         x.setAvoidFirstLastClipping(true);
         x.setGranularityEnabled(true);
         x.setTextSize(8f);
@@ -358,24 +389,19 @@ public class EstadisticasActivity extends BaseActivity {
             entries.add(new PieEntry(e.total, e.estado));
         }
 
-        com.github.mikephil.charting.data.PieDataSet set =
-                new com.github.mikephil.charting.data.PieDataSet(entries, "Multas por estado");
-
+        PieDataSet set = new PieDataSet(entries, "Multas por estado");
         set.setColors(
-                android.graphics.Color.parseColor("#EF9A9A"), // pendiente (rojo)
-                android.graphics.Color.parseColor("#A5D6A7"), // pagada (verde)
-                android.graphics.Color.parseColor("#64B5F6")  // condonada (azul)
+                Color.parseColor("#EF9A9A"), // pendiente
+                Color.parseColor("#A5D6A7"), // pagada
+                Color.parseColor("#64B5F6")  // condonada
         );
-
-// ✅ números en blanco
         set.setValueTextSize(12f);
-        set.setValueTextColor(android.graphics.Color.WHITE);
+        set.setValueTextColor(Color.WHITE);
 
         PieData pieData = new PieData(set);
         chartMultasEstado.setData(pieData);
 
-// ✅ letras en negro
-        chartMultasEstado.setEntryLabelColor(android.graphics.Color.BLACK);
+        chartMultasEstado.setEntryLabelColor(Color.BLACK);
         chartMultasEstado.setEntryLabelTextSize(13f);
 
         chartMultasEstado.getDescription().setEnabled(false);
@@ -386,6 +412,89 @@ public class EstadisticasActivity extends BaseActivity {
         chartMultasEstado.setExtraBottomOffset(10f);
 
         chartMultasEstado.invalidate();
+    }
+
+    private void pintarTartaPrestamosGenero(List<GeneroConteo> data) {
+        if (chartPrestamosGenero == null) return;
+
+        if (data == null || data.isEmpty()) {
+            chartPrestamosGenero.clear();
+            chartPrestamosGenero.setNoDataText("Sin datos");
+            chartPrestamosGenero.invalidate();
+            if (tvPrestamosGeneroTitulo != null) {
+                tvPrestamosGeneroTitulo.setText("Géneros\n0 préstamos");
+            }
+            return;
+        }
+
+        final int TOP = 6;
+
+        ArrayList<PieEntry> entries = new ArrayList<>();
+        int otros = 0;
+        int totalPrestamos = 0;
+
+        for (int i = 0; i < data.size(); i++) {
+            GeneroConteo g = data.get(i);
+            if (g == null) continue;
+
+            totalPrestamos += g.total;
+
+            if (i < TOP) entries.add(new PieEntry(g.total, g.genero));
+            else otros += g.total;
+        }
+        if (otros > 0) entries.add(new PieEntry(otros, "Otros"));
+
+        ArrayList<Integer> colores = new ArrayList<>();
+        colores.add(Color.parseColor("#1E88E5"));
+        colores.add(Color.parseColor("#43A047"));
+        colores.add(Color.parseColor("#FB8C00"));
+        colores.add(Color.parseColor("#8E24AA"));
+        colores.add(Color.parseColor("#E53935"));
+        colores.add(Color.parseColor("#00897B"));
+        colores.add(Color.parseColor("#6D4C41"));
+        colores.add(Color.parseColor("#3949AB"));
+
+        PieDataSet set = new PieDataSet(entries, "");
+        set.setColors(colores);
+        set.setDrawValues(true);
+        set.setValueTextColor(Color.WHITE);
+        set.setValueTextSize(12f);
+
+        PieData pieData = new PieData(set);
+        chartPrestamosGenero.setData(pieData);
+
+        chartPrestamosGenero.setDrawCenterText(false);
+        chartPrestamosGenero.setCenterText("");
+        chartPrestamosGenero.setDrawEntryLabels(false);
+
+        chartPrestamosGenero.setDrawHoleEnabled(true);
+        chartPrestamosGenero.setHoleRadius(52f);
+        chartPrestamosGenero.setTransparentCircleRadius(56f);
+        chartPrestamosGenero.setHoleColor(Color.WHITE);
+
+        chartPrestamosGenero.getDescription().setEnabled(false);
+        chartPrestamosGenero.setRotationEnabled(false);
+
+        Legend legend = chartPrestamosGenero.getLegend();
+        legend.setEnabled(true);
+        legend.setDrawInside(false);
+        legend.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
+        legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.LEFT);
+        legend.setOrientation(Legend.LegendOrientation.VERTICAL);
+        legend.setTextSize(11f);
+        legend.setFormSize(11f);
+        legend.setYEntrySpace(6f);
+
+        chartPrestamosGenero.setExtraBottomOffset(100f);
+        chartPrestamosGenero.animateY(900);
+
+        chartPrestamosGenero.setVisibility(View.VISIBLE);
+        chartPrestamosGenero.requestLayout();
+        chartPrestamosGenero.invalidate();
+
+        if (tvPrestamosGeneroTitulo != null) {
+            tvPrestamosGeneroTitulo.setText("Géneros\n" + totalPrestamos + " préstamos");
+        }
     }
 
     private String formatearMesYYYYMM(String yyyymm) {
@@ -411,7 +520,9 @@ public class EstadisticasActivity extends BaseActivity {
 
     private List<MesConteo> rellenar12MesesConteo(List<MesConteo> originales) {
         Map<String, Integer> map = new HashMap<>();
-        for (MesConteo m : originales) map.put(m.mes, m.total);
+        if (originales != null) {
+            for (MesConteo m : originales) map.put(m.mes, m.total);
+        }
 
         List<MesConteo> out = new ArrayList<>();
         Calendar cal = Calendar.getInstance();
@@ -433,7 +544,9 @@ public class EstadisticasActivity extends BaseActivity {
 
     private List<MesImporte> rellenar12MesesImporte(List<MesImporte> originales) {
         Map<String, Double> map = new HashMap<>();
-        for (MesImporte m : originales) map.put(m.mes, m.importe);
+        if (originales != null) {
+            for (MesImporte m : originales) map.put(m.mes, m.importe);
+        }
 
         List<MesImporte> out = new ArrayList<>();
         Calendar cal = Calendar.getInstance();
@@ -452,113 +565,4 @@ public class EstadisticasActivity extends BaseActivity {
         }
         return out;
     }
-
-    private void pintarTartaPrestamosGenero(List<GeneroConteo> data) {
-        if (chartPrestamosGenero == null) return;
-
-        // ✅ Si no hay datos, limpia y sal
-        if (data == null || data.isEmpty()) {
-            chartPrestamosGenero.clear();
-            chartPrestamosGenero.setNoDataText("Sin datos");
-            chartPrestamosGenero.invalidate();
-
-            if (tvPrestamosGeneroTitulo != null) {
-                tvPrestamosGeneroTitulo.setText("Géneros\n0 préstamos");
-            }
-            return;
-        }
-
-        final int TOP = 6;
-
-        java.util.ArrayList<PieEntry> entries = new java.util.ArrayList<>();
-        int otros = 0;
-        int totalPrestamos = 0;
-
-        for (int i = 0; i < data.size(); i++) {
-            GeneroConteo g = data.get(i);
-            if (g == null) continue;
-
-            totalPrestamos += g.total;
-
-            if (i < TOP) {
-                entries.add(new PieEntry(g.total, g.genero));
-            } else {
-                otros += g.total;
-            }
-        }
-        if (otros > 0) entries.add(new PieEntry(otros, "Otros"));
-
-        // ✅ Paleta clara y distinta
-        java.util.ArrayList<Integer> colores = new java.util.ArrayList<>();
-        colores.add(Color.parseColor("#1E88E5")); // azul
-        colores.add(Color.parseColor("#43A047")); // verde
-        colores.add(Color.parseColor("#FB8C00")); // naranja
-        colores.add(Color.parseColor("#8E24AA")); // morado
-        colores.add(Color.parseColor("#E53935")); // rojo
-        colores.add(Color.parseColor("#00897B")); // turquesa
-        colores.add(Color.parseColor("#6D4C41")); // marrón
-        colores.add(Color.parseColor("#3949AB")); // índigo
-
-        PieDataSet set = new PieDataSet(entries, "");
-        set.setColors(colores);
-
-        // ✅ Solo números (valores) en el donut
-        set.setDrawValues(true);
-        set.setValueTextColor(Color.WHITE);
-        set.setValueTextSize(12f);
-
-        PieData pieData = new PieData(set);
-
-        // ====== CONFIGURACIÓN DEL CHART (estable) ======
-
-        chartPrestamosGenero.setData(pieData);
-
-        // ❌ MUY IMPORTANTE: desactivar center text para evitar el crash NPE en drawExtras()
-        chartPrestamosGenero.setDrawCenterText(false);
-        chartPrestamosGenero.setCenterText("");
-
-        // ✅ No dibujar labels (nombres) sobre los slices
-        chartPrestamosGenero.setDrawEntryLabels(false);
-
-        // ✅ Donut (agujero)
-        chartPrestamosGenero.setDrawHoleEnabled(true);
-        chartPrestamosGenero.setHoleRadius(52f);
-        chartPrestamosGenero.setTransparentCircleRadius(56f);
-        chartPrestamosGenero.setHoleColor(Color.WHITE);
-
-// MUY IMPORTANTE para evitar el bug del centerText:
-        chartPrestamosGenero.setDrawCenterText(false);
-        chartPrestamosGenero.setCenterText("");
-
-        // Limpieza
-        chartPrestamosGenero.getDescription().setEnabled(false);
-        chartPrestamosGenero.setRotationEnabled(false);
-
-        // ✅ Leyenda vertical a la derecha (para que no se corte)
-        Legend legend = chartPrestamosGenero.getLegend();
-        legend.setEnabled(true);
-        legend.setDrawInside(false);
-        legend.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
-        legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.LEFT);
-        legend.setOrientation(Legend.LegendOrientation.VERTICAL);
-        legend.setTextSize(11f);
-        legend.setFormSize(11f);
-        legend.setYEntrySpace(6f);
-
-        chartPrestamosGenero.setExtraBottomOffset(90f);
-
-        // ✅ Animación suave
-        chartPrestamosGenero.animateY(900);
-
-        chartPrestamosGenero.setVisibility(View.VISIBLE);
-        chartPrestamosGenero.requestLayout();
-        chartPrestamosGenero.invalidate();
-
-
-        // ✅ Texto fuera del chart (en un TextView) -> evita crash y queda pro
-        if (tvPrestamosGeneroTitulo != null) {
-            tvPrestamosGeneroTitulo.setText("Géneros\n" + totalPrestamos + " préstamos");
-        }
-    }
 }
-
