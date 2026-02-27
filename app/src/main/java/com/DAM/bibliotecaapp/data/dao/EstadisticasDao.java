@@ -356,4 +356,29 @@ public interface EstadisticasDao {
     )
     List<com.DAM.bibliotecaapp.data.pojo.GeneroConteo> getPrestamosPorGeneroPorYear(String yearStr);
 
+    // Total préstamos del año
+    @Query(
+            "SELECT COUNT(*) " +
+                    "FROM prestamo " +
+                    "WHERE strftime('%Y', datetime(fechaPrestamo/1000, 'unixepoch')) = :yearStr"
+    )
+    int getTotalPrestamosYear(String yearStr);
+
+    // Total importe recaudado (multas PAGADAS) del año
+    @Query(
+            "SELECT COALESCE(SUM(importe), 0) " +
+                    "FROM multa " +
+                    "WHERE estado='PAGADA' " +
+                    "AND strftime('%Y', datetime(fechaCreacion/1000, 'unixepoch')) = :yearStr"
+    )
+    double getRecaudadoYear(String yearStr);
+
+    // Total multas creadas del año (todas)
+    @Query(
+            "SELECT COUNT(*) " +
+                    "FROM multa " +
+                    "WHERE strftime('%Y', datetime(fechaCreacion/1000, 'unixepoch')) = :yearStr"
+    )
+    int getTotalMultasYear(String yearStr);
+
 }

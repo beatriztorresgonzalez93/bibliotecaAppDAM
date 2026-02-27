@@ -51,6 +51,25 @@
 
         </com.google.android.material.card.MaterialCardView>
 
+        <TextView
+            android:id="@+id/tvComparacionPrestamos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Comparación: —"
+            android:textSize="14sp"
+            android:textColor="#666666"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="4dp"/>
+
+        <TextView
+            android:id="@+id/tvComparacionRecaudado"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Comparación: —"
+            android:textSize="14sp"
+            android:textColor="#666666"
+            android:layout_marginBottom="14dp"/>
+
         <!-- Resumen -->
         <!-- KPIs -->
         <LinearLayout

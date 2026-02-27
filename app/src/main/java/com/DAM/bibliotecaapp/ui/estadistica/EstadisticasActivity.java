@@ -76,6 +76,10 @@ public class EstadisticasActivity extends BaseActivity {
     private android.widget.Spinner spinnerYear;
     private String selectedYearStr = null; // null = TODOS
 
+    // Comparación vs año anterior
+    private TextView tvComparacionPrestamos;
+    private TextView tvComparacionRecaudado;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -127,7 +131,10 @@ public class EstadisticasActivity extends BaseActivity {
 
         spinnerYear = findViewById(R.id.spinnerYear);
 
-        // ✅ Spinner desde BD y carga inicial incluida
+        // TextViews comparación (añádelos en el XML)
+        tvComparacionPrestamos = findViewById(R.id.tvComparacionPrestamos);
+        tvComparacionRecaudado = findViewById(R.id.tvComparacionRecaudado);
+
         setupYearSpinnerDesdeBD();
     }
 
@@ -171,6 +178,13 @@ public class EstadisticasActivity extends BaseActivity {
 
         executor.execute(() -> {
 
+            // Variables para comparación vs año anterior (si aplica)
+            int totalPrestamosThis = 0;
+            int totalPrestamosPrev = 0;
+            double recaudadoThis = 0.0;
+            double recaudadoPrev = 0.0;
+            int prevYearInt = 0;
+
             StatsResumen r;
             List<TopLibro> topLibros;
             List<TopUsuario> topUsuarios;
@@ -199,7 +213,6 @@ public class EstadisticasActivity extends BaseActivity {
                 topLibros = db.estadisticasDao().getTopLibros(5);
                 topUsuarios = db.estadisticasDao().getTopUsuarios(5);
 
-                // En TODOS usamos desde últimos 12 meses reales
                 prestamosMesRaw = db.estadisticasDao().getPrestamosPorMesDesde(desde);
                 multasMesRaw = db.estadisticasDao().getImporteMultasPorMesDesde(desde);
 
@@ -220,7 +233,6 @@ public class EstadisticasActivity extends BaseActivity {
                 topLibros = db.estadisticasDao().getTopLibrosPorYear(y, 5);
                 topUsuarios = db.estadisticasDao().getTopUsuariosPorYear(y, 5);
 
-                // Para un año, ya vienen meses de ese año (máx 12)
                 prestamosMesRaw = db.estadisticasDao().getPrestamosUltimos12MesesPorYear(y);
                 multasMesRaw = db.estadisticasDao().getImporteMultasUltimos12MesesPorYear(y);
 
@@ -232,11 +244,28 @@ public class EstadisticasActivity extends BaseActivity {
 
                 porGenero = db.estadisticasDao().getPrestamosPorGeneroPorYear(y);
                 topLibrosMultas = db.estadisticasDao().getTopLibrosConMultasPorYear(y, 5);
+
+                // ====== COMPARACIÓN VS AÑO ANTERIOR ======
+                totalPrestamosThis = db.estadisticasDao().getTotalPrestamosYear(y);
+                recaudadoThis = db.estadisticasDao().getRecaudadoYear(y);
+
+                prevYearInt = Integer.parseInt(y) - 1;
+                String prev = String.valueOf(prevYearInt);
+
+                totalPrestamosPrev = db.estadisticasDao().getTotalPrestamosYear(prev);
+                recaudadoPrev = db.estadisticasDao().getRecaudadoYear(prev);
             }
 
-            // Rellenar meses vacíos para que SIEMPRE haya 12
+            // Rellenar meses vacíos para que SIEMPRE haya 12 (visual estable)
             List<MesConteo> prestamosMes = rellenar12MesesConteo(prestamosMesRaw);
             List<MesImporte> multasMes = rellenar12MesesImporte(multasMesRaw);
+
+            // Capturar para UI thread (variables efectivamente finales)
+            final int fTotalPrestamosThis = totalPrestamosThis;
+            final int fTotalPrestamosPrev = totalPrestamosPrev;
+            final double fRecaudadoThis = recaudadoThis;
+            final double fRecaudadoPrev = recaudadoPrev;
+            final int fPrevYearInt = prevYearInt;
 
             runOnUiThread(() -> {
                 // Resumen
@@ -253,13 +282,12 @@ public class EstadisticasActivity extends BaseActivity {
                 tvMultasCond.setText(String.valueOf(r.multasCondonadas));
 
                 tvRecaudado.setText(String.format(Locale.getDefault(), "%.2f €", r.dineroRecaudado));
-
                 tvPendiente.setText(String.format(Locale.getDefault(), "%.2f €", dineroPendiente));
 
                 double pctATiempo = (totalDevueltos == 0) ? 0 : (devueltosSinMulta * 100.0 / totalDevueltos);
                 tvPctATiempo.setText(String.format(Locale.getDefault(), "%.0f %%", pctATiempo));
 
-                // Disponibilidad
+                // Disponibilidad (global "ahora")
                 tvDisponibles.setText(String.valueOf(disponibles));
                 tvPrestadosAhora.setText(String.valueOf(prestadosAhora));
                 int total = disponibles + prestadosAhora;
@@ -283,11 +311,11 @@ public class EstadisticasActivity extends BaseActivity {
                     tvEstadoDisponibilidad.setTextColor(Color.parseColor("#D32F2F"));
                 }
 
-                // Colores de texto (como ya usabas)
-                tvMultasPend.setTextColor(Color.parseColor("#D32F2F"));  // rojo
-                tvMultasPag.setTextColor(Color.parseColor("#388E3C"));   // verde
-                tvMultasCond.setTextColor(Color.parseColor("#1976D2"));  // azul
-                tvPendiente.setTextColor(Color.parseColor("#D32F2F"));   // dinero pendiente rojo
+                // Colores de texto
+                tvMultasPend.setTextColor(Color.parseColor("#D32F2F"));
+                tvMultasPag.setTextColor(Color.parseColor("#388E3C"));
+                tvMultasCond.setTextColor(Color.parseColor("#1976D2"));
+                tvPendiente.setTextColor(Color.parseColor("#D32F2F"));
 
                 // Listas
                 rvTopLibros.setAdapter(new TopLibrosAdapter(topLibros));
@@ -299,10 +327,83 @@ public class EstadisticasActivity extends BaseActivity {
                 pintarBarrasMultas(multasMes);
                 pintarTartaMultasEstado(multasEstado);
                 pintarTartaPrestamosGenero(porGenero);
+
+                // ====== COMPARACIÓN VS AÑO ANTERIOR (texto + color) ======
+                if (selectedYearStr == null) {
+                    tvComparacionPrestamos.setText("Comparación: —");
+                    tvComparacionPrestamos.setTextColor(Color.parseColor("#666666"));
+
+                    tvComparacionRecaudado.setText("Comparación: —");
+                    tvComparacionRecaudado.setTextColor(Color.parseColor("#666666"));
+                } else {
+                    ComparacionText cPrest = buildComparacion("Préstamos", fTotalPrestamosThis, fTotalPrestamosPrev, fPrevYearInt);
+                    tvComparacionPrestamos.setText(cPrest.text);
+                    tvComparacionPrestamos.setTextColor(cPrest.color);
+
+                    ComparacionText cRec = buildComparacionEuros("Recaudado", fRecaudadoThis, fRecaudadoPrev, fPrevYearInt);
+                    tvComparacionRecaudado.setText(cRec.text);
+                    tvComparacionRecaudado.setTextColor(cRec.color);
+                }
             });
         });
     }
 
+    // ---------------------------
+    // Comparación (texto + color)
+    // ---------------------------
+    private static class ComparacionText {
+        String text;
+        int color;
+        ComparacionText(String t, int c) { text = t; color = c; }
+    }
+
+    private ComparacionText buildComparacion(String label, int actual, int prev, int prevYear) {
+        if (prev <= 0) {
+            return new ComparacionText(
+                    label + ": " + actual + " (sin datos en " + prevYear + ")",
+                    Color.parseColor("#666666")
+            );
+        }
+
+        double pct = (actual - prev) * 100.0 / prev;
+        boolean up = pct >= 0;
+        String arrow = up ? "↑" : "↓";
+        int color = up ? Color.parseColor("#388E3C") : Color.parseColor("#D32F2F");
+
+        String text = String.format(
+                Locale.getDefault(),
+                "%s: %d  %s %.1f%% vs %d",
+                label, actual, arrow, Math.abs(pct), prevYear
+        );
+        return new ComparacionText(text, color);
+    }
+
+    private ComparacionText buildComparacionEuros(String label, double actual, double prev, int prevYear) {
+        if (prev <= 0.0) {
+            String text = String.format(
+                    Locale.getDefault(),
+                    "%s: %.2f € (sin datos en %d)",
+                    label, actual, prevYear
+            );
+            return new ComparacionText(text, Color.parseColor("#666666"));
+        }
+
+        double pct = (actual - prev) * 100.0 / prev;
+        boolean up = pct >= 0;
+        String arrow = up ? "↑" : "↓";
+        int color = up ? Color.parseColor("#388E3C") : Color.parseColor("#D32F2F");
+
+        String text = String.format(
+                Locale.getDefault(),
+                "%s: %.2f €  %s %.1f%% vs %d",
+                label, actual, arrow, Math.abs(pct), prevYear
+        );
+        return new ComparacionText(text, color);
+    }
+
+    // ---------------------------
+    // Charts
+    // ---------------------------
     private void pintarLineaPrestamos(List<MesConteo> data12) {
         if (chartPrestamosMes == null) return;
 
@@ -391,9 +492,9 @@ public class EstadisticasActivity extends BaseActivity {
 
         PieDataSet set = new PieDataSet(entries, "Multas por estado");
         set.setColors(
-                Color.parseColor("#EF9A9A"), // pendiente
-                Color.parseColor("#A5D6A7"), // pagada
-                Color.parseColor("#64B5F6")  // condonada
+                Color.parseColor("#EF9A9A"),
+                Color.parseColor("#A5D6A7"),
+                Color.parseColor("#64B5F6")
         );
         set.setValueTextSize(12f);
         set.setValueTextColor(Color.WHITE);
@@ -497,6 +598,9 @@ public class EstadisticasActivity extends BaseActivity {
         }
     }
 
+    // ---------------------------
+    // Utilidades meses
+    // ---------------------------
     private String formatearMesYYYYMM(String yyyymm) {
         try {
             SimpleDateFormat inFmt = new SimpleDateFormat("yyyy-MM", Locale.US);
