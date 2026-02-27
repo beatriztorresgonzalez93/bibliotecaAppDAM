@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -20,56 +21,434 @@
             android:paddingBottom="12dp"/>
 
         <!-- Resumen -->
+        <!-- KPIs -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="12dp"
-            android:background="@android:color/darker_gray">
+            android:orientation="vertical">
 
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:text="Resumen global" android:textStyle="bold"/>
-
-            <TextView android:id="@+id/tvUsuarios" android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:text="0" />
-            <TextView android:id="@+id/tvLibros" android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:text="0" />
-            <TextView android:id="@+id/tvEjemplares" android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:text="0" />
-
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:text="Préstamos (A/V/D)" android:paddingTop="8dp" />
-
-            <TextView android:id="@+id/tvPrestamosActivos" android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:text="0" />
-            <TextView android:id="@+id/tvPrestamosVencidos" android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:text="0" />
-            <TextView android:id="@+id/tvPrestamosDevueltos" android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:text="0" />
-
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:text="Multas (PEND/PAG/COND)" android:paddingTop="8dp" />
-
-            <TextView android:id="@+id/tvMultasPendientes" android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:text="0" />
-            <TextView android:id="@+id/tvMultasPagadas" android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:text="0" />
-            <TextView android:id="@+id/tvMultasCondonadas" android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:text="0" />
-
-            <TextView
-                android:layout_width="wrap_content"
+            <!-- Fila 1 -->
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Dinero recaudado:"
-                android:paddingTop="8dp" />
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/tvRecaudado"
-                android:layout_width="wrap_content"
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="8dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="14dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Usuarios"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvUsuarios"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            android:text="0" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="8dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="14dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Libros"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvLibros"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            android:text="0" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="14dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Ejemplares"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvEjemplares"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            android:text="0" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+
+            <!-- Fila 2 -->
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="0,00 €"
-                android:textStyle="bold"/>
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="8dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="14dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Activos"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvPrestamosActivos"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            android:text="0" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="8dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="14dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Vencidos"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvPrestamosVencidos"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            android:text="0" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="14dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Devueltos"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvPrestamosDevueltos"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            android:text="0" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+
+            <!-- Multas + dinero -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="14dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Multas"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Pendientes / Pagadas / Condonadas" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="6dp">
+
+                        <TextView
+                            android:id="@+id/tvMultasPendientes"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textStyle="bold"
+                            android:textSize="18sp"
+                            android:text="0"/>
+
+                        <TextView
+                            android:id="@+id/tvMultasPagadas"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textStyle="bold"
+                            android:textSize="18sp"
+                            android:gravity="center"
+                            android:text="0"/>
+
+                        <TextView
+                            android:id="@+id/tvMultasCondonadas"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textStyle="bold"
+                            android:textSize="18sp"
+                            android:gravity="end"
+                            android:text="0"/>
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Dinero recaudado"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        android:id="@+id/tvRecaudado"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="22sp"
+                        android:textStyle="bold"
+                        android:text="0,00 €"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Dinero pendiente"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        android:id="@+id/tvPendiente"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:text="0,00 €"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="% devoluciones a tiempo"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        android:id="@+id/tvPctATiempo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:text="0 %"/>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="14dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Disponibilidad"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Disponibles / Prestados ahora"/>
+
+                    <!-- Fila solo con los números -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="6dp">
+
+                        <TextView
+                            android:id="@+id/tvDisponibles"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textStyle="bold"
+                            android:textSize="18sp"
+                            android:text="0"/>
+
+                        <TextView
+                            android:id="@+id/tvPrestadosAhora"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textStyle="bold"
+                            android:textSize="18sp"
+                            android:gravity="end"
+                            android:text="0"/>
+                    </LinearLayout>
+
+                    <!-- Barra debajo (vertical) -->
+                    <ProgressBar
+                        android:id="@+id/pbPrestados"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="10dp"
+                        android:layout_marginTop="10dp"
+                        android:max="100"
+                        android:progress="0"/>
+
+                    <TextView
+                        android:id="@+id/tvPctPrestados"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:text="0% prestados"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        android:id="@+id/tvEstadoDisponibilidad"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="Estado: NORMAL"
+                        android:textStyle="bold"
+                        android:textSize="14sp"/>
+
+
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+
         </LinearLayout>
+        <TextView
+            android:id="@+id/tvPrestamosGeneroTitulo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Géneros\n0 préstamos"
+            android:textAlignment="center"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:paddingTop="8dp"
+            android:paddingBottom="6dp"/>
+
+        <com.github.mikephil.charting.charts.PieChart
+            android:id="@+id/chartPrestamosGenero"
+            android:layout_width="match_parent"
+            android:layout_height="380dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="8dp"/>
+
+
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/chartPrestamosMes"
+            android:layout_width="match_parent"
+            android:layout_height="260dp"
+            android:layout_marginTop="8dp"/>
+
+        <com.github.mikephil.charting.charts.BarChart
+            android:id="@+id/chartMultasMes"
+            android:layout_width="match_parent"
+            android:layout_height="260dp"
+            android:layout_marginTop="16dp"/>
+
+        <com.github.mikephil.charting.charts.PieChart
+            android:id="@+id/chartMultasEstado"
+            android:layout_width="match_parent"
+            android:layout_height="240dp"
+            android:layout_marginTop="16dp"/>
 
         <!-- Top libros -->
         <TextView
@@ -97,6 +476,20 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvTopUsuarios"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Libros con más multas"
+            android:textStyle="bold"
+            android:paddingTop="16dp"
+            android:paddingBottom="8dp"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvTopLibrosMultas"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:nestedScrollingEnabled="false" />
