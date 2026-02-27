@@ -381,4 +381,26 @@ public interface EstadisticasDao {
     )
     int getTotalMultasYear(String yearStr);
 
+    // Préstamos por mes dentro de un rango (para año seleccionado)
+    @Query(
+            "SELECT strftime('%Y-%m', datetime(fechaPrestamo/1000, 'unixepoch')) AS mes, " +
+                    "COUNT(*) AS total " +
+                    "FROM prestamo " +
+                    "WHERE fechaPrestamo >= :desde AND fechaPrestamo < :hasta " +
+                    "GROUP BY mes " +
+                    "ORDER BY mes ASC"
+    )
+    List<MesConteo> getPrestamosPorMesEntre(long desde, long hasta);
+
+    // Importe multas por mes dentro de un rango (para año seleccionado)
+    @Query(
+            "SELECT strftime('%Y-%m', datetime(fechaCreacion/1000, 'unixepoch')) AS mes, " +
+                    "COALESCE(SUM(importe),0) AS importe " +
+                    "FROM multa " +
+                    "WHERE fechaCreacion >= :desde AND fechaCreacion < :hasta " +
+                    "GROUP BY mes " +
+                    "ORDER BY mes ASC"
+    )
+    List<MesImporte> getImporteMultasPorMesEntre(long desde, long hasta);
+
 }

@@ -1,13 +1,21 @@
 package com.DAM.bibliotecaapp.ui.estadistica;
 
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Typeface;
+import android.graphics.pdf.PdfDocument;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -39,31 +47,17 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Typeface;
-import android.graphics.pdf.PdfDocument;
-import android.net.Uri;
-import android.widget.Toast;
-
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import java.io.OutputStream;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-
-
 
 public class EstadisticasActivity extends BaseActivity {
 
@@ -96,17 +90,16 @@ public class EstadisticasActivity extends BaseActivity {
     // Comparación vs año anterior
     private TextView tvComparacionPrestamos;
     private TextView tvComparacionRecaudado;
+
     // ===== Datos actuales para exportar PDF =====
     private StatsResumen pdfResumen;
     private double pdfDineroPendiente;
     private double pdfPctATiempo;
     private int pdfDisponibles;
     private int pdfPrestadosAhora;
-
     private List<TopLibro> pdfTopLibros;
     private List<TopUsuario> pdfTopUsuarios;
     private List<TopLibro> pdfTopLibrosMultas;
-
     private String pdfYearLabel; // "TODOS" o "2023"
 
     private ActivityResultLauncher<String> createPdfLauncher;
@@ -171,30 +164,26 @@ public class EstadisticasActivity extends BaseActivity {
 
         spinnerYear = findViewById(R.id.spinnerYear);
 
-        // TextViews comparación (añádelos en el XML)
         tvComparacionPrestamos = findViewById(R.id.tvComparacionPrestamos);
         tvComparacionRecaudado = findViewById(R.id.tvComparacionRecaudado);
 
+        // PDF launcher
         createPdfLauncher = registerForActivityResult(
                 new ActivityResultContracts.CreateDocument("application/pdf"),
                 uri -> {
-                    if (uri == null) return; // cancelado
+                    if (uri == null) return;
                     exportarPdf(uri);
                 }
         );
 
         Button btnExportPdf = findViewById(R.id.btnExportPdf);
         btnExportPdf.setOnClickListener(v -> {
-
-            // Seguridad: si todavía no se han cargado datos, no exportamos
             if (pdfResumen == null) {
                 Toast.makeText(this, "Espera a que carguen los datos", Toast.LENGTH_SHORT).show();
                 return;
             }
-
             String nombre = "estadisticas_" + pdfYearLabel + "_" +
                     new SimpleDateFormat("yyyyMMdd_HHmm", Locale.getDefault()).format(new Date()) + ".pdf";
-
             createPdfLauncher.launch(nombre);
         });
 
@@ -226,7 +215,6 @@ public class EstadisticasActivity extends BaseActivity {
                         selectedYearStr = value.equals("TODOS") ? null : value;
                         cargarDatos();
                     }
-
                     @Override
                     public void onNothingSelected(AdapterView<?> parent) {}
                 });
@@ -271,7 +259,7 @@ public class EstadisticasActivity extends BaseActivity {
             long desde = desdeUltimos12Meses();
 
             if (selectedYearStr == null) {
-                // ====== TODOS ======
+                // ====== TODOS (últimos 12 meses reales desde HOY) ======
                 r = db.estadisticasDao().getResumen();
                 topLibros = db.estadisticasDao().getTopLibros(5);
                 topUsuarios = db.estadisticasDao().getTopUsuarios(5);
@@ -288,19 +276,29 @@ public class EstadisticasActivity extends BaseActivity {
                 porGenero = db.estadisticasDao().getPrestamosPorGenero();
                 topLibrosMultas = db.estadisticasDao().getTopLibrosConMultas(5);
 
-                // ===== Guardar datos para PDF (en background, antes de UI) =====
+                // Rellenar meses vacíos para que SIEMPRE haya 12 (ventana móvil)
+                List<MesConteo> prestamosMes = rellenar12MesesConteoVentanaMovil(prestamosMesRaw);
+                List<MesImporte> multasMes = rellenar12MesesImporteVentanaMovil(multasMesRaw);
+
+                // Guardar datos PDF (TODOS)
                 pdfResumen = r;
                 pdfDineroPendiente = dineroPendiente;
                 pdfDisponibles = disponibles;
                 pdfPrestadosAhora = prestadosAhora;
-
                 pdfTopLibros = topLibros;
                 pdfTopUsuarios = topUsuarios;
                 pdfTopLibrosMultas = topLibrosMultas;
-
-                pdfYearLabel = (selectedYearStr == null) ? "TODOS" : selectedYearStr;
-
+                pdfYearLabel = "TODOS";
                 pdfPctATiempo = (totalDevueltos == 0) ? 0 : (devueltosSinMulta * 100.0 / totalDevueltos);
+
+                // UI
+                runOnUiThread(() -> pintarUI(r, topLibros, topUsuarios, topLibrosMultas,
+                        prestamosMes, multasMes, multasEstado, porGenero,
+                        dineroPendiente, totalDevueltos, devueltosSinMulta,
+                        disponibles, prestadosAhora,
+                        0, 0, 0.0, 0.0, 0, true));
+                return;
+
             } else {
                 // ====== FILTRADO POR AÑO ======
                 String y = selectedYearStr;
@@ -309,8 +307,13 @@ public class EstadisticasActivity extends BaseActivity {
                 topLibros = db.estadisticasDao().getTopLibrosPorYear(y, 5);
                 topUsuarios = db.estadisticasDao().getTopUsuariosPorYear(y, 5);
 
-                prestamosMesRaw = db.estadisticasDao().getPrestamosUltimos12MesesPorYear(y);
-                multasMesRaw = db.estadisticasDao().getImporteMultasUltimos12MesesPorYear(y);
+                // OJO: tus DAOs "Ultimos12MesesPorYear" seguramente devuelven meses del año
+                // (yyyy-MM). Perfecto. El problema era el relleno (antes era ventana móvil de HOY).
+                long desdeYear = inicioDeYear(y);
+                long hastaYear = inicioDeYearSiguiente(y);
+
+                prestamosMesRaw = db.estadisticasDao().getPrestamosPorMesEntre(desdeYear, hastaYear);
+                multasMesRaw = db.estadisticasDao().getImporteMultasPorMesEntre(desdeYear, hastaYear);
 
                 multasEstado = db.estadisticasDao().getMultasPorEstadoPorYear(y);
 
@@ -330,98 +333,138 @@ public class EstadisticasActivity extends BaseActivity {
 
                 totalPrestamosPrev = db.estadisticasDao().getTotalPrestamosYear(prev);
                 recaudadoPrev = db.estadisticasDao().getRecaudadoYear(prev);
+
+                // ✅ RELLENO CORRECTO: 12 meses del año seleccionado (Ene..Dic de y)
+                List<MesConteo> prestamosMes = rellenar12MesesConteoDelYear(y, prestamosMesRaw);
+                List<MesImporte> multasMes = rellenar12MesesImporteDelYear(y, multasMesRaw);
+
+                // Guardar datos PDF (AÑO)
+                pdfResumen = r;
+                pdfDineroPendiente = dineroPendiente;
+                pdfDisponibles = disponibles;
+                pdfPrestadosAhora = prestadosAhora;
+                pdfTopLibros = topLibros;
+                pdfTopUsuarios = topUsuarios;
+                pdfTopLibrosMultas = topLibrosMultas;
+                pdfYearLabel = y;
+                pdfPctATiempo = (totalDevueltos == 0) ? 0 : (devueltosSinMulta * 100.0 / totalDevueltos);
+
+                // UI
+                final int fTotalPrestamosThis = totalPrestamosThis;
+                final int fTotalPrestamosPrev = totalPrestamosPrev;
+                final double fRecaudadoThis = recaudadoThis;
+                final double fRecaudadoPrev = recaudadoPrev;
+                final int fPrevYearInt = prevYearInt;
+
+                runOnUiThread(() -> pintarUI(r, topLibros, topUsuarios, topLibrosMultas,
+                        prestamosMes, multasMes, multasEstado, porGenero,
+                        dineroPendiente, totalDevueltos, devueltosSinMulta,
+                        disponibles, prestadosAhora,
+                        fTotalPrestamosThis, fTotalPrestamosPrev, fRecaudadoThis, fRecaudadoPrev, fPrevYearInt, false));
             }
-
-            // Rellenar meses vacíos para que SIEMPRE haya 12 (visual estable)
-            List<MesConteo> prestamosMes = rellenar12MesesConteo(prestamosMesRaw);
-            List<MesImporte> multasMes = rellenar12MesesImporte(multasMesRaw);
-
-            // Capturar para UI thread (variables efectivamente finales)
-            final int fTotalPrestamosThis = totalPrestamosThis;
-            final int fTotalPrestamosPrev = totalPrestamosPrev;
-            final double fRecaudadoThis = recaudadoThis;
-            final double fRecaudadoPrev = recaudadoPrev;
-            final int fPrevYearInt = prevYearInt;
-
-            runOnUiThread(() -> {
-                // Resumen
-                tvUsuarios.setText(String.valueOf(r.totalUsuarios));
-                tvLibros.setText(String.valueOf(r.totalLibros));
-                tvEjemplares.setText(String.valueOf(r.totalEjemplares));
-
-                tvActivos.setText(String.valueOf(r.prestamosActivos));
-                tvVencidos.setText(String.valueOf(r.prestamosVencidos));
-                tvDevueltos.setText(String.valueOf(r.prestamosDevueltos));
-
-                tvMultasPend.setText(String.valueOf(r.multasPendientes));
-                tvMultasPag.setText(String.valueOf(r.multasPagadas));
-                tvMultasCond.setText(String.valueOf(r.multasCondonadas));
-
-                tvRecaudado.setText(String.format(Locale.getDefault(), "%.2f €", r.dineroRecaudado));
-                tvPendiente.setText(String.format(Locale.getDefault(), "%.2f €", dineroPendiente));
-
-                double pctATiempo = (totalDevueltos == 0) ? 0 : (devueltosSinMulta * 100.0 / totalDevueltos);
-                tvPctATiempo.setText(String.format(Locale.getDefault(), "%.0f %%", pctATiempo));
-
-                // Disponibilidad (global "ahora")
-                tvDisponibles.setText(String.valueOf(disponibles));
-                tvPrestadosAhora.setText(String.valueOf(prestadosAhora));
-                int total = disponibles + prestadosAhora;
-                int pctPrestados = (total == 0) ? 0 : (int) Math.round(prestadosAhora * 100.0 / total);
-
-                pbPrestados.setMax(100);
-                pbPrestados.setProgress(pctPrestados);
-                tvPctPrestados.setText(pctPrestados + "% prestados");
-
-                if (pctPrestados < 50) {
-                    pbPrestados.setProgressDrawable(getResources().getDrawable(R.drawable.progress_green));
-                    tvEstadoDisponibilidad.setText("Estado: NORMAL");
-                    tvEstadoDisponibilidad.setTextColor(Color.parseColor("#388E3C"));
-                } else if (pctPrestados < 80) {
-                    pbPrestados.setProgressDrawable(getResources().getDrawable(R.drawable.progress_orange));
-                    tvEstadoDisponibilidad.setText("Estado: ALTO USO");
-                    tvEstadoDisponibilidad.setTextColor(Color.parseColor("#F57C00"));
-                } else {
-                    pbPrestados.setProgressDrawable(getResources().getDrawable(R.drawable.progress_red));
-                    tvEstadoDisponibilidad.setText("Estado: SATURADO");
-                    tvEstadoDisponibilidad.setTextColor(Color.parseColor("#D32F2F"));
-                }
-
-                // Colores de texto
-                tvMultasPend.setTextColor(Color.parseColor("#D32F2F"));
-                tvMultasPag.setTextColor(Color.parseColor("#388E3C"));
-                tvMultasCond.setTextColor(Color.parseColor("#1976D2"));
-                tvPendiente.setTextColor(Color.parseColor("#D32F2F"));
-
-                // Listas
-                rvTopLibros.setAdapter(new TopLibrosAdapter(topLibros));
-                rvTopUsuarios.setAdapter(new TopUsuariosAdapter(topUsuarios));
-                rvTopLibrosMultas.setAdapter(new TopLibrosAdapter(topLibrosMultas));
-
-                // Charts
-                pintarLineaPrestamos(prestamosMes);
-                pintarBarrasMultas(multasMes);
-                pintarTartaMultasEstado(multasEstado);
-                pintarTartaPrestamosGenero(porGenero);
-
-                // ====== COMPARACIÓN VS AÑO ANTERIOR (texto + color) ======
-                if (selectedYearStr == null) {
-                    tvComparacionPrestamos.setText("Comparación: —");
-                    tvComparacionPrestamos.setTextColor(Color.parseColor("#666666"));
-
-                    tvComparacionRecaudado.setText("Comparación: —");
-                    tvComparacionRecaudado.setTextColor(Color.parseColor("#666666"));
-                } else {
-                    ComparacionText cPrest = buildComparacion("Préstamos", fTotalPrestamosThis, fTotalPrestamosPrev, fPrevYearInt);
-                    tvComparacionPrestamos.setText(cPrest.text);
-                    tvComparacionPrestamos.setTextColor(cPrest.color);
-
-                    ComparacionText cRec = buildComparacionEuros("Recaudado", fRecaudadoThis, fRecaudadoPrev, fPrevYearInt);
-                    tvComparacionRecaudado.setText(cRec.text);
-                    tvComparacionRecaudado.setTextColor(cRec.color);
-                }
-            });
         });
+    }
+
+    /**
+     * Centralizamos la actualización de UI para no duplicar código.
+     */
+    private void pintarUI(
+            StatsResumen r,
+            List<TopLibro> topLibros,
+            List<TopUsuario> topUsuarios,
+            List<TopLibro> topLibrosMultas,
+            List<MesConteo> prestamosMes,
+            List<MesImporte> multasMes,
+            List<EstadoConteo> multasEstado,
+            List<GeneroConteo> porGenero,
+            double dineroPendiente,
+            int totalDevueltos,
+            int devueltosSinMulta,
+            int disponibles,
+            int prestadosAhora,
+            int totalPrestamosThis,
+            int totalPrestamosPrev,
+            double recaudadoThis,
+            double recaudadoPrev,
+            int prevYearInt,
+            boolean esTodos
+    ) {
+        // Resumen
+        tvUsuarios.setText(String.valueOf(r.totalUsuarios));
+        tvLibros.setText(String.valueOf(r.totalLibros));
+        tvEjemplares.setText(String.valueOf(r.totalEjemplares));
+
+        tvActivos.setText(String.valueOf(r.prestamosActivos));
+        tvVencidos.setText(String.valueOf(r.prestamosVencidos));
+        tvDevueltos.setText(String.valueOf(r.prestamosDevueltos));
+
+        tvMultasPend.setText(String.valueOf(r.multasPendientes));
+        tvMultasPag.setText(String.valueOf(r.multasPagadas));
+        tvMultasCond.setText(String.valueOf(r.multasCondonadas));
+
+        tvRecaudado.setText(String.format(Locale.getDefault(), "%.2f €", r.dineroRecaudado));
+        tvPendiente.setText(String.format(Locale.getDefault(), "%.2f €", dineroPendiente));
+
+        double pctATiempo = (totalDevueltos == 0) ? 0 : (devueltosSinMulta * 100.0 / totalDevueltos);
+        tvPctATiempo.setText(String.format(Locale.getDefault(), "%.0f %%", pctATiempo));
+
+        // Disponibilidad (global "ahora")
+        tvDisponibles.setText(String.valueOf(disponibles));
+        tvPrestadosAhora.setText(String.valueOf(prestadosAhora));
+        int total = disponibles + prestadosAhora;
+        int pctPrestados = (total == 0) ? 0 : (int) Math.round(prestadosAhora * 100.0 / total);
+
+        pbPrestados.setMax(100);
+        pbPrestados.setProgress(pctPrestados);
+        tvPctPrestados.setText(pctPrestados + "% prestados");
+
+        if (pctPrestados < 50) {
+            pbPrestados.setProgressDrawable(getResources().getDrawable(R.drawable.progress_green));
+            tvEstadoDisponibilidad.setText("Estado: NORMAL");
+            tvEstadoDisponibilidad.setTextColor(Color.parseColor("#388E3C"));
+        } else if (pctPrestados < 80) {
+            pbPrestados.setProgressDrawable(getResources().getDrawable(R.drawable.progress_orange));
+            tvEstadoDisponibilidad.setText("Estado: ALTO USO");
+            tvEstadoDisponibilidad.setTextColor(Color.parseColor("#F57C00"));
+        } else {
+            pbPrestados.setProgressDrawable(getResources().getDrawable(R.drawable.progress_red));
+            tvEstadoDisponibilidad.setText("Estado: SATURADO");
+            tvEstadoDisponibilidad.setTextColor(Color.parseColor("#D32F2F"));
+        }
+
+        // Colores de texto
+        tvMultasPend.setTextColor(Color.parseColor("#D32F2F"));
+        tvMultasPag.setTextColor(Color.parseColor("#388E3C"));
+        tvMultasCond.setTextColor(Color.parseColor("#1976D2"));
+        tvPendiente.setTextColor(Color.parseColor("#D32F2F"));
+
+        // Listas
+        rvTopLibros.setAdapter(new TopLibrosAdapter(topLibros));
+        rvTopUsuarios.setAdapter(new TopUsuariosAdapter(topUsuarios));
+        rvTopLibrosMultas.setAdapter(new TopLibrosAdapter(topLibrosMultas));
+
+        // Charts
+        pintarLineaPrestamos(prestamosMes);
+        pintarBarrasMultas(multasMes);
+        pintarTartaMultasEstado(multasEstado);
+        pintarTartaPrestamosGenero(porGenero);
+
+        // Comparación
+        if (esTodos) {
+            tvComparacionPrestamos.setText("Comparación: —");
+            tvComparacionPrestamos.setTextColor(Color.parseColor("#666666"));
+
+            tvComparacionRecaudado.setText("Comparación: —");
+            tvComparacionRecaudado.setTextColor(Color.parseColor("#666666"));
+        } else {
+            ComparacionText cPrest = buildComparacion("Préstamos", totalPrestamosThis, totalPrestamosPrev, prevYearInt);
+            tvComparacionPrestamos.setText(cPrest.text);
+            tvComparacionPrestamos.setTextColor(cPrest.color);
+
+            ComparacionText cRec = buildComparacionEuros("Recaudado", recaudadoThis, recaudadoPrev, prevYearInt);
+            tvComparacionRecaudado.setText(cRec.text);
+            tvComparacionRecaudado.setTextColor(cRec.color);
+        }
     }
 
     // ---------------------------
@@ -562,8 +605,10 @@ public class EstadisticasActivity extends BaseActivity {
         if (chartMultasEstado == null) return;
 
         ArrayList<PieEntry> entries = new ArrayList<>();
-        for (EstadoConteo e : data) {
-            entries.add(new PieEntry(e.total, e.estado));
+        if (data != null) {
+            for (EstadoConteo e : data) {
+                entries.add(new PieEntry(e.total, e.estado));
+            }
         }
 
         PieDataSet set = new PieDataSet(entries, "Multas por estado");
@@ -662,7 +707,7 @@ public class EstadisticasActivity extends BaseActivity {
         legend.setFormSize(11f);
         legend.setYEntrySpace(6f);
 
-        chartPrestamosGenero.setExtraBottomOffset(100f);
+        chartPrestamosGenero.setExtraBottomOffset(110f);
         chartPrestamosGenero.animateY(900);
 
         chartPrestamosGenero.setVisibility(View.VISIBLE);
@@ -698,7 +743,10 @@ public class EstadisticasActivity extends BaseActivity {
         return cal.getTimeInMillis();
     }
 
-    private List<MesConteo> rellenar12MesesConteo(List<MesConteo> originales) {
+    /**
+     * Ventana móvil: últimos 12 meses desde "hoy" (para TODOS).
+     */
+    private List<MesConteo> rellenar12MesesConteoVentanaMovil(List<MesConteo> originales) {
         Map<String, Integer> map = new HashMap<>();
         if (originales != null) {
             for (MesConteo m : originales) map.put(m.mes, m.total);
@@ -722,7 +770,7 @@ public class EstadisticasActivity extends BaseActivity {
         return out;
     }
 
-    private List<MesImporte> rellenar12MesesImporte(List<MesImporte> originales) {
+    private List<MesImporte> rellenar12MesesImporteVentanaMovil(List<MesImporte> originales) {
         Map<String, Double> map = new HashMap<>();
         if (originales != null) {
             for (MesImporte m : originales) map.put(m.mes, m.importe);
@@ -746,6 +794,46 @@ public class EstadisticasActivity extends BaseActivity {
         return out;
     }
 
+    /**
+     * ✅ Año seleccionado: siempre 12 meses de ese año (ene..dic), con claves yyyy-MM.
+     */
+    private List<MesConteo> rellenar12MesesConteoDelYear(String year, List<MesConteo> originales) {
+        Map<String, Integer> map = new HashMap<>();
+        if (originales != null) {
+            for (MesConteo m : originales) map.put(m.mes, m.total);
+        }
+
+        List<MesConteo> out = new ArrayList<>();
+        for (int month = 1; month <= 12; month++) {
+            String key = String.format(Locale.US, "%s-%02d", year, month);
+            MesConteo mc = new MesConteo();
+            mc.mes = key;
+            mc.total = map.getOrDefault(key, 0);
+            out.add(mc);
+        }
+        return out;
+    }
+
+    private List<MesImporte> rellenar12MesesImporteDelYear(String year, List<MesImporte> originales) {
+        Map<String, Double> map = new HashMap<>();
+        if (originales != null) {
+            for (MesImporte m : originales) map.put(m.mes, m.importe);
+        }
+
+        List<MesImporte> out = new ArrayList<>();
+        for (int month = 1; month <= 12; month++) {
+            String key = String.format(Locale.US, "%s-%02d", year, month);
+            MesImporte mi = new MesImporte();
+            mi.mes = key;
+            mi.importe = map.getOrDefault(key, 0.0);
+            out.add(mi);
+        }
+        return out;
+    }
+
+    // ===========================
+    // PDF (tu sistema multipágina)
+    // ===========================
     private void exportarPdf(Uri uri) {
         try (OutputStream os = getContentResolver().openOutputStream(uri)) {
 
@@ -756,7 +844,6 @@ public class EstadisticasActivity extends BaseActivity {
 
             PdfDocument doc = new PdfDocument();
 
-            // Prepara paints una sola vez
             Paint h1 = new Paint(Paint.ANTI_ALIAS_FLAG);
             h1.setTextSize(18);
             h1.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
@@ -768,7 +855,6 @@ public class EstadisticasActivity extends BaseActivity {
             Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
             p.setTextSize(12);
 
-            // Empezamos en la página 1
             int pageNumber = 1;
             PdfDocument.Page page = doc.startPage(new PdfDocument.PageInfo.Builder(PDF_W, PDF_H, pageNumber).create());
             Canvas canvas = page.getCanvas();
@@ -776,11 +862,8 @@ public class EstadisticasActivity extends BaseActivity {
             int x = PDF_MARGIN_X;
             int y = PDF_MARGIN_TOP;
 
-            // Pintar contenido con salto de página
             PdfCursor cursor = new PdfCursor(doc, page, canvas, pageNumber, x, y, h1, h2, p);
             pintarPdfMulti(cursor);
-
-            // Cerrar la última página
             cursor.finishCurrentPage();
 
             doc.writeTo(os);
@@ -795,34 +878,29 @@ public class EstadisticasActivity extends BaseActivity {
     }
 
     private void pintarPdfMulti(PdfCursor c) {
-
         int maxWidth = PDF_W - (PDF_MARGIN_X * 2);
         int line = 18;
 
-        // CABECERA
         c.ensureSpace(60);
         c.canvas.drawText("ESTADÍSTICAS - " + pdfYearLabel, c.x, c.y, c.h1);
         c.y += 28;
 
-        String fecha = new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault()).format(new Date());
+        String fecha = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault()).format(new Date());
         c.canvas.drawText("Generado: " + fecha, c.x, c.y, c.p);
         c.y += 28;
 
-        // RESUMEN
         c.ensureSpace(40);
         c.canvas.drawText("RESUMEN", c.x, c.y, c.h2); c.y += line;
         c.canvas.drawText("Usuarios: " + pdfResumen.totalUsuarios, c.x, c.y, c.p); c.y += line;
         c.canvas.drawText("Libros: " + pdfResumen.totalLibros, c.x, c.y, c.p); c.y += line;
         c.canvas.drawText("Ejemplares: " + pdfResumen.totalEjemplares, c.x, c.y, c.p); c.y += (line + 6);
 
-        // PRÉSTAMOS
         c.ensureSpace(50);
         c.canvas.drawText("PRÉSTAMOS", c.x, c.y, c.h2); c.y += line;
         c.canvas.drawText("Activos: " + pdfResumen.prestamosActivos, c.x, c.y, c.p); c.y += line;
         c.canvas.drawText("Vencidos: " + pdfResumen.prestamosVencidos, c.x, c.y, c.p); c.y += line;
         c.canvas.drawText("Devueltos: " + pdfResumen.prestamosDevueltos, c.x, c.y, c.p); c.y += (line + 6);
 
-        // MULTAS
         c.ensureSpace(80);
         c.canvas.drawText("MULTAS", c.x, c.y, c.h2); c.y += line;
         c.canvas.drawText("Pendientes: " + pdfResumen.multasPendientes, c.x, c.y, c.p); c.y += line;
@@ -833,13 +911,11 @@ public class EstadisticasActivity extends BaseActivity {
         c.canvas.drawText(String.format(Locale.getDefault(), "Pendiente: %.2f €", pdfDineroPendiente), c.x, c.y, c.p); c.y += line;
         c.canvas.drawText(String.format(Locale.getDefault(), "%% devoluciones a tiempo: %.0f %%", pdfPctATiempo), c.x, c.y, c.p); c.y += (line + 6);
 
-        // DISPONIBILIDAD
         c.ensureSpace(40);
         c.canvas.drawText("DISPONIBILIDAD", c.x, c.y, c.h2); c.y += line;
         c.canvas.drawText("Disponibles: " + pdfDisponibles, c.x, c.y, c.p); c.y += line;
         c.canvas.drawText("Prestados ahora: " + pdfPrestadosAhora, c.x, c.y, c.p); c.y += (line + 10);
 
-        // RANKINGS (con salto + wrap)
         c.y = pintarTopLibrosPdf(c, "LIBROS MÁS PRESTADOS", pdfTopLibros, maxWidth);
         c.y += 10;
 
@@ -850,7 +926,6 @@ public class EstadisticasActivity extends BaseActivity {
     }
 
     private int pintarTopLibrosPdf(PdfCursor c, String titulo, List<TopLibro> lista, int maxWidth) {
-
         int line = 18;
 
         c.ensureSpace(30);
@@ -865,21 +940,14 @@ public class EstadisticasActivity extends BaseActivity {
 
         for (int i = 0; i < lista.size(); i++) {
             TopLibro t = lista.get(i);
-
-            // Texto largo -> wrap
             String txt = (i + 1) + ". " + t.titulo + " — " + t.autor + " (" + t.totalPrestamos + ")";
-
-            // Antes de escribir, asegura espacio aproximado (2 líneas por si se parte)
             c.ensureSpace(line * 2);
-
             c.y = drawWrappedText(c.canvas, txt, c.x, c.y, c.p, maxWidth, line);
         }
-
         return c.y;
     }
 
     private int pintarTopUsuariosPdf(PdfCursor c, String titulo, List<TopUsuario> lista, int maxWidth) {
-
         int line = 18;
 
         c.ensureSpace(30);
@@ -894,27 +962,20 @@ public class EstadisticasActivity extends BaseActivity {
 
         for (int i = 0; i < lista.size(); i++) {
             TopUsuario t = lista.get(i);
-
             String txt = (i + 1) + ". " + t.nombre + " — " + t.email + " (" + t.totalPrestamos + ")";
-
             c.ensureSpace(line * 2);
             c.y = drawWrappedText(c.canvas, txt, c.x, c.y, c.p, maxWidth, line);
         }
-
         return c.y;
     }
-
-
 
     private class PdfCursor {
         PdfDocument doc;
         PdfDocument.Page page;
         Canvas canvas;
         int pageNumber;
-
         int x;
         int y;
-
         Paint h1, h2, p;
 
         PdfCursor(PdfDocument doc, PdfDocument.Page page, Canvas canvas, int pageNumber,
@@ -940,18 +1001,13 @@ public class EstadisticasActivity extends BaseActivity {
         }
 
         void newPage() {
-            // termina página actual
             doc.finishPage(page);
 
-            // crea nueva
             pageNumber++;
             page = doc.startPage(new PdfDocument.PageInfo.Builder(PDF_W, PDF_H, pageNumber).create());
             canvas = page.getCanvas();
 
-            // reset cursor
             y = PDF_MARGIN_TOP;
-
-            // (Opcional) encabezado pequeño en páginas 2+
             canvas.drawText("ESTADÍSTICAS - " + pdfYearLabel + " (pág. " + pageNumber + ")", x, y, p);
             y += 25;
         }
@@ -981,5 +1037,31 @@ public class EstadisticasActivity extends BaseActivity {
             y += lineHeight;
         }
         return y;
+    }
+
+    private long inicioDeYear(String yearStr) {
+        int year = Integer.parseInt(yearStr);
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR, year);
+        cal.set(Calendar.MONTH, Calendar.JANUARY);
+        cal.set(Calendar.DAY_OF_MONTH, 1);
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        return cal.getTimeInMillis();
+    }
+
+    private long inicioDeYearSiguiente(String yearStr) {
+        int year = Integer.parseInt(yearStr) + 1;
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR, year);
+        cal.set(Calendar.MONTH, Calendar.JANUARY);
+        cal.set(Calendar.DAY_OF_MONTH, 1);
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        return cal.getTimeInMillis();
     }
 }
