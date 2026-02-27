@@ -2,10 +2,10 @@ package com.DAM.bibliotecaapp.ui.libro;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -43,23 +43,41 @@ public class LibroAdapter extends RecyclerView.Adapter<LibroAdapter.LibroViewHol
     public void onBindViewHolder(@NonNull LibroViewHolder holder, int position) {
         Libro libro = libros.get(position);
 
-        holder.tvTitulo.setText(libro.titulo);
-        holder.tvAutor.setText("Autor: " + libro.autor);
-        holder.tvIsbn.setText("ISBN: " + libro.isbn);
-        holder.tvEditorial.setText("Editorial: " + (libro.editorial != null ? libro.editorial : ""));
-        holder.tvGenero.setText("Género: " + (libro.genero != null ? libro.genero : ""));
+        // Título / autor
+        holder.tvTitulo.setText(libro.titulo != null ? libro.titulo : "");
+        holder.tvAutor.setText(libro.autor != null ? libro.autor : "");
 
+        // Info compacta (ISBN + Editorial)
+        String isbn = (libro.isbn != null) ? libro.isbn : "";
+        String editorial = (libro.editorial != null) ? libro.editorial : "";
+        String info = "ISBN: " + isbn;
+        if (!editorial.trim().isEmpty()) info += " · Editorial: " + editorial;
+        holder.tvInfo.setText(info);
+
+        // Chips: género
+        String genero = (libro.genero != null) ? libro.genero : "Sin género";
+        holder.chipGenero.setText(genero);
+
+        // Disponibilidad
         int total = db.ejemplarDao().countTotal(libro.id);
         int disp = db.ejemplarDao().countDisponibles(libro.id);
-        holder.tvDisponibles.setText("Disponibles: " + disp + " / " + total);
+
+        // Chip disponibilidad (verde si hay, rojo si no)
+        if (disp > 0) {
+            holder.chipDisponibilidad.setText("Disponible · " + disp + "/" + total);
+            holder.chipDisponibilidad.setBackgroundResource(R.drawable.bg_chip_success);
+            holder.chipDisponibilidad.setTextColor(Color.parseColor("#065F46"));
+        } else {
+            holder.chipDisponibilidad.setText("No disponible · " + disp + "/" + total);
+            holder.chipDisponibilidad.setBackgroundResource(R.drawable.bg_chip_danger);
+            holder.chipDisponibilidad.setTextColor(Color.parseColor("#991B1B"));
+        }
 
         // ===== CONTROL DE ROLES =====
         if (!isAdmin) {
-            // LECTOR: no puede prestar ni borrar (ni verlos)
             holder.btnPrestar.setVisibility(View.GONE);
             holder.btnBorrar.setVisibility(View.GONE);
 
-            // evita “clicks reciclados” del RecyclerView
             holder.btnPrestar.setOnClickListener(null);
             holder.btnBorrar.setOnClickListener(null);
             return;
@@ -72,7 +90,6 @@ public class LibroAdapter extends RecyclerView.Adapter<LibroAdapter.LibroViewHol
         holder.btnPrestar.setEnabled(disp > 0);
 
         holder.btnPrestar.setOnClickListener(v -> {
-            // seguridad extra por si acaso
             if (!new SessionManager(v.getContext()).isBibliotecario()) return;
 
             Intent i = new Intent(v.getContext(), NuevoPrestamoActivity.class);
@@ -102,17 +119,20 @@ public class LibroAdapter extends RecyclerView.Adapter<LibroAdapter.LibroViewHol
 
     static class LibroViewHolder extends RecyclerView.ViewHolder {
 
-        TextView tvTitulo, tvAutor, tvIsbn, tvEditorial, tvGenero, tvDisponibles;
-        Button btnPrestar, btnBorrar;
+        TextView tvTitulo, tvAutor, tvInfo;
+        TextView chipGenero, chipDisponibilidad;
+        View btnPrestar, btnBorrar;
 
         public LibroViewHolder(@NonNull View itemView) {
             super(itemView);
+
             tvTitulo = itemView.findViewById(R.id.tvTitulo);
             tvAutor = itemView.findViewById(R.id.tvAutor);
-            tvIsbn = itemView.findViewById(R.id.tvIsbn);
-            tvEditorial = itemView.findViewById(R.id.tvEditorial);
-            tvGenero = itemView.findViewById(R.id.tvGenero);
-            tvDisponibles = itemView.findViewById(R.id.tvDisponibles);
+            tvInfo = itemView.findViewById(R.id.tvInfo);
+
+            chipGenero = itemView.findViewById(R.id.chipGenero);
+            chipDisponibilidad = itemView.findViewById(R.id.chipDisponibilidad);
+
             btnPrestar = itemView.findViewById(R.id.btnPrestar);
             btnBorrar = itemView.findViewById(R.id.btnBorrar);
         }

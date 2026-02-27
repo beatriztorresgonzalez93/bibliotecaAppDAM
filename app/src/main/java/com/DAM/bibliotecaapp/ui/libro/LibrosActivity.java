@@ -2,8 +2,12 @@ package com.DAM.bibliotecaapp.ui.libro;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.core.view.WindowCompat;
@@ -16,6 +20,8 @@ import com.DAM.bibliotecaapp.SessionManager;
 import com.DAM.bibliotecaapp.data.db.AppDatabase;
 import com.DAM.bibliotecaapp.data.entities.Libro;
 import com.DAM.bibliotecaapp.ui.base.BaseActivity;
+import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,14 +34,17 @@ public class LibrosActivity extends BaseActivity {
     private RecyclerView rvLibros;
     private AppDatabase db;
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
-    private androidx.appcompat.widget.SearchView svLibros;
 
     private String queryActual = "";
     private String ordenActual = "titulo";
 
     private LibroAdapter adapter;
+    private boolean isAdmin; // CONTROL DE ROL
 
-    private boolean isAdmin; // <-- CONTROL DE ROL
+    private TextView tvEmpty; // ✅ ahora es campo
+
+    private android.os.Handler searchHandler = new android.os.Handler();
+    private Runnable searchRunnable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,32 +59,47 @@ public class LibrosActivity extends BaseActivity {
         SessionManager session = new SessionManager(this);
         isAdmin = session.isBibliotecario();
 
-        androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.toolbarLibros);
+        MaterialToolbar toolbar = findViewById(R.id.toolbarLibros);
         setSupportActionBar(toolbar);
 
-        svLibros = findViewById(R.id.svLibros);
-        svLibros.setOnQueryTextListener(new androidx.appcompat.widget.SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                queryActual = query == null ? "" : query.trim();
-                cargarLibros();
-                return true;
-            }
+        // ✅ Buscar con el EditText del layout (NO SearchView)
+        TextInputEditText etBuscar = findViewById(R.id.etBuscar);
 
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                queryActual = newText == null ? "" : newText.trim();
-                cargarLibros();
-                return true;
-            }
-        });
+        if (etBuscar != null) {
+            etBuscar.addTextChangedListener(new TextWatcher() {
+
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+                @Override
+                public void afterTextChanged(Editable s) {}
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                    queryActual = (s == null) ? "" : s.toString().trim();
+
+                    // cancelar búsqueda anterior si existe
+                    if (searchRunnable != null) {
+                        searchHandler.removeCallbacks(searchRunnable);
+                    }
+
+                    // esperar 300ms antes de buscar
+                    searchRunnable = () -> cargarLibros();
+
+                    searchHandler.postDelayed(searchRunnable, 300);
+                }
+            });
+        }
 
         rvLibros = findViewById(R.id.rvLibros);
         rvLibros.setLayoutManager(new LinearLayoutManager(this));
 
+        tvEmpty = findViewById(R.id.tvEmpty); // ✅ solo se inicializa aquí
+
         db = AppDatabase.getInstance(this);
 
-        // 🔥 Adapter con rol: admin = puede prestar/borrar, lector = oculto/bloqueado
+        // Adapter con rol: admin = puede prestar/borrar, lector = oculto/bloqueado
         adapter = new LibroAdapter(db, new ArrayList<>(), isAdmin);
         rvLibros.setAdapter(adapter);
 
@@ -116,7 +140,13 @@ public class LibrosActivity extends BaseActivity {
             ordenarEnMemoria(libros);
 
             List<Libro> finalLibros = libros;
-            runOnUiThread(() -> adapter.setData(finalLibros));
+
+            runOnUiThread(() -> {
+                adapter.setData(finalLibros);
+                if (tvEmpty != null) {
+                    tvEmpty.setVisibility(finalLibros.isEmpty() ? View.VISIBLE : View.GONE);
+                }
+            });
         });
     }
 
@@ -227,4 +257,6 @@ public class LibrosActivity extends BaseActivity {
             });
         });
     }
+
+
 }

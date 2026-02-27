@@ -1,69 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardLibro"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="12dp">
+    android:layout_marginBottom="12dp"
+    app:cardCornerRadius="18dp"
+    app:cardUseCompatPadding="true"
+    app:cardElevation="2dp"
+    app:strokeColor="#E5E7EB"
+    app:strokeWidth="1dp">
 
-    <TextView
-        android:id="@+id/tvTitulo"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Título"
-        android:textSize="18sp"
-        android:textStyle="bold" />
+        android:orientation="vertical"
+        android:padding="16dp">
 
-    <TextView
-        android:id="@+id/tvAutor"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Autor"
-        android:layout_marginTop="4dp" />
+        <!-- Título -->
+        <TextView
+            android:id="@+id/tvTitulo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="1984"
+            android:textColor="#111827"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/tvIsbn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="ISBN"
-        android:layout_marginTop="2dp" />
+        <!-- Autor -->
+        <TextView
+            android:id="@+id/tvAutor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:text="George Orwell"
+            android:textColor="#6B7280"
+            android:textSize="14sp" />
 
-    <TextView
-        android:id="@+id/tvEditorial"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp" />
+        <!-- Info secundaria -->
+        <TextView
+            android:id="@+id/tvInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="ISBN: 978... · Editorial: Debolsillo"
+            android:textColor="#374151"
+            android:textSize="13sp" />
 
-    <TextView
-        android:id="@+id/tvGenero"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="2dp" />
+        <!-- Chips -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/tvDisponibles"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Disponibles: 0 / 0"
-        android:layout_marginTop="4dp" />
+            <TextView
+                android:id="@+id/chipGenero"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:paddingTop="6dp"
+                android:paddingBottom="6dp"
+                android:text="Distopía"
+                android:textSize="12sp"
+                android:textColor="#111827"
+                android:background="@drawable/bg_chip_neutral" />
 
-    <Button
-        android:id="@+id/btnPrestar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Prestar"
-        android:layout_marginTop="8dp"/>
+            <TextView
+                android:id="@+id/chipDisponibilidad"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:paddingTop="6dp"
+                android:paddingBottom="6dp"
+                android:text="Disponible · 2/2"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:textColor="#065F46"
+                android:background="@drawable/bg_chip_success" />
+        </LinearLayout>
 
-    <Button
-        android:id="@+id/btnBorrar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Borrar"
-        android:layout_marginTop="4dp"/>
+        <!-- Acciones -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:orientation="horizontal">
 
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnPrestar"
+                style="@style/Widget.Material3.Button.TonalButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minHeight="40dp"
+                android:text="Prestar"
+                app:cornerRadius="14dp"
+                android:layout_marginEnd="10dp" />
 
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnBorrar"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minHeight="40dp"
+                android:text="Borrar"
+                app:cornerRadius="14dp" />
 
+        </LinearLayout>
 
+    </LinearLayout>
 
-
-
-</LinearLayout>
+</com.google.android.material.card.MaterialCardView>

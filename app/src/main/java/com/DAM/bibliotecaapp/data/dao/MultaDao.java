@@ -206,6 +206,9 @@ public interface MultaDao {
     @Query("SELECT COALESCE(SUM(importe), 0) FROM multa WHERE idUsuario = :idUsuario AND estado = 'PENDIENTE'")
     double sumarMultasPendientesUsuario(int idUsuario);
 
+    @Query("SELECT COALESCE(SUM(importe),0) FROM multa WHERE estado = 'PENDIENTE'")
+    double getTotalMultasPendientes();
+
 
 
 }

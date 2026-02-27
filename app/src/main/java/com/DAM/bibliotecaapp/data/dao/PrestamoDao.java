@@ -281,6 +281,12 @@ public interface PrestamoDao {
     @Query("SELECT COUNT(*) FROM prestamo WHERE idUsuario = :idUsuario")
     int contarPrestamosTotalesUsuario(int idUsuario);
 
+    @Query("SELECT COUNT(*) FROM prestamo WHERE fechaDevolucion IS NULL")
+    int countPrestamosActivos();
+
+    @Query("SELECT COUNT(*) FROM prestamo WHERE estado = 'VENCIDO' AND fechaDevolucion IS NULL")
+    int countPrestamosVencidos();
+
 
 
 

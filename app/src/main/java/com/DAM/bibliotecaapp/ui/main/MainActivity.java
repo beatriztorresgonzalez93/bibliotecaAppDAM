@@ -10,6 +10,7 @@ import androidx.core.view.WindowCompat;
 import com.DAM.bibliotecaapp.R;
 import com.DAM.bibliotecaapp.RoleGuard;
 import com.DAM.bibliotecaapp.SessionManager;
+import com.DAM.bibliotecaapp.data.db.AppDatabase;
 import com.DAM.bibliotecaapp.ui.base.BaseActivity;
 import com.DAM.bibliotecaapp.ui.devolucion.DevolucionesActivity;
 import com.DAM.bibliotecaapp.ui.estadistica.EstadisticasActivity;
@@ -20,6 +21,8 @@ import com.DAM.bibliotecaapp.ui.multa.MultasActivity;
 import com.DAM.bibliotecaapp.ui.prestamo.PrestamoActivity;
 import com.DAM.bibliotecaapp.ui.usuario.UsuarioActivity;
 
+import java.util.concurrent.Executors;
+
 public class MainActivity extends BaseActivity {
 
     private TextView tvTitulo;
@@ -27,6 +30,13 @@ public class MainActivity extends BaseActivity {
 
     // ✅ Ahora son Views porque en el XML son MaterialCardView (no Button)
     private View btnPrestamos, btnMultas, btnDevoluciones, btnEstadisticas;
+
+    private TextView tvResumenPrestamos;
+    private TextView tvResumenVencidos;
+    private TextView tvResumenMultas;
+    private TextView tvSubtitulo;
+    private View cardResumen;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +71,15 @@ public class MainActivity extends BaseActivity {
         View btnLogout = findViewById(R.id.btnLogout);
 
         btnAddBibliotecario = findViewById(R.id.btnAddBibliotecario);
+
+        tvResumenPrestamos = findViewById(R.id.tvResumenPrestamos);
+        tvResumenVencidos = findViewById(R.id.tvResumenVencidos);
+        tvResumenMultas = findViewById(R.id.tvResumenMultas);
+
+        tvSubtitulo = findViewById(R.id.tvSubtitulo);
+
+        cardResumen = findViewById(R.id.cardResumen);
+
 
         // Clicks
         if (btnLogout != null) {
@@ -114,6 +133,7 @@ public class MainActivity extends BaseActivity {
         }
 
         aplicarUIRol();
+        cargarResumenBibliotecario();
     }
 
     @Override
@@ -126,22 +146,55 @@ public class MainActivity extends BaseActivity {
         SessionManager session = new SessionManager(this);
         boolean isAdmin = session.isBibliotecario();
 
+        // Subtítulo
+        if (tvSubtitulo != null) {
+            tvSubtitulo.setText(isAdmin ? "Modo Bibliotecario" : "Modo Lector");
+        }
+
+        // ✅ Card resumen SOLO bibliotecario
+        if (cardResumen != null) {
+            cardResumen.setVisibility(isAdmin ? View.VISIBLE : View.GONE);
+        }
+
         // Botón "Añadir bibliotecario" solo admin
         if (btnAddBibliotecario != null) {
             btnAddBibliotecario.setVisibility(isAdmin ? View.VISIBLE : View.GONE);
         }
 
-        // Título dinámico
-        if (tvTitulo != null) {
-            tvTitulo.setText(isAdmin ? "Biblioteca (Modo Bibliotecario)" : "Biblioteca");
-        }
-
-        // Menú por rol
+        // Menú por rol (como ya lo tienes)
         if (btnPrestamos != null) btnPrestamos.setVisibility(isAdmin ? View.VISIBLE : View.GONE);
         if (btnMultas != null) btnMultas.setVisibility(isAdmin ? View.VISIBLE : View.GONE);
         if (btnDevoluciones != null) btnDevoluciones.setVisibility(isAdmin ? View.VISIBLE : View.GONE);
-
-        // Estadísticas solo bibliotecario
         if (btnEstadisticas != null) btnEstadisticas.setVisibility(isAdmin ? View.VISIBLE : View.GONE);
+
+        // ✅ Solo si es admin cargamos los KPIs globales
+        if (isAdmin) {
+            cargarResumenBibliotecario();
+        }
     }
+
+    private void cargarResumenBibliotecario() {
+        java.util.concurrent.Executors.newSingleThreadExecutor().execute(() -> {
+            com.DAM.bibliotecaapp.data.db.AppDatabase db =
+                    com.DAM.bibliotecaapp.data.db.AppDatabase.getInstance(this);
+
+            // Asegura que estados vencidos están actualizados
+            db.prestamoDao().marcarVencidos(System.currentTimeMillis());
+
+            int prestamos = db.prestamoDao().countPrestamosActivos();      // no devueltos
+            int vencidos = db.prestamoDao().countPrestamosVencidos();      // vencidos no devueltos
+            double multas = db.multaDao().getTotalMultasPendientes();      // pendientes global
+
+            runOnUiThread(() -> {
+                if (tvResumenPrestamos != null) tvResumenPrestamos.setText(String.valueOf(prestamos));
+                if (tvResumenVencidos != null) tvResumenVencidos.setText(String.valueOf(vencidos));
+                if (tvResumenMultas != null) {
+                    tvResumenMultas.setText(String.format(
+                            java.util.Locale.getDefault(), "%.2f €", multas));
+                }
+            });
+        });
+    }
+
+
 }

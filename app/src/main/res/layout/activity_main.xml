@@ -87,6 +87,7 @@
                     android:orientation="horizontal"
                     android:weightSum="3">
 
+                    <!-- Préstamos -->
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -101,7 +102,7 @@
                             android:textColor="#6B7280" />
 
                         <TextView
-                            android:id="@+id/tvKpiPrestamos"
+                            android:id="@+id/tvResumenPrestamos"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="—"
@@ -110,6 +111,7 @@
                             android:textColor="#111827" />
                     </LinearLayout>
 
+                    <!-- Vencidos -->
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -124,7 +126,7 @@
                             android:textColor="#6B7280" />
 
                         <TextView
-                            android:id="@+id/tvKpiVencidos"
+                            android:id="@+id/tvResumenVencidos"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="—"
@@ -133,6 +135,7 @@
                             android:textColor="#111827" />
                     </LinearLayout>
 
+                    <!-- Multas -->
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -147,7 +150,7 @@
                             android:textColor="#6B7280" />
 
                         <TextView
-                            android:id="@+id/tvKpiMultas"
+                            android:id="@+id/tvResumenMultas"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="—"
