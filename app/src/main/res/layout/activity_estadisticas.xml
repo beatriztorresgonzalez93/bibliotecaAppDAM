@@ -544,5 +544,12 @@
             android:layout_height="wrap_content"
             android:nestedScrollingEnabled="false" />
 
+        <Button
+            android:id="@+id/btnExportPdf"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Exportar PDF"
+            android:layout_marginTop="12dp"/>
+
     </LinearLayout>
 </ScrollView>

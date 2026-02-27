@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -48,6 +49,22 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Typeface;
+import android.graphics.pdf.PdfDocument;
+import android.net.Uri;
+import android.widget.Toast;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import java.io.OutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
+
+
 public class EstadisticasActivity extends BaseActivity {
 
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -79,6 +96,29 @@ public class EstadisticasActivity extends BaseActivity {
     // Comparación vs año anterior
     private TextView tvComparacionPrestamos;
     private TextView tvComparacionRecaudado;
+    // ===== Datos actuales para exportar PDF =====
+    private StatsResumen pdfResumen;
+    private double pdfDineroPendiente;
+    private double pdfPctATiempo;
+    private int pdfDisponibles;
+    private int pdfPrestadosAhora;
+
+    private List<TopLibro> pdfTopLibros;
+    private List<TopUsuario> pdfTopUsuarios;
+    private List<TopLibro> pdfTopLibrosMultas;
+
+    private String pdfYearLabel; // "TODOS" o "2023"
+
+    private ActivityResultLauncher<String> createPdfLauncher;
+
+    // Medidas A4 aproximadas (PdfDocument)
+    private static final int PDF_W = 595;
+    private static final int PDF_H = 842;
+
+    // Márgenes
+    private static final int PDF_MARGIN_X = 50;
+    private static final int PDF_MARGIN_TOP = 70;
+    private static final int PDF_MARGIN_BOTTOM = 60;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,6 +174,29 @@ public class EstadisticasActivity extends BaseActivity {
         // TextViews comparación (añádelos en el XML)
         tvComparacionPrestamos = findViewById(R.id.tvComparacionPrestamos);
         tvComparacionRecaudado = findViewById(R.id.tvComparacionRecaudado);
+
+        createPdfLauncher = registerForActivityResult(
+                new ActivityResultContracts.CreateDocument("application/pdf"),
+                uri -> {
+                    if (uri == null) return; // cancelado
+                    exportarPdf(uri);
+                }
+        );
+
+        Button btnExportPdf = findViewById(R.id.btnExportPdf);
+        btnExportPdf.setOnClickListener(v -> {
+
+            // Seguridad: si todavía no se han cargado datos, no exportamos
+            if (pdfResumen == null) {
+                Toast.makeText(this, "Espera a que carguen los datos", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            String nombre = "estadisticas_" + pdfYearLabel + "_" +
+                    new SimpleDateFormat("yyyyMMdd_HHmm", Locale.getDefault()).format(new Date()) + ".pdf";
+
+            createPdfLauncher.launch(nombre);
+        });
 
         setupYearSpinnerDesdeBD();
     }
@@ -225,6 +288,19 @@ public class EstadisticasActivity extends BaseActivity {
                 porGenero = db.estadisticasDao().getPrestamosPorGenero();
                 topLibrosMultas = db.estadisticasDao().getTopLibrosConMultas(5);
 
+                // ===== Guardar datos para PDF (en background, antes de UI) =====
+                pdfResumen = r;
+                pdfDineroPendiente = dineroPendiente;
+                pdfDisponibles = disponibles;
+                pdfPrestadosAhora = prestadosAhora;
+
+                pdfTopLibros = topLibros;
+                pdfTopUsuarios = topUsuarios;
+                pdfTopLibrosMultas = topLibrosMultas;
+
+                pdfYearLabel = (selectedYearStr == null) ? "TODOS" : selectedYearStr;
+
+                pdfPctATiempo = (totalDevueltos == 0) ? 0 : (devueltosSinMulta * 100.0 / totalDevueltos);
             } else {
                 // ====== FILTRADO POR AÑO ======
                 String y = selectedYearStr;
@@ -668,5 +744,242 @@ public class EstadisticasActivity extends BaseActivity {
             cal.add(Calendar.MONTH, 1);
         }
         return out;
+    }
+
+    private void exportarPdf(Uri uri) {
+        try (OutputStream os = getContentResolver().openOutputStream(uri)) {
+
+            if (os == null) {
+                Toast.makeText(this, "No se pudo guardar el PDF", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            PdfDocument doc = new PdfDocument();
+
+            // Prepara paints una sola vez
+            Paint h1 = new Paint(Paint.ANTI_ALIAS_FLAG);
+            h1.setTextSize(18);
+            h1.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+
+            Paint h2 = new Paint(Paint.ANTI_ALIAS_FLAG);
+            h2.setTextSize(12);
+            h2.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+
+            Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
+            p.setTextSize(12);
+
+            // Empezamos en la página 1
+            int pageNumber = 1;
+            PdfDocument.Page page = doc.startPage(new PdfDocument.PageInfo.Builder(PDF_W, PDF_H, pageNumber).create());
+            Canvas canvas = page.getCanvas();
+
+            int x = PDF_MARGIN_X;
+            int y = PDF_MARGIN_TOP;
+
+            // Pintar contenido con salto de página
+            PdfCursor cursor = new PdfCursor(doc, page, canvas, pageNumber, x, y, h1, h2, p);
+            pintarPdfMulti(cursor);
+
+            // Cerrar la última página
+            cursor.finishCurrentPage();
+
+            doc.writeTo(os);
+            doc.close();
+
+            Toast.makeText(this, "PDF generado correctamente", Toast.LENGTH_SHORT).show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Error creando PDF: " + e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void pintarPdfMulti(PdfCursor c) {
+
+        int maxWidth = PDF_W - (PDF_MARGIN_X * 2);
+        int line = 18;
+
+        // CABECERA
+        c.ensureSpace(60);
+        c.canvas.drawText("ESTADÍSTICAS - " + pdfYearLabel, c.x, c.y, c.h1);
+        c.y += 28;
+
+        String fecha = new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault()).format(new Date());
+        c.canvas.drawText("Generado: " + fecha, c.x, c.y, c.p);
+        c.y += 28;
+
+        // RESUMEN
+        c.ensureSpace(40);
+        c.canvas.drawText("RESUMEN", c.x, c.y, c.h2); c.y += line;
+        c.canvas.drawText("Usuarios: " + pdfResumen.totalUsuarios, c.x, c.y, c.p); c.y += line;
+        c.canvas.drawText("Libros: " + pdfResumen.totalLibros, c.x, c.y, c.p); c.y += line;
+        c.canvas.drawText("Ejemplares: " + pdfResumen.totalEjemplares, c.x, c.y, c.p); c.y += (line + 6);
+
+        // PRÉSTAMOS
+        c.ensureSpace(50);
+        c.canvas.drawText("PRÉSTAMOS", c.x, c.y, c.h2); c.y += line;
+        c.canvas.drawText("Activos: " + pdfResumen.prestamosActivos, c.x, c.y, c.p); c.y += line;
+        c.canvas.drawText("Vencidos: " + pdfResumen.prestamosVencidos, c.x, c.y, c.p); c.y += line;
+        c.canvas.drawText("Devueltos: " + pdfResumen.prestamosDevueltos, c.x, c.y, c.p); c.y += (line + 6);
+
+        // MULTAS
+        c.ensureSpace(80);
+        c.canvas.drawText("MULTAS", c.x, c.y, c.h2); c.y += line;
+        c.canvas.drawText("Pendientes: " + pdfResumen.multasPendientes, c.x, c.y, c.p); c.y += line;
+        c.canvas.drawText("Pagadas: " + pdfResumen.multasPagadas, c.x, c.y, c.p); c.y += line;
+        c.canvas.drawText("Condonadas: " + pdfResumen.multasCondonadas, c.x, c.y, c.p); c.y += line;
+
+        c.canvas.drawText(String.format(Locale.getDefault(), "Recaudado: %.2f €", pdfResumen.dineroRecaudado), c.x, c.y, c.p); c.y += line;
+        c.canvas.drawText(String.format(Locale.getDefault(), "Pendiente: %.2f €", pdfDineroPendiente), c.x, c.y, c.p); c.y += line;
+        c.canvas.drawText(String.format(Locale.getDefault(), "%% devoluciones a tiempo: %.0f %%", pdfPctATiempo), c.x, c.y, c.p); c.y += (line + 6);
+
+        // DISPONIBILIDAD
+        c.ensureSpace(40);
+        c.canvas.drawText("DISPONIBILIDAD", c.x, c.y, c.h2); c.y += line;
+        c.canvas.drawText("Disponibles: " + pdfDisponibles, c.x, c.y, c.p); c.y += line;
+        c.canvas.drawText("Prestados ahora: " + pdfPrestadosAhora, c.x, c.y, c.p); c.y += (line + 10);
+
+        // RANKINGS (con salto + wrap)
+        c.y = pintarTopLibrosPdf(c, "LIBROS MÁS PRESTADOS", pdfTopLibros, maxWidth);
+        c.y += 10;
+
+        c.y = pintarTopUsuariosPdf(c, "LECTORES MÁS ACTIVOS", pdfTopUsuarios, maxWidth);
+        c.y += 10;
+
+        c.y = pintarTopLibrosPdf(c, "LIBROS CON MÁS MULTAS", pdfTopLibrosMultas, maxWidth);
+    }
+
+    private int pintarTopLibrosPdf(PdfCursor c, String titulo, List<TopLibro> lista, int maxWidth) {
+
+        int line = 18;
+
+        c.ensureSpace(30);
+        c.canvas.drawText(titulo, c.x, c.y, c.h2);
+        c.y += line;
+
+        if (lista == null || lista.isEmpty()) {
+            c.ensureSpace(line);
+            c.canvas.drawText("— Sin datos —", c.x, c.y, c.p);
+            return c.y + line;
+        }
+
+        for (int i = 0; i < lista.size(); i++) {
+            TopLibro t = lista.get(i);
+
+            // Texto largo -> wrap
+            String txt = (i + 1) + ". " + t.titulo + " — " + t.autor + " (" + t.totalPrestamos + ")";
+
+            // Antes de escribir, asegura espacio aproximado (2 líneas por si se parte)
+            c.ensureSpace(line * 2);
+
+            c.y = drawWrappedText(c.canvas, txt, c.x, c.y, c.p, maxWidth, line);
+        }
+
+        return c.y;
+    }
+
+    private int pintarTopUsuariosPdf(PdfCursor c, String titulo, List<TopUsuario> lista, int maxWidth) {
+
+        int line = 18;
+
+        c.ensureSpace(30);
+        c.canvas.drawText(titulo, c.x, c.y, c.h2);
+        c.y += line;
+
+        if (lista == null || lista.isEmpty()) {
+            c.ensureSpace(line);
+            c.canvas.drawText("— Sin datos —", c.x, c.y, c.p);
+            return c.y + line;
+        }
+
+        for (int i = 0; i < lista.size(); i++) {
+            TopUsuario t = lista.get(i);
+
+            String txt = (i + 1) + ". " + t.nombre + " — " + t.email + " (" + t.totalPrestamos + ")";
+
+            c.ensureSpace(line * 2);
+            c.y = drawWrappedText(c.canvas, txt, c.x, c.y, c.p, maxWidth, line);
+        }
+
+        return c.y;
+    }
+
+
+
+    private class PdfCursor {
+        PdfDocument doc;
+        PdfDocument.Page page;
+        Canvas canvas;
+        int pageNumber;
+
+        int x;
+        int y;
+
+        Paint h1, h2, p;
+
+        PdfCursor(PdfDocument doc, PdfDocument.Page page, Canvas canvas, int pageNumber,
+                  int x, int y, Paint h1, Paint h2, Paint p) {
+            this.doc = doc;
+            this.page = page;
+            this.canvas = canvas;
+            this.pageNumber = pageNumber;
+            this.x = x;
+            this.y = y;
+            this.h1 = h1;
+            this.h2 = h2;
+            this.p = p;
+        }
+
+        int bottomLimit() {
+            return PDF_H - PDF_MARGIN_BOTTOM;
+        }
+
+        void ensureSpace(int neededHeight) {
+            if (y + neededHeight <= bottomLimit()) return;
+            newPage();
+        }
+
+        void newPage() {
+            // termina página actual
+            doc.finishPage(page);
+
+            // crea nueva
+            pageNumber++;
+            page = doc.startPage(new PdfDocument.PageInfo.Builder(PDF_W, PDF_H, pageNumber).create());
+            canvas = page.getCanvas();
+
+            // reset cursor
+            y = PDF_MARGIN_TOP;
+
+            // (Opcional) encabezado pequeño en páginas 2+
+            canvas.drawText("ESTADÍSTICAS - " + pdfYearLabel + " (pág. " + pageNumber + ")", x, y, p);
+            y += 25;
+        }
+
+        void finishCurrentPage() {
+            doc.finishPage(page);
+        }
+    }
+
+    private int drawWrappedText(Canvas canvas, String text, int x, int y, Paint paint, int maxWidth, int lineHeight) {
+        if (text == null) text = "";
+        String[] words = text.split("\\s+");
+        StringBuilder line = new StringBuilder();
+
+        for (String w : words) {
+            String test = line.length() == 0 ? w : (line + " " + w);
+            if (paint.measureText(test) <= maxWidth) {
+                line = new StringBuilder(test);
+            } else {
+                canvas.drawText(line.toString(), x, y, paint);
+                y += lineHeight;
+                line = new StringBuilder(w);
+            }
+        }
+        if (line.length() > 0) {
+            canvas.drawText(line.toString(), x, y, paint);
+            y += lineHeight;
+        }
+        return y;
     }
 }
