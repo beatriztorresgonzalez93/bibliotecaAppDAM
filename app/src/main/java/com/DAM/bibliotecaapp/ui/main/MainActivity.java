@@ -3,7 +3,6 @@ package com.DAM.bibliotecaapp.ui.main;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.core.view.WindowCompat;
@@ -26,8 +25,8 @@ public class MainActivity extends BaseActivity {
     private TextView tvTitulo;
     private TextView btnAddBibliotecario;
 
-    private Button btnPrestamos, btnMultas, btnDevoluciones;
-    private Button btnEstadisticas;
+    // ✅ Ahora son Views porque en el XML son MaterialCardView (no Button)
+    private View btnPrestamos, btnMultas, btnDevoluciones, btnEstadisticas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,10 +38,8 @@ public class MainActivity extends BaseActivity {
         WindowCompat.setDecorFitsSystemWindows(getWindow(), true);
         setContentView(R.layout.activity_main);
 
-        // ✅ usa SOLO tu sistema de BaseActivity (no metas otro listener extra)
         applySystemBarsPadding(R.id.main);
 
-        // Sesión (extra defensivo, aunque RoleGuard ya lo hace)
         SessionManager session = new SessionManager(this);
         if (!session.isLoggedIn()) {
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
@@ -52,43 +49,57 @@ public class MainActivity extends BaseActivity {
 
         tvTitulo = findViewById(R.id.tvTitulo);
 
-        Button btnLibros = findViewById(R.id.btnLibros);
+        // ✅ Todos como View (da igual si son CardView o Button)
+        View btnLibros = findViewById(R.id.btnLibros);
         btnPrestamos = findViewById(R.id.btnPrestamos);
-        Button btnUsuario = findViewById(R.id.btnUsuarios);
-        Button btnLogout = findViewById(R.id.btnLogout);
+        View btnUsuario = findViewById(R.id.btnUsuarios);
 
         btnMultas = findViewById(R.id.btnMultas);
         btnDevoluciones = findViewById(R.id.btnDevolucion);
-
         btnEstadisticas = findViewById(R.id.btnEstadisticas);
+
+        View btnLogout = findViewById(R.id.btnLogout);
+
         btnAddBibliotecario = findViewById(R.id.btnAddBibliotecario);
 
         // Clicks
-        btnLogout.setOnClickListener(v -> {
-            new SessionManager(MainActivity.this).logout();
-            startActivity(new Intent(MainActivity.this, LoginActivity.class));
-            finish();
-        });
+        if (btnLogout != null) {
+            btnLogout.setOnClickListener(v -> {
+                new SessionManager(MainActivity.this).logout();
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                finish();
+            });
+        }
 
-        btnUsuario.setOnClickListener(v ->
-                startActivity(new Intent(MainActivity.this, UsuarioActivity.class))
-        );
+        if (btnUsuario != null) {
+            btnUsuario.setOnClickListener(v ->
+                    startActivity(new Intent(MainActivity.this, UsuarioActivity.class))
+            );
+        }
 
-        btnLibros.setOnClickListener(v ->
-                startActivity(new Intent(MainActivity.this, LibrosActivity.class))
-        );
+        if (btnLibros != null) {
+            btnLibros.setOnClickListener(v ->
+                    startActivity(new Intent(MainActivity.this, LibrosActivity.class))
+            );
+        }
 
-        btnPrestamos.setOnClickListener(v ->
-                startActivity(new Intent(MainActivity.this, PrestamoActivity.class))
-        );
+        if (btnPrestamos != null) {
+            btnPrestamos.setOnClickListener(v ->
+                    startActivity(new Intent(MainActivity.this, PrestamoActivity.class))
+            );
+        }
 
-        btnMultas.setOnClickListener(v ->
-                startActivity(new Intent(MainActivity.this, MultasActivity.class))
-        );
+        if (btnMultas != null) {
+            btnMultas.setOnClickListener(v ->
+                    startActivity(new Intent(MainActivity.this, MultasActivity.class))
+            );
+        }
 
-        btnDevoluciones.setOnClickListener(v ->
-                startActivity(new Intent(MainActivity.this, DevolucionesActivity.class))
-        );
+        if (btnDevoluciones != null) {
+            btnDevoluciones.setOnClickListener(v ->
+                    startActivity(new Intent(MainActivity.this, DevolucionesActivity.class))
+            );
+        }
 
         if (btnAddBibliotecario != null) {
             btnAddBibliotecario.setOnClickListener(v ->
@@ -96,14 +107,12 @@ public class MainActivity extends BaseActivity {
             );
         }
 
-        // Estadísticas: el click lo dejamos fijo, y la visibilidad la controla el rol
         if (btnEstadisticas != null) {
             btnEstadisticas.setOnClickListener(v ->
                     startActivity(new Intent(MainActivity.this, EstadisticasActivity.class))
             );
         }
 
-        // ✅ Aplicar UI por rol (incluye estadísticas)
         aplicarUIRol();
     }
 
@@ -127,12 +136,12 @@ public class MainActivity extends BaseActivity {
             tvTitulo.setText(isAdmin ? "Biblioteca (Modo Bibliotecario)" : "Biblioteca");
         }
 
-        // Botones por rol
+        // Menú por rol
         if (btnPrestamos != null) btnPrestamos.setVisibility(isAdmin ? View.VISIBLE : View.GONE);
         if (btnMultas != null) btnMultas.setVisibility(isAdmin ? View.VISIBLE : View.GONE);
         if (btnDevoluciones != null) btnDevoluciones.setVisibility(isAdmin ? View.VISIBLE : View.GONE);
 
-        // ✅ Estadísticas solo bibliotecario
+        // Estadísticas solo bibliotecario
         if (btnEstadisticas != null) btnEstadisticas.setVisibility(isAdmin ? View.VISIBLE : View.GONE);
     }
 }

@@ -278,6 +278,9 @@ public interface PrestamoDao {
     )
     List<PrestamoGlobal> getPrestamosVencidosGlobalFiltrado(Integer idUsuario);
 
+    @Query("SELECT COUNT(*) FROM prestamo WHERE idUsuario = :idUsuario")
+    int contarPrestamosTotalesUsuario(int idUsuario);
+
 
 
 

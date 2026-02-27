@@ -1,9 +1,28 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+
+    <!-- Base application theme -->
     <style name="Base.Theme.BibliotecaApp" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+
+        <!-- Color principal (verde salvia recomendado) -->
+        <item name="colorPrimary">#5C8D89</item>
+
+        <!-- Variante más oscura -->
+        <item name="colorPrimaryContainer">#4A716E</item>
+
+        <!-- Color secundario opcional -->
+        <item name="colorSecondary">#7FA9A4</item>
+
+        <!-- Fondo de la app -->
+        <item name="android:colorBackground">#F8FAF9</item>
+
+        <!-- Color de las cards -->
+        <item name="colorSurface">#FFFFFF</item>
+
+        <!-- Color del texto principal -->
+        <item name="android:textColorPrimary">#1F2937</item>
+
     </style>
 
     <style name="Theme.BibliotecaApp" parent="Base.Theme.BibliotecaApp" />
+
 </resources>

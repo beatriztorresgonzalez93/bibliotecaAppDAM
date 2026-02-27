@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.DAM.bibliotecaapp.R;
-import com.DAM.bibliotecaapp.data.entities.Prestamo;
+import com.DAM.bibliotecaapp.data.pojo.PrestamoInfo;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -18,12 +18,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class PrestamoActivoAdapter extends RecyclerView.Adapter<PrestamoActivoAdapter.VH> {
+public class PrestamoInfoActivoAdapter extends RecyclerView.Adapter<PrestamoInfoActivoAdapter.VH> {
 
-    private final List<Prestamo> data = new ArrayList<>();
+    private final List<PrestamoInfo> data = new ArrayList<>();
     private final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
 
-    public void setData(List<Prestamo> list) {
+    public void setData(List<PrestamoInfo> list) {
         data.clear();
         if (list != null) data.addAll(list);
         notifyDataSetChanged();
@@ -39,43 +39,48 @@ public class PrestamoActivoAdapter extends RecyclerView.Adapter<PrestamoActivoAd
 
     @Override
     public void onBindViewHolder(@NonNull VH h, int position) {
-        Prestamo p = data.get(position);
+        PrestamoInfo p = data.get(position);
         if (p == null) return;
 
-        // 1) Título: Ejemplar
-        h.tvLinea1.setText("Ejemplar #" + p.idEjemplar);
+        // Línea 1: título
+        String titulo = safe(p.titulo, "Libro");
+        h.tvLinea1.setText(titulo);
 
-        // 2) Fechas seguras
+        // Línea 2: autor + inventario + fechas
+        String autor = safe(p.autor, "Autor desconocido");
+        String inv = safe(p.codigoInventario, "—");
         String fPrestamo = formatDateSafe(p.fechaPrestamo);
         String fVence = formatDateSafe(p.fechaVencimiento);
-        h.tvLinea2.setText("Prestado: " + fPrestamo + " · Vence: " + fVence);
 
-        // 3) Chip estado bonito (si existe en el layout)
-        if (h.tvEstadoChip != null) {
-            String estado = (p.estado == null) ? "" : p.estado.trim().toUpperCase(Locale.ROOT);
+        h.tvLinea2.setText(autor + "  ·  " + inv + "\nPrestado: " + fPrestamo + "  ·  Vence: " + fVence);
 
-            if (!estado.isEmpty()) {
-                h.tvEstadoChip.setVisibility(View.VISIBLE);
+        // Chip estado
+        setChip(h.tvEstadoChip, p.estado);
+    }
 
-                if (estado.contains("VENC")) { // VENCIDO
-                    h.tvEstadoChip.setText("VENCIDO");
-                    h.tvEstadoChip.setTextColor(Color.parseColor("#B71C1C"));
-                    h.tvEstadoChip.setBackgroundResource(R.drawable.bg_chip_bad);
+    private void setChip(TextView chip, String estadoRaw) {
+        if (chip == null) return;
 
-                } else if (estado.contains("ACT")) { // ACTIVO
-                    h.tvEstadoChip.setText("ACTIVO");
-                    h.tvEstadoChip.setTextColor(Color.parseColor("#1B5E20"));
-                    h.tvEstadoChip.setBackgroundResource(R.drawable.bg_chip_ok);
+        String estado = (estadoRaw == null) ? "" : estadoRaw.trim().toUpperCase(Locale.ROOT);
+        if (estado.isEmpty()) {
+            chip.setVisibility(View.GONE);
+            return;
+        }
 
-                } else {
-                    // Cualquier otro estado (por si acaso)
-                    h.tvEstadoChip.setText(estado);
-                    h.tvEstadoChip.setTextColor(Color.parseColor("#374151"));
-                    h.tvEstadoChip.setBackgroundResource(R.drawable.bg_chip_neutral);
-                }
-            } else {
-                h.tvEstadoChip.setVisibility(View.GONE);
-            }
+        chip.setVisibility(View.VISIBLE);
+
+        if (estado.contains("VENC")) {
+            chip.setText("VENCIDO");
+            chip.setTextColor(Color.parseColor("#B71C1C"));
+            chip.setBackgroundResource(R.drawable.bg_chip_bad);
+        } else if (estado.contains("ACT")) {
+            chip.setText("ACTIVO");
+            chip.setTextColor(Color.parseColor("#1B5E20"));
+            chip.setBackgroundResource(R.drawable.bg_chip_ok);
+        } else {
+            chip.setText(estado);
+            chip.setTextColor(Color.parseColor("#374151"));
+            chip.setBackgroundResource(R.drawable.bg_chip_neutral);
         }
     }
 
@@ -86,6 +91,12 @@ public class PrestamoActivoAdapter extends RecyclerView.Adapter<PrestamoActivoAd
         } catch (Exception e) {
             return "—";
         }
+    }
+
+    private String safe(String v, String fallback) {
+        if (v == null) return fallback;
+        v = v.trim();
+        return v.isEmpty() ? fallback : v;
     }
 
     @Override
@@ -100,8 +111,6 @@ public class PrestamoActivoAdapter extends RecyclerView.Adapter<PrestamoActivoAd
             super(itemView);
             tvLinea1 = itemView.findViewById(R.id.tvLinea1);
             tvLinea2 = itemView.findViewById(R.id.tvLinea2);
-
-            // Si tu layout aún no tiene este id, quedará null y no pasa nada
             tvEstadoChip = itemView.findViewById(R.id.tvEstadoChip);
         }
     }

@@ -197,6 +197,15 @@ public interface MultaDao {
     )
     List<MultaInfo> getCondonadasInfoFiltrado(Integer idUsuario);
 
+    @Query("SELECT COUNT(*) FROM multa WHERE idUsuario = :idUsuario")
+    int contarMultasTotalesUsuario(int idUsuario);
+
+    @Query("SELECT COALESCE(SUM(importe), 0) FROM multa WHERE idUsuario = :idUsuario AND estado = 'PAGADA'")
+    double sumarMultasPagadasUsuario(int idUsuario);
+
+    @Query("SELECT COALESCE(SUM(importe), 0) FROM multa WHERE idUsuario = :idUsuario AND estado = 'PENDIENTE'")
+    double sumarMultasPendientesUsuario(int idUsuario);
+
 
 
 }

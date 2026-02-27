@@ -13,10 +13,11 @@ import com.DAM.bibliotecaapp.R;
 import com.DAM.bibliotecaapp.RoleGuard;
 import com.DAM.bibliotecaapp.SessionManager;
 import com.DAM.bibliotecaapp.data.db.AppDatabase;
+import com.DAM.bibliotecaapp.data.entities.Multa;
 import com.DAM.bibliotecaapp.data.entities.Usuario;
 import com.DAM.bibliotecaapp.data.pojo.PrestamoInfo;
 import com.DAM.bibliotecaapp.ui.base.BaseActivity;
-import com.DAM.bibliotecaapp.ui.prestamo.PrestamoInfoAdapter;
+import com.DAM.bibliotecaapp.ui.prestamo.PrestamoInfoActivoAdapter;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -29,12 +30,16 @@ public class UsuarioDetalleActivity extends BaseActivity {
     private AppDatabase db;
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
-    private int usuarioId = -1; // ✅ solo 1 usuarioId y es int (tu DAO usa int)
+    private int usuarioId = -1;
 
     private TextView tvNombre, tvEmail, tvRol, tvPrestamosActivos, tvSinPrestamos;
-    private PrestamoInfoAdapter adapter;
-    private TextView tvMultasPendientes;
-    private TextView tvNumMultasPendientes;
+    private TextView tvMultasPendientes, tvNumMultasPendientes;
+    private TextView tvTotalPrestamos, tvTotalMultas, tvTotalPagado, tvTotalPendiente;
+
+    private PrestamoInfoActivoAdapter adapter;
+
+    private View cardAvisoVencidos;
+    private TextView tvAvisoVencidos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +49,7 @@ public class UsuarioDetalleActivity extends BaseActivity {
 
         SessionManager s = new SessionManager(this);
 
-// ✅ leer id desde intent con compatibilidad
+        // ✅ leer id desde intent con compatibilidad
         long idIntent = -1L;
         Bundle extras = getIntent().getExtras();
 
@@ -63,13 +68,13 @@ public class UsuarioDetalleActivity extends BaseActivity {
             }
         }
 
-// ✅ lector: si no viene por intent, usar sesión
+        // ✅ lector: si no viene por intent, usar sesión
         long idSesion = s.getUsuarioId();
 
-// decidir id final
+        // decidir id final
         long elegido = (idIntent != -1L) ? idIntent : idSesion;
 
-// validar
+        // validar
         if (elegido == -1L) {
             Toast.makeText(this, "Error: usuario no recibido", Toast.LENGTH_SHORT).show();
             finish();
@@ -78,7 +83,7 @@ public class UsuarioDetalleActivity extends BaseActivity {
 
         usuarioId = (int) elegido;
 
-// seguridad lector
+        // seguridad lector: solo puede ver su propio perfil
         if (s.isLector() && usuarioId != (int) s.getUsuarioId()) {
             Toast.makeText(this, "Acceso restringido", Toast.LENGTH_SHORT).show();
             finish();
@@ -96,13 +101,20 @@ public class UsuarioDetalleActivity extends BaseActivity {
         tvPrestamosActivos = findViewById(R.id.tvPrestamosActivos);
         tvSinPrestamos = findViewById(R.id.tvSinPrestamos);
 
-        RecyclerView rv = findViewById(R.id.rvPrestamosActivos);
-        rv.setLayoutManager(new LinearLayoutManager(this));
-
         tvMultasPendientes = findViewById(R.id.tvMultasPendientes);
         tvNumMultasPendientes = findViewById(R.id.tvNumMultasPendientes);
 
-        adapter = new PrestamoInfoAdapter(prestamoInfo -> mostrarDialogoDevolucion(prestamoInfo.idPrestamo));
+        tvTotalPrestamos = findViewById(R.id.tvTotalPrestamos);
+        tvTotalMultas = findViewById(R.id.tvTotalMultas);
+        tvTotalPagado = findViewById(R.id.tvTotalPagado);
+        tvTotalPendiente = findViewById(R.id.tvTotalPendiente);
+
+        cardAvisoVencidos = findViewById(R.id.cardAvisoVencidos);
+        tvAvisoVencidos = findViewById(R.id.tvAvisoVencidos);
+
+        RecyclerView rv = findViewById(R.id.rvPrestamosActivos);
+        rv.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new PrestamoInfoActivoAdapter();
         rv.setAdapter(adapter);
 
         cargarDatos(usuarioId);
@@ -110,36 +122,54 @@ public class UsuarioDetalleActivity extends BaseActivity {
 
     private void cargarDatos(int usuarioId) {
         executor.execute(() -> {
+            // 1) actualiza vencidos antes de consultar
             db.prestamoDao().marcarVencidos(System.currentTimeMillis());
 
+            // 2) usuario
             Usuario usuario = db.usuarioDao().getById(usuarioId);
 
-            List<PrestamoInfo> lista = db.prestamoDao().getNoDevueltosByUsuario(usuarioId);
+            // 3) préstamos NO devueltos para contar activos/vencidos (incluye ACTIVO + VENCIDO)
+            List<PrestamoInfo> noDevueltos = db.prestamoDao().getNoDevueltosByUsuario(usuarioId);
 
             int activos = 0;
             int vencidos = 0;
 
-            if (lista != null) {
-                for (PrestamoInfo p : lista) {
-                    if ("VENCIDO".equals(p.estado)) vencidos++;
-                    else activos++;
+            if (noDevueltos != null) {
+                for (PrestamoInfo p : noDevueltos) {
+                    if (p == null || p.estado == null) continue;
+                    if ("VENCIDO".equalsIgnoreCase(p.estado)) vencidos++;
+                    else if ("ACTIVO".equalsIgnoreCase(p.estado)) activos++;
+                    else activos++; // por si hay algún estado raro
                 }
             }
 
+            // 4) listado que verá el lector (solo ACTIVO + info completa)
+            List<PrestamoInfo> activosInfo = db.prestamoDao().getActivosInfoByUsuario(usuarioId);
+
+            // 5) multas pendientes (importe)
             double totalMultasPendientes = db.multaDao().totalPendienteUsuario(usuarioId);
 
-            List<com.DAM.bibliotecaapp.data.entities.Multa> multasUsuario =
-                    db.multaDao().getByUsuario(usuarioId);
-
+            // 6) nº multas pendientes
+            List<Multa> multasUsuario = db.multaDao().getByUsuario(usuarioId);
             int numPendientes = 0;
             if (multasUsuario != null) {
-                for (com.DAM.bibliotecaapp.data.entities.Multa m : multasUsuario) {
-                    if ("PENDIENTE".equals(m.estado)) numPendientes++;
+                for (Multa m : multasUsuario) {
+                    if (m != null && "PENDIENTE".equalsIgnoreCase(m.estado)) numPendientes++;
                 }
             }
 
             int finalActivos = activos;
             int finalVencidos = vencidos;
+            if (cardAvisoVencidos != null) {
+                if (finalVencidos > 0) {
+                    cardAvisoVencidos.setVisibility(View.VISIBLE);
+                    tvAvisoVencidos.setText(
+                            "Tienes " + finalVencidos + " préstamos vencidos. Devuélvelos lo antes posible."
+                    );
+                } else {
+                    cardAvisoVencidos.setVisibility(View.GONE);
+                }
+            }
             double finalTotalMultasPendientes = totalMultasPendientes;
             int finalNumPendientes = numPendientes;
 
@@ -155,9 +185,11 @@ public class UsuarioDetalleActivity extends BaseActivity {
 
                 tvPrestamosActivos.setText("Activos: " + finalActivos + " · Vencidos: " + finalVencidos);
 
-                adapter.setData(lista);
+                // ✅ listado de préstamos activos con info
+                adapter.setData(activosInfo);
 
-                tvSinPrestamos.setVisibility((lista == null || lista.isEmpty()) ? View.VISIBLE : View.GONE);
+                // ✅ mensaje “sin préstamos”
+                tvSinPrestamos.setVisibility((activosInfo == null || activosInfo.isEmpty()) ? View.VISIBLE : View.GONE);
 
                 if (tvMultasPendientes != null) {
                     tvMultasPendientes.setText(
@@ -170,6 +202,9 @@ public class UsuarioDetalleActivity extends BaseActivity {
                 if (tvNumMultasPendientes != null) {
                     tvNumMultasPendientes.setText("Nº multas pendientes: " + finalNumPendientes);
                 }
+
+                // ✅ estadísticas del usuario (siempre)
+                cargarEstadisticasUsuario(usuarioId);
             });
         });
     }
@@ -180,34 +215,25 @@ public class UsuarioDetalleActivity extends BaseActivity {
         if (usuarioId != -1) cargarDatos(usuarioId);
     }
 
-    private void mostrarDialogoDevolucion(int idPrestamo) {
-        // ✅ Solo bibliotecario debería poder devolver
-        if (!new SessionManager(this).isBibliotecario()) {
-            Toast.makeText(this, "Solo bibliotecario puede devolver", Toast.LENGTH_SHORT).show();
-            return;
-        }
+    // ⚠️ En esta pantalla (perfil lector) ya NO deberíamos devolver desde el listado.
+    // Si quieres devolución, déjalo para pantallas de bibliotecario (PrestamoActivity / DevolucionesActivity).
 
-        new androidx.appcompat.app.AlertDialog.Builder(this)
-                .setTitle("Confirmar devolución")
-                .setMessage("¿Quieres marcar este préstamo como devuelto?")
-                .setNegativeButton("Cancelar", (d, w) -> d.dismiss())
-                .setPositiveButton("Devolver", (d, w) -> devolverPrestamo(idPrestamo))
-                .show();
-    }
-
-    private void devolverPrestamo(int idPrestamo) {
+    private void cargarEstadisticasUsuario(int idUsuario) {
         executor.execute(() -> {
-            long ahora = System.currentTimeMillis();
-
-            db.runInTransaction(() -> {
-                int idEjemplar = db.prestamoDao().getIdEjemplarByPrestamo(idPrestamo);
-                db.prestamoDao().marcarDevuelto(idPrestamo, ahora);
-                db.ejemplarDao().actualizarEstado(idEjemplar, "DISPONIBLE");
-            });
+            int totalPrestamos = db.prestamoDao().contarPrestamosTotalesUsuario(idUsuario);
+            int totalMultas = db.multaDao().contarMultasTotalesUsuario(idUsuario);
+            double totalPagado = db.multaDao().sumarMultasPagadasUsuario(idUsuario);
+            double totalPendiente = db.multaDao().sumarMultasPendientesUsuario(idUsuario);
 
             runOnUiThread(() -> {
-                Toast.makeText(this, "Devolución registrada", Toast.LENGTH_SHORT).show();
-                cargarDatos(usuarioId);
+                if (tvTotalPrestamos != null) tvTotalPrestamos.setText("Total préstamos: " + totalPrestamos);
+                if (tvTotalMultas != null) tvTotalMultas.setText("Total multas: " + totalMultas);
+                if (tvTotalPagado != null)
+                    tvTotalPagado.setText("Total pagado en multas: " +
+                            String.format(java.util.Locale.getDefault(), "%.2f €", totalPagado));
+                if (tvTotalPendiente != null)
+                    tvTotalPendiente.setText("Total pendiente en multas: " +
+                            String.format(java.util.Locale.getDefault(), "%.2f €", totalPendiente));
             });
         });
     }

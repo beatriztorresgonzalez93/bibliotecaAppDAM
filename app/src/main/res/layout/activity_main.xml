@@ -1,123 +1,479 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
-    android:paddingStart="20dp"
-    android:paddingEnd="20dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    android:padding="16dp"
+    android:fillViewport="true"
+    android:overScrollMode="never"
+    android:paddingStart="20dp"
+    android:paddingEnd="20dp"
+    android:paddingTop="16dp"
+    android:paddingBottom="16dp"
     tools:context=".ui.main.MainActivity">
 
-    <TextView
-        android:id="@+id/tvTitulo"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Biblioteca"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:paddingBottom="16dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <Button
-        android:id="@+id/btnLibros"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Libros"
-        app:layout_constraintTop_toBottomOf="@id/tvTitulo"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        <!-- ===== Header ===== -->
+        <TextView
+            android:id="@+id/tvTitulo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Biblioteca"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            android:textColor="#111827"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
-    <Button
-        android:id="@+id/btnPrestamos"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Préstamos"
-        android:layout_marginTop="12dp"
-        app:layout_constraintTop_toBottomOf="@id/btnLibros"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        <TextView
+            android:id="@+id/tvSubtitulo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="Modo Bibliotecario"
+            android:textSize="14sp"
+            android:textColor="#6B7280"
+            app:layout_constraintTop_toBottomOf="@id/tvTitulo"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
-    <Button
-        android:id="@+id/btnUsuarios"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Usuarios"
-        android:layout_marginTop="12dp"
-        app:layout_constraintTop_toBottomOf="@id/btnPrestamos"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        <!-- ===== Resumen (Dashboard Card) ===== -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardResumen"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            app:cardCornerRadius="18dp"
+            app:cardUseCompatPadding="true"
+            app:cardElevation="2dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="#E5E7EB"
+            app:layout_constraintTop_toBottomOf="@id/tvSubtitulo"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
-    <Button
-        android:id="@+id/btnMultas"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Multas"
-        android:layout_marginTop="12dp"
-        app:layout_constraintTop_toBottomOf="@id/btnUsuarios"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
 
-    <Button
-        android:id="@+id/btnDevolucion"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Historial de Devoluciones"
-        android:layout_marginTop="12dp"
-        app:layout_constraintTop_toBottomOf="@id/btnMultas"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Resumen de hoy"
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    android:textColor="#111827" />
 
-    <Button
-        android:id="@+id/btnEstadisticas"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Estadísticas"
-        android:layout_marginTop="12dp"
-        android:padding="14dp"
-        app:layout_constraintTop_toBottomOf="@id/btnDevolucion"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="Accede rápido a las secciones principales."
+                    android:textSize="13sp"
+                    android:textColor="#6B7280" />
 
-    <TextView
-        android:id="@+id/btnAddBibliotecario"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="+ Añadir bibliotecario"
-        android:textSize="14sp"
-        android:textColor="#666666"
-        android:textStyle="italic"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:gravity="center"
-        android:textAlignment="center"
-        android:visibility="gone"
+                <!-- mini KPIs (placeholders; luego los puedes rellenar con datos reales) -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:orientation="horizontal"
+                    android:weightSum="3">
 
-        app:layout_constraintTop_toBottomOf="@id/btnEstadisticas"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
 
-        android:layout_marginTop="12dp"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Préstamos"
+                            android:textSize="12sp"
+                            android:textColor="#6B7280" />
 
-    <Button
-        android:id="@+id/btnLogout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Cerrar sesión"
-        android:layout_marginTop="12dp"
-        android:layout_marginBottom="12dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+                        <TextView
+                            android:id="@+id/tvKpiPrestamos"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="—"
+                            android:textStyle="bold"
+                            android:textSize="16sp"
+                            android:textColor="#111827" />
+                    </LinearLayout>
 
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
 
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Vencidos"
+                            android:textSize="12sp"
+                            android:textColor="#6B7280" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+                        <TextView
+                            android:id="@+id/tvKpiVencidos"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="—"
+                            android:textStyle="bold"
+                            android:textSize="16sp"
+                            android:textColor="#111827" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Multas €"
+                            android:textSize="12sp"
+                            android:textColor="#6B7280" />
+
+                        <TextView
+                            android:id="@+id/tvKpiMultas"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="—"
+                            android:textStyle="bold"
+                            android:textSize="16sp"
+                            android:textColor="#111827" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- ===== Menú en grid (2 columnas) ===== -->
+        <androidx.gridlayout.widget.GridLayout
+            android:id="@+id/gridMenu"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            app:columnCount="2"
+            app:rowCount="3"
+            app:layout_constraintTop_toBottomOf="@id/cardResumen"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <!-- Libros -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/btnLibros"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp"
+                app:cardCornerRadius="18dp"
+                app:cardElevation="2dp"
+                app:cardUseCompatPadding="true"
+                app:strokeWidth="1dp"
+                app:strokeColor="#E5E7EB"
+                app:layout_columnWeight="1">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <ImageView
+                        android:layout_width="26dp"
+                        android:layout_height="26dp"
+                        android:src="@drawable/ic_books_24"
+                        android:contentDescription="@null" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Libros"
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        android:textColor="#111827" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="Catálogo y ejemplares"
+                        android:textSize="12sp"
+                        android:textColor="#6B7280" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Préstamos -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/btnPrestamos"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp"
+                app:cardCornerRadius="18dp"
+                app:cardElevation="2dp"
+                app:cardUseCompatPadding="true"
+                app:strokeWidth="1dp"
+                app:strokeColor="#E5E7EB"
+                app:layout_columnWeight="1">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <ImageView
+                        android:layout_width="26dp"
+                        android:layout_height="26dp"
+                        android:src="@drawable/ic_loans_24"
+                        android:contentDescription="@null" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Préstamos"
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        android:textColor="#111827" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="Gestionar activos/vencidos"
+                        android:textSize="12sp"
+                        android:textColor="#6B7280" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Usuarios -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/btnUsuarios"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp"
+                app:cardCornerRadius="18dp"
+                app:cardElevation="2dp"
+                app:cardUseCompatPadding="true"
+                app:strokeWidth="1dp"
+                app:strokeColor="#E5E7EB"
+                app:layout_columnWeight="1">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <ImageView
+                        android:layout_width="26dp"
+                        android:layout_height="26dp"
+                        android:src="@drawable/ic_users_24"
+                        android:contentDescription="@null" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Usuarios"
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        android:textColor="#111827" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="Perfiles y actividad"
+                        android:textSize="12sp"
+                        android:textColor="#6B7280" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Multas -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/btnMultas"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp"
+                app:cardCornerRadius="18dp"
+                app:cardElevation="2dp"
+                app:cardUseCompatPadding="true"
+                app:strokeWidth="1dp"
+                app:strokeColor="#E5E7EB"
+                app:layout_columnWeight="1">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <ImageView
+                        android:layout_width="26dp"
+                        android:layout_height="26dp"
+                        android:src="@drawable/ic_fines_24"
+                        android:contentDescription="@null" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Multas"
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        android:textColor="#111827" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="Pendientes y pagadas"
+                        android:textSize="12sp"
+                        android:textColor="#6B7280" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Historial devoluciones -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/btnDevolucion"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp"
+                app:cardCornerRadius="18dp"
+                app:cardElevation="2dp"
+                app:cardUseCompatPadding="true"
+                app:strokeWidth="1dp"
+                app:strokeColor="#E5E7EB"
+                app:layout_columnWeight="1">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <ImageView
+                        android:layout_width="26dp"
+                        android:layout_height="26dp"
+                        android:src="@drawable/ic_history_24"
+                        android:contentDescription="@null" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Historial"
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        android:textColor="#111827" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="Devoluciones registradas"
+                        android:textSize="12sp"
+                        android:textColor="#6B7280" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Estadísticas -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/btnEstadisticas"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp"
+                app:cardCornerRadius="18dp"
+                app:cardElevation="2dp"
+                app:cardUseCompatPadding="true"
+                app:strokeWidth="1dp"
+                app:strokeColor="#E5E7EB"
+                app:layout_columnWeight="1">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <ImageView
+                        android:layout_width="26dp"
+                        android:layout_height="26dp"
+                        android:src="@drawable/ic_stats_24"
+                        android:contentDescription="@null" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Estadísticas"
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        android:textColor="#111827" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="KPIs y gráficos"
+                        android:textSize="12sp"
+                        android:textColor="#6B7280" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+        </androidx.gridlayout.widget.GridLayout>
+
+        <!-- Añadir bibliotecario -->
+        <TextView
+            android:id="@+id/btnAddBibliotecario"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="+ Añadir bibliotecario"
+            android:textSize="14sp"
+            android:textColor="#6B7280"
+            android:textStyle="bold"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:textAlignment="center"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/gridMenu"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="6dp" />
+
+        <!-- Logout -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnLogout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:text="Cerrar sesión"
+            android:padding="14dp"
+            app:cornerRadius="16dp"
+            app:layout_constraintTop_toBottomOf="@id/btnAddBibliotecario"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>
