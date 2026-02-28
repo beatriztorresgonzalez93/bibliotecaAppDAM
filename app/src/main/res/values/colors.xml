@@ -6,9 +6,9 @@
     <color name="white">#FFFFFFFF</color>
 
     <!-- Estados de préstamos -->
-    <color name="estado_vencido">#D32F2F</color>
-    <color name="estado_activo">#388E3C</color>
-    <color name="estado_devuelto">#1976D2</color>
+    <color name="estado_activo">#66BB6A</color>
+    <color name="estado_vencido">#EF5350</color>
+    <color name="estado_devuelto">#42A5F5</color>
 
     <!-- Fondos de estados -->
     <color name="fondo_vencido">#FDE1E6</color>
@@ -26,7 +26,7 @@
     <color name="surface">#FFFFFF</color>
 
     <!-- Fondo general app -->
-    <color name="background">#F8FAF9</color>
+    <color name="background">#FDFAFA</color>
 
     <!-- Texto principal -->
     <color name="text_primary">#1F2937</color>
@@ -42,5 +42,12 @@
 
     <!-- Ripple salvia -->
     <color name="salvia_ripple">#335C8D89</color>
+
+    <color name="onSurface">#1F2937</color>
+    <color name="onSurfaceVariant">#42535A</color>
+    <color name="surfaceVariant">#EEF5F4</color>
+    <color name="outlineVariant">#D6E3DF</color>
+
+    <color name="outline_focused">#5C8D89</color>
 
 </resources>

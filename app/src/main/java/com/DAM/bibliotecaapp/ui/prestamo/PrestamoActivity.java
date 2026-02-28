@@ -1,16 +1,14 @@
 package com.DAM.bibliotecaapp.ui.prestamo;
 
-import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -23,9 +21,12 @@ import com.DAM.bibliotecaapp.data.pojo.PrestamoGlobal;
 import com.DAM.bibliotecaapp.data.pojo.PrestamoVencidoMini;
 import com.DAM.bibliotecaapp.ui.base.BaseActivity;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.textfield.MaterialAutoCompleteTextView;
+
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -37,13 +38,14 @@ public class PrestamoActivity extends BaseActivity {
     private AppDatabase db;
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
-    private PrestamoGlobalAdapter adapter;
+    private PrestamoGlobalAdapter prestamoAdapter;
 
-    private Spinner spFiltro;
+    // ✅ Dropdown estado (reemplaza Spinner)
+    private MaterialAutoCompleteTextView actEstado;
     private String filtroActual = "Todos";
 
-    // NUEVO: filtro usuario
-    private AutoCompleteTextView actUsuarioFiltro;
+    // ✅ Filtro usuario
+    private MaterialAutoCompleteTextView actUsuarioFiltro;
     private MaterialButton btnLimpiarFiltro;
     private Integer selectedUsuarioId = null;
 
@@ -67,41 +69,20 @@ public class PrestamoActivity extends BaseActivity {
         RecyclerView rv = findViewById(R.id.rvPrestamos);
         rv.setLayoutManager(new LinearLayoutManager(this));
 
-        adapter = new PrestamoGlobalAdapter(
+        prestamoAdapter = new PrestamoGlobalAdapter(
                 prestamo -> {
                     // Click fila (opcional)
                 },
-                prestamo -> {
-                    // ampliar
-                    mostrarDialogoAmpliar(prestamo.idPrestamo);
-                },
-                prestamo -> {
-                    // devolver
-                    mostrarDialogoDevolucion(prestamo.idPrestamo);
-                }
+                prestamo -> mostrarDialogoAmpliar(prestamo.idPrestamo),
+                prestamo -> mostrarDialogoDevolucion(prestamo.idPrestamo)
         );
-        rv.setAdapter(adapter);
+        rv.setAdapter(prestamoAdapter);
 
-        // Spinner
-        spFiltro = findViewById(R.id.spFiltroPrestamos);
-        ArrayAdapter<String> filtroAdapter = new ArrayAdapter<>(
-                this,
-                android.R.layout.simple_spinner_item,
-                new String[]{"Todos", "Activos", "Vencidos"}
-        );
-        filtroAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spFiltro.setAdapter(filtroAdapter);
+        // ✅ Dropdown estado tipo "Libros"
+        actEstado = findViewById(R.id.actEstado);
+        setupEstadoDropdown();
 
-        spFiltro.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, android.view.View view, int position, long id) {
-                filtroActual = parent.getItemAtPosition(position).toString();
-                cargarPrestamos();
-            }
-            @Override public void onNothingSelected(AdapterView<?> parent) {}
-        });
-
-        // NUEVO: Autocomplete usuario + limpiar
+        // ✅ Autocomplete usuario + limpiar
         actUsuarioFiltro = findViewById(R.id.actUsuarioFiltroPrestamos);
         btnLimpiarFiltro = findViewById(R.id.btnLimpiarFiltroPrestamos);
 
@@ -117,13 +98,38 @@ public class PrestamoActivity extends BaseActivity {
         cargarPrestamos();
     }
 
+    private void setupEstadoDropdown() {
+        final String[] opciones = new String[]{"Todos", "Activos", "Vencidos"};
+
+        ArrayAdapter<String> estadoAdapter = new ArrayAdapter<>(
+                this,
+                R.layout.item_dropdown_material,
+                opciones
+        );
+        estadoAdapter.setDropDownViewResource(R.layout.item_dropdown_material);
+
+        actEstado.setAdapter(estadoAdapter);
+        actEstado.setDropDownBackgroundDrawable(
+                ContextCompat.getDrawable(this, R.drawable.bg_dropdown_menu)
+        );
+
+        actEstado.setText("Todos", false);
+        filtroActual = "Todos";
+
+        actEstado.setOnItemClickListener((parent, view, position, id) -> {
+            filtroActual = opciones[position];
+            cargarPrestamos();
+        });
+    }
+
     private void setupUserAutocomplete() {
         executor.execute(() -> {
             List<Usuario> list = db.usuarioDao().getAllOrderByNombre();
 
             List<UserChoice> choices = new ArrayList<>();
             for (Usuario u : list) {
-                choices.add(new UserChoice(u.id, u.nombre + " (" + u.email + ")"));
+                String label = u.nombre + " (" + u.email + ")";
+                choices.add(new UserChoice(u.id, label));
             }
 
             runOnUiThread(() -> {
@@ -176,20 +182,24 @@ public class PrestamoActivity extends BaseActivity {
             actualizarMultas(ahora, TARIFA_DIA, TOPE);
 
             List<PrestamoGlobal> lista;
+
             if ("Activos".equals(filtroActual)) {
-                if (selectedUsuarioId == null) lista = db.prestamoDao().getPrestamosSoloActivosGlobal();
-                else lista = db.prestamoDao().getPrestamosSoloActivosGlobalFiltrado(selectedUsuarioId);
+                lista = (selectedUsuarioId == null)
+                        ? db.prestamoDao().getPrestamosSoloActivosGlobal()
+                        : db.prestamoDao().getPrestamosSoloActivosGlobalFiltrado(selectedUsuarioId);
 
             } else if ("Vencidos".equals(filtroActual)) {
-                if (selectedUsuarioId == null) lista = db.prestamoDao().getPrestamosVencidosGlobal();
-                else lista = db.prestamoDao().getPrestamosVencidosGlobalFiltrado(selectedUsuarioId);
+                lista = (selectedUsuarioId == null)
+                        ? db.prestamoDao().getPrestamosVencidosGlobal()
+                        : db.prestamoDao().getPrestamosVencidosGlobalFiltrado(selectedUsuarioId);
 
-            } else {
-                if (selectedUsuarioId == null) lista = db.prestamoDao().getPrestamosNoDevueltosGlobal();
-                else lista = db.prestamoDao().getPrestamosNoDevueltosGlobalFiltrado(selectedUsuarioId);
+            } else { // Todos
+                lista = (selectedUsuarioId == null)
+                        ? db.prestamoDao().getPrestamosNoDevueltosGlobal()
+                        : db.prestamoDao().getPrestamosNoDevueltosGlobalFiltrado(selectedUsuarioId);
             }
 
-            runOnUiThread(() -> adapter.setData(lista));
+            runOnUiThread(() -> prestamoAdapter.setData(lista));
         });
     }
 

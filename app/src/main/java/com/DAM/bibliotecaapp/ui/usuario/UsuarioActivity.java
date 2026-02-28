@@ -2,9 +2,12 @@ package com.DAM.bibliotecaapp.ui.usuario;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.widget.Toast;
 
-import androidx.appcompat.widget.SearchView;
 import androidx.core.view.WindowCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,6 +20,7 @@ import com.DAM.bibliotecaapp.data.entities.Usuario;
 import com.DAM.bibliotecaapp.ui.base.BaseActivity;
 import com.DAM.bibliotecaapp.ui.login.LoginActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -28,6 +32,10 @@ public class UsuarioActivity extends BaseActivity {
     private AppDatabase db;
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
+    // Debounce búsqueda
+    private final Handler handler = new Handler(Looper.getMainLooper());
+    private Runnable searchRunnable;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +44,7 @@ public class UsuarioActivity extends BaseActivity {
 
         SessionManager s = new SessionManager(this);
 
+        // ✅ Si es lector, va directo a su perfil
         if (s.isLector()) {
             long miId = s.getUsuarioId();
 
@@ -48,27 +57,23 @@ public class UsuarioActivity extends BaseActivity {
             }
 
             Intent i = new Intent(this, UsuarioDetalleActivity.class);
-            // opcional: puedes pasar el id, pero ya no hace falta
-            i.putExtra("usuario_id", s.getUsuarioId());
+            i.putExtra("usuario_id", miId);
             startActivity(i);
             finish();
             return;
         }
 
-
         setContentView(R.layout.activity_usuario);
         applySystemBarsPadding(R.id.main);
 
-
         db = AppDatabase.getInstance(this);
 
-        SearchView search = findViewById(R.id.searchUsuarios);
+        TextInputEditText search = findViewById(R.id.searchUsuarios);
         RecyclerView rv = findViewById(R.id.rvUsuarios);
         FloatingActionButton fab = findViewById(R.id.fabAddUsuario);
 
         rv.setLayoutManager(new LinearLayoutManager(this));
 
-        // ✅ Adapter con lista vacía al inicio
         adapter = new UsuarioAdapter(u -> {
             Intent i = new Intent(UsuarioActivity.this, UsuarioDetalleActivity.class);
             i.putExtra("usuarioId", u.id);
@@ -79,18 +84,23 @@ public class UsuarioActivity extends BaseActivity {
         // Carga inicial
         cargarUsuarios();
 
-        // Búsqueda
-        search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override public boolean onQueryTextSubmit(String query) { return true; }
+        // ✅ Búsqueda con debounce (300ms)
+        search.addTextChangedListener(new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void afterTextChanged(Editable s) {}
 
             @Override
-            public boolean onQueryTextChange(String newText) {
-                buscarUsuarios(newText);
-                return true;
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                final String q = (s == null) ? "" : s.toString();
+
+                if (searchRunnable != null) handler.removeCallbacks(searchRunnable);
+
+                searchRunnable = () -> buscarUsuarios(q);
+                handler.postDelayed(searchRunnable, 300);
             }
         });
 
-        // ✅ Abrir pantalla de añadir usuario
+        // ✅ Abrir pantalla añadir usuario
         fab.setOnClickListener(v ->
                 startActivity(new Intent(UsuarioActivity.this, AddUsuarioActivity.class))
         );
@@ -125,6 +135,7 @@ public class UsuarioActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        handler.removeCallbacksAndMessages(null);
         executor.shutdown();
     }
 }

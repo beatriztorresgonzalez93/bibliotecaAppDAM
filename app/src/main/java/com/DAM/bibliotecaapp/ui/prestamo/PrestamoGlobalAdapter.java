@@ -1,43 +1,33 @@
 package com.DAM.bibliotecaapp.ui.prestamo;
 
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.DAM.bibliotecaapp.R;
 import com.DAM.bibliotecaapp.data.pojo.PrestamoGlobal;
+import com.google.android.material.button.MaterialButton;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
-
 
 public class PrestamoGlobalAdapter extends RecyclerView.Adapter<PrestamoGlobalAdapter.VH> {
 
     private final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
 
-
-    // Click en la fila (opcional, por si luego quieres abrir detalle)
-    public interface OnItemClickListener {
-        void onClick(PrestamoGlobal p);
-    }
-
-    // Click en ampliar
-    public interface OnAmpliarClickListener {
-        void onAmpliarClick(PrestamoGlobal p);
-    }
-
-    // Click en devolver
-    public interface OnDevolverClickListener {
-        void onDevolverClick(PrestamoGlobal p);
-    }
+    public interface OnItemClickListener { void onClick(PrestamoGlobal p); }
+    public interface OnAmpliarClickListener { void onAmpliarClick(PrestamoGlobal p); }
+    public interface OnDevolverClickListener { void onDevolverClick(PrestamoGlobal p); }
 
     private final List<PrestamoGlobal> data = new ArrayList<>();
 
@@ -45,7 +35,6 @@ public class PrestamoGlobalAdapter extends RecyclerView.Adapter<PrestamoGlobalAd
     private final OnAmpliarClickListener onAmpliarClick;
     private final OnDevolverClickListener onDevolverClick;
 
-    // ✅ Constructor ÚNICO (así no hay "might not have been initialized")
     public PrestamoGlobalAdapter(OnItemClickListener onItemClick,
                                  OnAmpliarClickListener onAmpliarClick,
                                  OnDevolverClickListener onDevolverClick) {
@@ -72,47 +61,52 @@ public class PrestamoGlobalAdapter extends RecyclerView.Adapter<PrestamoGlobalAd
     public void onBindViewHolder(@NonNull VH h, int position) {
         PrestamoGlobal p = data.get(position);
 
-        String vence = sdf.format(new Date(p.fechaVencimiento));
-        h.tvVence.setText("Vence: " + vence);
-
-
+        // Texto
         h.tvLinea1.setText(p.titulo + " · " + p.autor);
         h.tvLinea3.setText(p.nombreUsuario);
         h.tvLinea4.setText(p.emailUsuario);
         h.tvLinea5.setText(p.codigoInventario);
 
+        String vence = sdf.format(new Date(p.fechaVencimiento));
+        h.tvVence.setText("Vence: " + vence);
 
-        h.tvEstado.setText(p.estado);
+        // Estado
+        String estado = (p.estado == null) ? "" : p.estado.trim().toUpperCase(Locale.ROOT);
+        h.tvEstadoChip.setText(estado.isEmpty() ? "—" : estado);
 
-        boolean esVencido = "VENCIDO".equals(p.estado);
+        // Colores (usa tus colores pastel ya definidos / o cambia aquí)
+        int colorEstado = ContextCompat.getColor(h.itemView.getContext(), R.color.estado_activo);
 
-        // Colores estado (si tienes los colores definidos)
-        if (esVencido) {
-            h.tvEstado.setTextColor(h.itemView.getResources().getColor(R.color.estado_vencido));
-            h.container.setBackgroundColor(h.itemView.getResources().getColor(R.color.fondo_vencido));
-        } else if ("ACTIVO".equals(p.estado)) {
-            h.tvEstado.setTextColor(h.itemView.getResources().getColor(R.color.estado_activo));
-            h.container.setBackgroundColor(h.itemView.getResources().getColor(android.R.color.transparent));
-        } else {
-            h.tvEstado.setTextColor(h.itemView.getResources().getColor(android.R.color.black));
-            h.container.setBackgroundColor(h.itemView.getResources().getColor(android.R.color.transparent));
+        if ("VENCIDO".equals(estado)) {
+            colorEstado = ContextCompat.getColor(h.itemView.getContext(), R.color.estado_vencido);
+        } else if ("ACTIVO".equals(estado)) {
+            colorEstado = ContextCompat.getColor(h.itemView.getContext(), R.color.estado_activo);
+        } else if ("DEVUELTO".equals(estado)) {
+            // si no tienes color, pon uno neutro
+            colorEstado = ContextCompat.getColor(h.itemView.getContext(), R.color.estado_devuelto);
         }
 
-        // ✅ Ampliar: deshabilitado si vencido
+        // Barrita lateral
+        h.viewEstado.setBackgroundColor(colorEstado);
+
+        // Chip (background shape)
+        GradientDrawable bg = (GradientDrawable) h.tvEstadoChip.getBackground().mutate();
+        bg.setColor(colorEstado);
+
+        // Ampliar: deshabilitado si vencido
+        boolean esVencido = "VENCIDO".equals(estado);
         h.btnAmpliar.setEnabled(!esVencido);
-        h.btnAmpliar.setAlpha(esVencido ? 0.4f : 1f);
+        h.btnAmpliar.setAlpha(esVencido ? 0.45f : 1f);
 
         h.btnAmpliar.setOnClickListener(v -> {
             if (esVencido) return;
             if (onAmpliarClick != null) onAmpliarClick.onAmpliarClick(p);
         });
 
-        // ✅ Devolver: SIEMPRE visible
         h.btnDevolver.setOnClickListener(v -> {
             if (onDevolverClick != null) onDevolverClick.onDevolverClick(p);
         });
 
-        // ✅ Click en la fila (opcional). No devuelve, solo lo que tú quieras.
         h.itemView.setOnClickListener(v -> {
             if (onItemClick != null) onItemClick.onClick(p);
         });
@@ -125,28 +119,23 @@ public class PrestamoGlobalAdapter extends RecyclerView.Adapter<PrestamoGlobalAd
 
     static class VH extends RecyclerView.ViewHolder {
 
-        TextView tvLinea1, tvEstado, tvVence;
-
-        TextView tvLinea3, tvLinea4, tvLinea5;
-        Button btnAmpliar;
-        Button btnDevolver;
-        View container;
-
+        TextView tvLinea1, tvLinea3, tvLinea4, tvLinea5, tvVence, tvEstadoChip;
+        MaterialButton btnAmpliar, btnDevolver;
+        View viewEstado;
 
         VH(@NonNull View itemView) {
             super(itemView);
-            tvLinea1 = itemView.findViewById(R.id.tvLinea1);;
+            tvLinea1 = itemView.findViewById(R.id.tvLinea1);
             tvLinea3 = itemView.findViewById(R.id.tvLinea3);
             tvLinea4 = itemView.findViewById(R.id.tvLinea4);
             tvLinea5 = itemView.findViewById(R.id.tvLinea5);
-            tvEstado = itemView.findViewById(R.id.tvEstado);
+            tvVence = itemView.findViewById(R.id.tvVence);
+
+            tvEstadoChip = itemView.findViewById(R.id.tvEstadoChip);
+            viewEstado = itemView.findViewById(R.id.viewEstado);
 
             btnAmpliar = itemView.findViewById(R.id.btnAmpliar);
             btnDevolver = itemView.findViewById(R.id.btnDevolver);
-
-            container = itemView.findViewById(R.id.container);
-            tvVence = itemView.findViewById(R.id.tvVence);
-
         }
     }
 }
