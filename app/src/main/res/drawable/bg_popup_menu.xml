@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+
+    <!-- Fondo verde muy claro coherente con salvia -->
+    <solid android:color="#EEF5F4"/>
+
+    <!-- Bordes redondeados -->
+    <corners android:radius="16dp"/>
+
+    <!-- Borde suave -->
+    <stroke
+        android:width="1dp"
+        android:color="#D6E3DF"/>
+
+    <!-- Padding interno -->
+    <padding
+        android:left="6dp"
+        android:top="6dp"
+        android:right="6dp"
+        android:bottom="6dp"/>
+
+</shape>

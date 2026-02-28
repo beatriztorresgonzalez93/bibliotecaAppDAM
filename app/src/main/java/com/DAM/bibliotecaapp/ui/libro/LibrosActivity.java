@@ -21,6 +21,7 @@ import com.DAM.bibliotecaapp.data.db.AppDatabase;
 import com.DAM.bibliotecaapp.data.entities.Libro;
 import com.DAM.bibliotecaapp.ui.base.BaseActivity;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
@@ -112,6 +113,19 @@ public class LibrosActivity extends BaseActivity {
             borrarLibro(libro);
         });
 
+        FloatingActionButton fab = findViewById(R.id.fabAddLibro);
+
+        if (isAdmin) {
+            fab.setVisibility(View.VISIBLE);
+
+            fab.setOnClickListener(v -> {
+                startActivity(new Intent(this, NuevoLibroActivity.class));
+            });
+
+        } else {
+            fab.setVisibility(View.GONE);
+        }
+
         // Primera carga
         cargarLibros();
     }
@@ -190,11 +204,6 @@ public class LibrosActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_libros, menu);
-
-        // ✅ Ocultar opción "Añadir libro" si es lector
-        MenuItem add = menu.findItem(R.id.menu_add_libro);
-        if (add != null) add.setVisible(isAdmin);
-
         return true;
     }
 
@@ -217,15 +226,6 @@ public class LibrosActivity extends BaseActivity {
         } else if (id == R.id.orden_genero) {
             ordenActual = "genero";
             cargarLibros();
-            return true;
-        }
-
-        if (id == R.id.menu_add_libro) {
-            if (!isAdmin) {
-                Toast.makeText(this, "Acceso solo para bibliotecario", Toast.LENGTH_SHORT).show();
-                return true;
-            }
-            startActivity(new Intent(this, NuevoLibroActivity.class));
             return true;
         }
 

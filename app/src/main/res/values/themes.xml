@@ -1,28 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- Base application theme -->
+    <!-- =========================
+         TEMA PRINCIPAL APP
+         ========================= -->
     <style name="Base.Theme.BibliotecaApp" parent="Theme.Material3.DayNight.NoActionBar">
 
-        <!-- Color principal (verde salvia recomendado) -->
+        <!-- Paleta (verde salvia) -->
         <item name="colorPrimary">#5C8D89</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
 
-        <!-- Variante más oscura -->
         <item name="colorPrimaryContainer">#4A716E</item>
+        <item name="colorOnPrimaryContainer">#FFFFFF</item>
 
-        <!-- Color secundario opcional -->
         <item name="colorSecondary">#7FA9A4</item>
+        <item name="colorOnSecondary">#1F2937</item>
 
-        <!-- Fondo de la app -->
+        <!-- Tertiary (ripple/acento suave) -->
+        <item name="colorTertiary">#88B6B0</item>
+        <item name="colorOnTertiary">#1F2937</item>
+
+        <!-- Fondo general -->
         <item name="android:colorBackground">#F8FAF9</item>
 
-        <!-- Color de las cards -->
+        <!-- Superficies (cards, menús, etc.) -->
         <item name="colorSurface">#FFFFFF</item>
+        <item name="colorOnSurface">#1F2937</item>
 
-        <!-- Color del texto principal -->
+        <!-- Variante de surface (evita “lilas” raros por defecto en Material3) -->
+        <item name="colorSurfaceVariant">#EEF5F4</item>
+        <item name="colorOnSurfaceVariant">#42535A</item>
+
+        <!-- Bordes/divisores -->
+        <item name="colorOutline">#D6E3DF</item>
+
+        <!-- Texto principal legacy -->
         <item name="android:textColorPrimary">#1F2937</item>
 
     </style>
 
     <style name="Theme.BibliotecaApp" parent="Base.Theme.BibliotecaApp" />
+
+
+    <!-- =========================
+         POPUP MENU (OVERFLOW ORDENAR)
+         ========================= -->
+
+    <!-- Se aplica desde la Toolbar con: app:popupTheme="@style/ThemeOverlay.Biblioteca.PopupMenu" -->
+    <style name="ThemeOverlay.Biblioteca.PopupMenu" parent="ThemeOverlay.Material3.Light">
+        <!-- ✅ Esto fuerza el estilo del menú overflow -->
+        <item name="actionOverflowMenuStyle">@style/Widget.Biblioteca.PopupMenu</item>
+
+        <!-- (opcional) también para popupMenu normal -->
+        <item name="popupMenuStyle">@style/Widget.Biblioteca.PopupMenu</item>
+    </style>
+
+    <style name="Widget.Biblioteca.PopupMenu" parent="Widget.Material3.PopupMenu.Overflow">
+        <item name="android:popupBackground">@drawable/bg_popup_menu</item>
+        <item name="itemTextColor">@color/popup_menu_text</item>
+        <item name="itemBackground">@drawable/bg_popup_menu_item</item>
+    </style>
 
 </resources>

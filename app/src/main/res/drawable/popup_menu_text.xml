@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Color del texto del popup menu (verde/gris oscuro coherente con salvia) -->
+    <color name="popup_menu_text">#1F2937</color>
+
+</resources>

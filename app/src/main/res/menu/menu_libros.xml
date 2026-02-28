@@ -17,10 +17,4 @@
         </menu>
     </item>
 
-    <!-- Añadir libro -->
-    <item
-        android:id="@+id/menu_add_libro"
-        android:title="Añadir"
-        android:icon="@android:drawable/ic_input_add"
-        app:showAsAction="ifRoom"/>
 </menu>
