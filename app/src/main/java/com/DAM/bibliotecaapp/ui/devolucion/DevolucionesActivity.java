@@ -40,13 +40,11 @@ public class DevolucionesActivity extends BaseActivity {
 
     private AppDatabase db;
 
-    private final List<Usuario> usuarios = new ArrayList<>();
-    private final List<String> usuariosDisplay = new ArrayList<>();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         RoleGuard.requireBibliotecario(this);
+
         setContentView(R.layout.activity_devoluciones);
         applySystemBarsPadding(R.id.main);
 
@@ -67,7 +65,6 @@ public class DevolucionesActivity extends BaseActivity {
         setupDatePickers();
         setupClearButton();
 
-        // Primera carga
         cargarDatosFiltrados();
     }
 
@@ -83,9 +80,11 @@ public class DevolucionesActivity extends BaseActivity {
 
             runOnUiThread(() -> {
                 android.widget.ArrayAdapter<UserChoice> aa =
-                        new android.widget.ArrayAdapter<>(this,
+                        new android.widget.ArrayAdapter<>(
+                                this,
                                 android.R.layout.simple_dropdown_item_1line,
-                                choices);
+                                choices
+                        );
 
                 actUsuario.setAdapter(aa);
                 actUsuario.setThreshold(1);
@@ -101,7 +100,6 @@ public class DevolucionesActivity extends BaseActivity {
                 actUsuario.addTextChangedListener(new SimpleTextWatcher() {
                     @Override
                     public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        // Si borran el texto manualmente, quitamos filtro
                         if (s == null || s.length() == 0) {
                             selectedUsuarioId = null;
                             cargarDatosFiltrados();
@@ -140,7 +138,6 @@ public class DevolucionesActivity extends BaseActivity {
             chosen.set(Calendar.MILLISECOND, 0);
 
             if (!isDesde) {
-                // "Hasta" -> final del día para incluir todo ese día
                 chosen.set(Calendar.HOUR_OF_DAY, 23);
                 chosen.set(Calendar.MINUTE, 59);
                 chosen.set(Calendar.SECOND, 59);
@@ -172,7 +169,6 @@ public class DevolucionesActivity extends BaseActivity {
         });
     }
 
-    // TextWatcher simple para no escribir 3 métodos siempre
     public abstract static class SimpleTextWatcher implements TextWatcher {
         @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
         @Override public void afterTextChanged(Editable s) {}
@@ -189,7 +185,7 @@ public class DevolucionesActivity extends BaseActivity {
 
         @Override
         public String toString() {
-            return label; // esto es lo que se muestra en el autocompletar
+            return label;
         }
     }
 }

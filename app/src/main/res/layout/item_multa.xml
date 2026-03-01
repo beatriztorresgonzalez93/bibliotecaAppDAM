@@ -1,52 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/container"
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardMulta"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="12dp">
+    android:layout_marginTop="10dp"
+    android:layout_marginBottom="10dp"
+    app:cardCornerRadius="22dp"
+    app:cardElevation="0dp"
+    app:strokeWidth="1dp"
+    app:strokeColor="@color/outline"
+    android:backgroundTint="@color/surface">
 
-    <TextView
-        android:id="@+id/tvLinea1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:textSize="16sp" />
-
-    <TextView
-        android:id="@+id/tvLinea2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp" />
-
-    <TextView
-        android:id="@+id/tvEstado"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
-        android:textStyle="bold" />
-
-    <!-- Botones en horizontal -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="8dp">
+        android:orientation="vertical"
+        android:padding="14dp">
 
-        <Button
-            android:id="@+id/btnPagar"
-            android:layout_width="0dp"
+        <!-- Usuario -->
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvUsuario"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Pagar" />
+            android:text="David Blanco Díaz"
+            android:textAppearance="@style/TextAppearance.Biblioteca.TitleCard"/>
 
-        <Button
-            android:id="@+id/btnCondonar"
-            android:layout_width="0dp"
+        <!-- Libro -->
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvLibro"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginStart="8dp"
-            android:text="Condonar" />
+            android:layout_marginTop="2dp"
+            android:text="Patria"
+            android:textAppearance="@style/TextAppearance.Biblioteca.SubtitleCard"/>
+
+        <!-- Chips -->
+        <LinearLayout
+            android:id="@+id/rowChips"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/chipEstado"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:paddingTop="6dp"
+                android:paddingBottom="6dp"
+                android:text="PENDIENTE"
+                android:textAllCaps="true"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:background="@drawable/chip_danger"/>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/chipDias"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:paddingTop="6dp"
+                android:paddingBottom="6dp"
+                android:text="⏱ 3 días"
+                android:textSize="12sp"
+                android:background="@drawable/bg_chip_neutral"/>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/chipImporte"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:paddingTop="6dp"
+                android:paddingBottom="6dp"
+                android:text="💶 4,50 €"
+                android:textSize="12sp"
+                android:background="@drawable/bg_chip_success"/>
+        </LinearLayout>
+
+        <!-- Acciones -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnPagar"
+                style="@style/Widget.Biblioteca.ButtonPrimary"
+                android:layout_width="0dp"
+                android:layout_height="44dp"
+                android:layout_weight="1"
+                android:text="Pagar"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnCondonar"
+                style="@style/Widget.Biblioteca.ButtonOutlined"
+                android:layout_width="0dp"
+                android:layout_height="44dp"
+                android:layout_marginStart="10dp"
+                android:layout_weight="1"
+                android:text="Condonar"/>
+        </LinearLayout>
+
     </LinearLayout>
-
-</LinearLayout>
+</com.google.android.material.card.MaterialCardView>

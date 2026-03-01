@@ -1,56 +1,127 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main"
-    android:paddingStart="20dp"
-    android:paddingEnd="20dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:background="@color/app_background">
 
-    <TextView
-        android:id="@+id/tvTituloMultas"
-        android:layout_width="wrap_content"
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/topBar"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Multas"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="8dp"/>
+        android:background="@color/app_background"
+        app:title="Multas"
+        app:titleTextAppearance="@style/TextAppearance.Biblioteca.ToolbarTitle"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
-    <Spinner
-        android:id="@+id/spFiltroMultas"
-        android:layout_width="match_parent"
+    <!-- Contenedor filtros -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardFilters"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"/>
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="12dp"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="0dp"
+        app:strokeWidth="1dp"
+        app:strokeColor="@color/outline"
+        app:layout_constraintTop_toBottomOf="@id/topBar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
-    <!-- FILTRO POR USUARIO (AUTOCOMPLETE) -->
-    <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Filtrar por usuario">
-
-        <AutoCompleteTextView
-            android:id="@+id/actUsuarioFiltroMultas"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text"
-            android:importantForAutofill="no" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:orientation="vertical"
+            android:padding="14dp">
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnLimpiarFiltroMultas"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Limpiar filtro usuario"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp" />
+            <!-- Estado -->
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Estado"
+                android:textAppearance="@style/TextAppearance.Biblioteca.Label"/>
+
+            <Spinner
+                android:id="@+id/spEstado"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/bg_input_soft"/>
+
+            <!-- Usuario -->
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="Usuario"
+                android:textAppearance="@style/TextAppearance.Biblioteca.Label"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilUsuario"
+                style="@style/Widget.Biblioteca.TextInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                app:startIconDrawable="@drawable/ic_users_24"
+                app:hintEnabled="true"
+                android:hint="Filtrar por usuario">
+
+                <AutoCompleteTextView
+                    android:id="@+id/actvUsuario"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:singleLine="true"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnClearUser"
+                android:layout_width="wrap_content"
+                android:layout_height="44dp"
+                android:layout_marginTop="10dp"
+
+                android:text="Limpiar filtro usuario"
+                android:textColor="@color/primary"
+                android:backgroundTint="@color/primary_light"
+
+                app:icon="@drawable/ic_close_24"
+                app:iconTint="@color/primary"
+                app:iconPadding="8dp"
+                app:rippleColor="@color/salvia_ripple"/>
+
+
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvMultas"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:overScrollMode="never"/>
-</LinearLayout>
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingTop="10dp"
+        android:clipToPadding="false"
+        app:layout_constraintTop_toBottomOf="@id/cardFilters"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tvEmpty"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="No hay multas con esos filtros."
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.Biblioteca.Empty"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="@id/rvMultas"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

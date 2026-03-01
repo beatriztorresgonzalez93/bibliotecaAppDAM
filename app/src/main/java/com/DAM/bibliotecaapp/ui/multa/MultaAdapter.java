@@ -1,10 +1,9 @@
 package com.DAM.bibliotecaapp.ui.multa;
 
-import android.graphics.Color;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,9 +11,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.DAM.bibliotecaapp.R;
 import com.DAM.bibliotecaapp.data.pojo.MultaInfo;
+import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class MultaAdapter extends RecyclerView.Adapter<MultaAdapter.VH> {
 
@@ -46,42 +47,80 @@ public class MultaAdapter extends RecyclerView.Adapter<MultaAdapter.VH> {
 
     @Override
     public void onBindViewHolder(@NonNull VH h, int position) {
+        Context ctx = h.itemView.getContext();
         MultaInfo m = data.get(position);
 
-        h.tvLinea1.setText(m.nombreUsuario);
-        h.tvLinea2.setText(m.tituloLibro + " · " + m.diasRetraso + " días · " + m.importe + " €");
-        h.tvEstado.setText(m.estado);
+        // Título
+        h.tvUsuario.setText(safe(m.nombreUsuario));
+        h.tvLibro.setText("📖 " + safe(m.tituloLibro));
 
-        boolean pendiente = "PENDIENTE".equals(m.estado);
+        String estado = safe(m.estado).toUpperCase(Locale.ROOT);
+        boolean pendiente = "PENDIENTE".equals(estado);
 
-        // Estilo simple por estado
-        if ("PENDIENTE".equals(m.estado)) {
-            h.tvEstado.setTextColor(Color.parseColor("#C62828")); // rojo
+        // --- Estado chip (texto + fondo + color) ---
+        h.chipEstado.setText(estado);
+        switch (estado) {
+            case "PENDIENTE":
+                h.chipEstado.setBackgroundResource(R.drawable.chip_danger);
+                h.chipEstado.setTextColor(ctx.getColor(R.color.chip_danger_text)); // lo creamos abajo
+                break;
+            case "PAGADA":
+                h.chipEstado.setBackgroundResource(R.drawable.bg_chip_success);
+                h.chipEstado.setTextColor(ctx.getColor(R.color.chip_success_text));
+                break;
+            case "CONDONADA":
+                h.chipEstado.setBackgroundResource(R.drawable.bg_chip_neutral);
+                h.chipEstado.setTextColor(ctx.getColor(R.color.chip_neutral_text));
+                break;
+            default:
+                h.chipEstado.setBackgroundResource(R.drawable.bg_chip_neutral);
+                h.chipEstado.setTextColor(ctx.getColor(R.color.chip_neutral_text));
+                h.chipEstado.setText(estado.isEmpty() ? "—" : estado);
+                break;
         }
-        else if ("PAGADA".equals(m.estado)) {
-            h.tvEstado.setTextColor(Color.parseColor("#2E7D32")); // verde
-        }
-        else if ("CONDONADA".equals(m.estado)) {
-            h.tvEstado.setTextColor(Color.parseColor("#1565C0")); // azul elegante
-        }
-        else {
-            h.tvEstado.setTextColor(Color.DKGRAY);
+
+        // --- Chip días ---
+        int dias = m.diasRetraso;
+        if (dias <= 0) {
+            // Opción 1: ocultar
+            h.chipDias.setVisibility(View.GONE);
+
+            // Opción 2 (si prefieres mostrarlo): descomenta y comenta el GONE
+            // h.chipDias.setVisibility(View.VISIBLE);
+            // h.chipDias.setBackgroundResource(R.drawable.chip_neutral);
+            // h.chipDias.setText("✅ En plazo");
+        } else {
+            h.chipDias.setVisibility(View.VISIBLE);
+            h.chipDias.setBackgroundResource(R.drawable.bg_chip_neutral);
+            h.chipDias.setText("⏱ " + dias + (dias == 1 ? " día" : " días"));
         }
 
+        // --- Chip importe ---
+        double importe = m.importe;
+        if (importe <= 0.00001) {
+            // Para evitar “0.0 €” que queda feo
+            h.chipImporte.setVisibility(View.GONE);
 
-        // Botones solo si pendiente
-        h.btnPagar.setEnabled(pendiente);
-        h.btnCondonar.setEnabled(pendiente);
+            // Alternativa:
+            // h.chipImporte.setVisibility(View.VISIBLE);
+            // h.chipImporte.setBackgroundResource(R.drawable.chip_neutral);
+            // h.chipImporte.setText("💶 Sin importe");
+        } else {
+            h.chipImporte.setVisibility(View.VISIBLE);
+            h.chipImporte.setBackgroundResource(R.drawable.bg_chip_success);
+            h.chipImporte.setText(String.format(Locale.getDefault(), "💶 %.2f €", importe));
+        }
 
-        h.btnPagar.setAlpha(pendiente ? 1f : 0.4f);
-        h.btnCondonar.setAlpha(pendiente ? 1f : 0.4f);
+        // --- Acciones: solo si pendiente (más limpio visualmente) ---
+        h.btnPagar.setVisibility(pendiente ? View.VISIBLE : View.GONE);
+        h.btnCondonar.setVisibility(pendiente ? View.VISIBLE : View.GONE);
 
         h.btnPagar.setOnClickListener(v -> {
-            if (pendiente && listener != null) listener.onPagar(m);
+            if (listener != null) listener.onPagar(m);
         });
 
         h.btnCondonar.setOnClickListener(v -> {
-            if (pendiente && listener != null) listener.onCondonar(m);
+            if (listener != null) listener.onCondonar(m);
         });
     }
 
@@ -90,15 +129,23 @@ public class MultaAdapter extends RecyclerView.Adapter<MultaAdapter.VH> {
         return data.size();
     }
 
+    private static String safe(String s) {
+        return s == null ? "" : s.trim();
+    }
+
     static class VH extends RecyclerView.ViewHolder {
-        TextView tvLinea1, tvLinea2, tvEstado;
-        Button btnPagar, btnCondonar;
+        TextView tvUsuario, tvLibro, chipEstado, chipDias, chipImporte;
+        MaterialButton btnPagar, btnCondonar;
 
         VH(@NonNull View itemView) {
             super(itemView);
-            tvLinea1 = itemView.findViewById(R.id.tvLinea1);
-            tvLinea2 = itemView.findViewById(R.id.tvLinea2);
-            tvEstado = itemView.findViewById(R.id.tvEstado);
+            tvUsuario = itemView.findViewById(R.id.tvUsuario);
+            tvLibro = itemView.findViewById(R.id.tvLibro);
+
+            chipEstado = itemView.findViewById(R.id.chipEstado);
+            chipDias = itemView.findViewById(R.id.chipDias);
+            chipImporte = itemView.findViewById(R.id.chipImporte);
+
             btnPagar = itemView.findViewById(R.id.btnPagar);
             btnCondonar = itemView.findViewById(R.id.btnCondonar);
         }

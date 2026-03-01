@@ -50,4 +50,10 @@
 
     <color name="outline_focused">#5C8D89</color>
 
+    <color name="chip_danger_text">#B3261E</color>
+    <color name="chip_success_text">#1B5E20</color>
+    <color name="chip_neutral_text">#37474F</color>
+
+    <color name="app_background">#F8FAF9</color>
+
 </resources>

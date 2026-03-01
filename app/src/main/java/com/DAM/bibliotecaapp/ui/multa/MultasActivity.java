@@ -3,6 +3,7 @@ package com.DAM.bibliotecaapp.ui.multa;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -10,7 +11,6 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
-
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,6 +21,7 @@ import com.DAM.bibliotecaapp.data.entities.Usuario;
 import com.DAM.bibliotecaapp.data.pojo.MultaInfo;
 import com.DAM.bibliotecaapp.ui.base.BaseActivity;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.textview.MaterialTextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,10 +38,12 @@ public class MultasActivity extends BaseActivity {
     private Spinner spFiltro;
     private String filtroActual = "Todas";
 
-    // NUEVO: filtro usuario
+    // filtro usuario
     private AutoCompleteTextView actUsuarioFiltro;
     private MaterialButton btnLimpiarFiltro;
     private Integer selectedUsuarioId = null;
+
+    private MaterialTextView tvEmpty;
 
     static class UserChoice {
         final int id;
@@ -53,10 +56,18 @@ public class MultasActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         RoleGuard.requireBibliotecario(this);
+
         setContentView(R.layout.activity_multas);
         applySystemBarsPadding(R.id.main);
 
         db = AppDatabase.getInstance(this);
+
+        // Views
+        tvEmpty = findViewById(R.id.tvEmpty);
+
+        spFiltro = findViewById(R.id.spEstado);
+        actUsuarioFiltro = findViewById(R.id.actvUsuario);
+        btnLimpiarFiltro = findViewById(R.id.btnClearUser);
 
         // Recycler
         RecyclerView rv = findViewById(R.id.rvMultas);
@@ -75,31 +86,7 @@ public class MultasActivity extends BaseActivity {
         });
         rv.setAdapter(adapter);
 
-        // Spinner filtro
-        spFiltro = findViewById(R.id.spFiltroMultas);
-        ArrayAdapter<String> filtroAdapter = new ArrayAdapter<>(
-                this,
-                android.R.layout.simple_spinner_item,
-                new String[]{"Todas", "Pendientes", "Pagadas", "Condonadas"}
-        );
-        filtroAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spFiltro.setAdapter(filtroAdapter);
-
-        spFiltro.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, android.view.View view, int position, long id) {
-                filtroActual = parent.getItemAtPosition(position).toString();
-                cargarMultas();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
-        });
-
-        // NUEVO: filtro usuario
-        actUsuarioFiltro = findViewById(R.id.actUsuarioFiltroMultas);
-        btnLimpiarFiltro = findViewById(R.id.btnLimpiarFiltroMultas);
-
+        setupSpinnerFiltro();
         setupUserAutocomplete();
         setupClearButton();
 
@@ -112,12 +99,32 @@ public class MultasActivity extends BaseActivity {
         cargarMultas();
     }
 
+    private void setupSpinnerFiltro() {
+        ArrayAdapter<String> filtroAdapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_spinner_item,
+                new String[]{"Todas", "Pendientes", "Pagadas", "Condonadas"}
+        );
+        filtroAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spFiltro.setAdapter(filtroAdapter);
+
+        spFiltro.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                filtroActual = parent.getItemAtPosition(position).toString();
+                cargarMultas();
+            }
+            @Override public void onNothingSelected(AdapterView<?> parent) {}
+        });
+    }
+
     private void setupUserAutocomplete() {
         executor.execute(() -> {
             List<Usuario> list = db.usuarioDao().getAllOrderByNombre();
 
             List<UserChoice> choices = new ArrayList<>();
             for (Usuario u : list) {
+                // Ajusta aquí si tu entidad usa otros nombres de campos
                 choices.add(new UserChoice(u.id, u.nombre + " (" + u.email + ")"));
             }
 
@@ -141,6 +148,7 @@ public class MultasActivity extends BaseActivity {
                 actUsuarioFiltro.addTextChangedListener(new SimpleTextWatcher() {
                     @Override
                     public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        // si borran el texto, quitamos filtro
                         if (s == null || s.length() == 0) {
                             selectedUsuarioId = null;
                             cargarMultas();
@@ -189,7 +197,11 @@ public class MultasActivity extends BaseActivity {
                     break;
             }
 
-            runOnUiThread(() -> adapter.setData(lista));
+            runOnUiThread(() -> {
+                adapter.setData(lista);
+                boolean empty = (lista == null || lista.isEmpty());
+                tvEmpty.setVisibility(empty ? View.VISIBLE : View.GONE);
+            });
         });
     }
 

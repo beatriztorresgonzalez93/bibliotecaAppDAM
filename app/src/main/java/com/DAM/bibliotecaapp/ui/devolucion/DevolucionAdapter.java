@@ -15,6 +15,7 @@ import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class DevolucionAdapter extends RecyclerView.Adapter<DevolucionAdapter.ViewHolder> {
 
@@ -49,16 +50,28 @@ public class DevolucionAdapter extends RecyclerView.Adapter<DevolucionAdapter.Vi
         String email = safe(it.usuarioEmail);
 
         h.tvTituloAutor.setText(titulo + " · " + autor);
-        h.tvCodigoInventario.setText("Ejemplar: " + codigo);
-        h.tvUsuario.setText("Usuario: " + usuario + " (" + email + ")");
+        h.tvChipEstado.setText("DEVUELTO"); // historial de devoluciones => siempre devuelto
 
-        // Fecha devolución (epoch millis -> texto)
+        h.tvCodigoInventario.setText("🏷 Ejemplar: " + codigo);
+
+        h.tvUsuarioNombre.setText("👤 " + usuario);
+        h.tvUsuarioEmail.setText("📧 " + email);
+
+        // Fechas
         String fechaDev = formatDate(it.fechaDevolucion);
-        h.tvFechaDevolucion.setText("Devuelto: " + fechaDev);
-
-        // Extra (opcional): fecha préstamo
         String fechaPres = formatDate(it.fechaPrestamo);
-        h.tvFechaPrestamo.setText("Prestado: " + fechaPres);
+
+        h.tvFechaDevolucion.setText("✅ Devuelto: " + fechaDev);
+        h.tvFechaPrestamo.setText("📦 Prestado: " + fechaPres);
+
+        // Duración (opcional PRO)
+        long dias = calcularDias(it.fechaPrestamo, it.fechaDevolucion);
+        if (dias > 0) {
+            h.tvDuracion.setVisibility(View.VISIBLE);
+            h.tvDuracion.setText(String.format(Locale.getDefault(), "⏱ Duración: %d %s", dias, (dias == 1 ? "día" : "días")));
+        } else {
+            h.tvDuracion.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -67,20 +80,29 @@ public class DevolucionAdapter extends RecyclerView.Adapter<DevolucionAdapter.Vi
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tvTituloAutor, tvCodigoInventario, tvUsuario, tvFechaDevolucion, tvFechaPrestamo;
+        TextView tvTituloAutor, tvChipEstado, tvCodigoInventario;
+        TextView tvUsuarioNombre, tvUsuarioEmail;
+        TextView tvFechaDevolucion, tvFechaPrestamo, tvDuracion;
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvTituloAutor = itemView.findViewById(R.id.tvTituloAutor);
+            tvChipEstado = itemView.findViewById(R.id.chipEstado);
+
             tvCodigoInventario = itemView.findViewById(R.id.tvCodigoInventario);
-            tvUsuario = itemView.findViewById(R.id.tvUsuario);
+
+            tvUsuarioNombre = itemView.findViewById(R.id.tvUsuarioNombre);
+            tvUsuarioEmail = itemView.findViewById(R.id.tvUsuarioEmail);
+
             tvFechaDevolucion = itemView.findViewById(R.id.tvFechaDevolucion);
             tvFechaPrestamo = itemView.findViewById(R.id.tvFechaPrestamo);
+
+            tvDuracion = itemView.findViewById(R.id.tvDuracion);
         }
     }
 
     private static String safe(String s) {
-        return (s == null) ? "" : s;
+        return (s == null) ? "" : s.trim();
     }
 
     private static String formatDate(long epochMillis) {
@@ -90,6 +112,16 @@ public class DevolucionAdapter extends RecyclerView.Adapter<DevolucionAdapter.Vi
             return df.format(new Date(epochMillis));
         } catch (Exception e) {
             return "-";
+        }
+    }
+
+    private static long calcularDias(long desde, long hasta) {
+        try {
+            if (desde <= 0 || hasta <= 0 || hasta < desde) return 0;
+            long diff = hasta - desde;
+            return diff / (1000L * 60L * 60L * 24L);
+        } catch (Exception e) {
+            return 0;
         }
     }
 }
