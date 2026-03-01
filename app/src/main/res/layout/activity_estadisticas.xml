@@ -4,74 +4,108 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true">
+    android:fillViewport="true"
+    android:background="@color/app_background">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="16dp">
 
-        <TextView
+        <!-- Header -->
+        <com.google.android.material.textview.MaterialTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Estadísticas"
             android:textSize="22sp"
             android:textStyle="bold"
-            android:paddingBottom="12dp"/>
+            android:textColor="@color/text_primary"
+            android:paddingBottom="10dp"/>
 
+        <!-- Card filtros (Año + comparación) -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="2dp">
+            app:cardCornerRadius="20dp"
+            app:cardElevation="0dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="@color/outline"
+            android:backgroundTint="@color/surface"
+            android:layout_marginBottom="12dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="12dp"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:orientation="vertical"
+                android:padding="14dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Año:"
-                    android:textStyle="bold"
-                    android:textSize="16sp"/>
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
 
-                <Spinner
-                    android:id="@+id/spinnerYear"
-                    android:layout_width="wrap_content"
+                    <com.google.android.material.textview.MaterialTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Año"
+                        android:textStyle="bold"
+                        android:textSize="15sp"
+                        android:textColor="@color/text_primary"/>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="14dp"
+                        style="@style/Widget.Biblioteca.TextInput"
+                        app:endIconMode="dropdown_menu"
+                        android:hint="Seleccionar año">
+
+                        <AutoCompleteTextView
+                            android:id="@+id/spinnerYear"
+                            android:layout_width="120dp"
+                            android:layout_height="wrap_content"
+                            android:inputType="none"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tvComparacionPrestamos"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"/>
+                    android:text="Comparación: —"
+                    android:textSize="13sp"
+                    android:textColor="@color/onSurfaceVariant"
+                    android:layout_marginTop="10dp"/>
 
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tvComparacionRecaudado"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Comparación: —"
+                    android:textSize="13sp"
+                    android:textColor="@color/onSurfaceVariant"
+                    android:layout_marginTop="4dp"/>
             </LinearLayout>
 
         </com.google.android.material.card.MaterialCardView>
 
-        <TextView
-            android:id="@+id/tvComparacionPrestamos"
+        <!-- Sección: KPIs -->
+        <com.google.android.material.textview.MaterialTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Comparación: —"
-            android:textSize="14sp"
-            android:textColor="#666666"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="4dp"/>
+            android:text="Resumen"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:textColor="@color/text_primary"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="8dp"/>
 
-        <TextView
-            android:id="@+id/tvComparacionRecaudado"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Comparación: —"
-            android:textSize="14sp"
-            android:textColor="#666666"
-            android:layout_marginBottom="14dp"/>
-
-        <!-- Resumen -->
-        <!-- KPIs -->
+        <!-- KPIs Grid 3 + 3 (cards compactas) -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -88,8 +122,11 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_marginEnd="8dp"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="2dp">
+                    app:cardCornerRadius="18dp"
+                    app:cardElevation="0dp"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="@color/outline"
+                    android:backgroundTint="@color/surface">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -97,19 +134,22 @@
                         android:orientation="vertical"
                         android:padding="14dp">
 
-                        <TextView
+                        <com.google.android.material.textview.MaterialTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Usuarios"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            android:textColor="@color/onSurfaceVariant"/>
 
-                        <TextView
+                        <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/tvUsuarios"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="20sp"
+                            android:text="0"
+                            android:textSize="22sp"
                             android:textStyle="bold"
-                            android:text="0" />
+                            android:textColor="@color/text_primary"
+                            android:layout_marginTop="4dp"/>
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
@@ -118,8 +158,11 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_marginEnd="8dp"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="2dp">
+                    app:cardCornerRadius="18dp"
+                    app:cardElevation="0dp"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="@color/outline"
+                    android:backgroundTint="@color/surface">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -127,19 +170,22 @@
                         android:orientation="vertical"
                         android:padding="14dp">
 
-                        <TextView
+                        <com.google.android.material.textview.MaterialTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Libros"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            android:textColor="@color/onSurfaceVariant"/>
 
-                        <TextView
+                        <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/tvLibros"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="20sp"
+                            android:text="0"
+                            android:textSize="22sp"
                             android:textStyle="bold"
-                            android:text="0" />
+                            android:textColor="@color/text_primary"
+                            android:layout_marginTop="4dp"/>
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
@@ -147,8 +193,11 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="2dp">
+                    app:cardCornerRadius="18dp"
+                    app:cardElevation="0dp"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="@color/outline"
+                    android:backgroundTint="@color/surface">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -156,21 +205,25 @@
                         android:orientation="vertical"
                         android:padding="14dp">
 
-                        <TextView
+                        <com.google.android.material.textview.MaterialTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Ejemplares"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            android:textColor="@color/onSurfaceVariant"/>
 
-                        <TextView
+                        <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/tvEjemplares"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="20sp"
+                            android:text="0"
+                            android:textSize="22sp"
                             android:textStyle="bold"
-                            android:text="0" />
+                            android:textColor="@color/text_primary"
+                            android:layout_marginTop="4dp"/>
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
+
             </LinearLayout>
 
             <!-- Fila 2 -->
@@ -185,8 +238,11 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_marginEnd="8dp"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="2dp">
+                    app:cardCornerRadius="18dp"
+                    app:cardElevation="0dp"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="@color/outline"
+                    android:backgroundTint="@color/surface">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -194,19 +250,22 @@
                         android:orientation="vertical"
                         android:padding="14dp">
 
-                        <TextView
+                        <com.google.android.material.textview.MaterialTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Activos"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            android:textColor="@color/onSurfaceVariant"/>
 
-                        <TextView
+                        <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/tvPrestamosActivos"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="20sp"
+                            android:text="0"
+                            android:textSize="22sp"
                             android:textStyle="bold"
-                            android:text="0" />
+                            android:textColor="@color/text_primary"
+                            android:layout_marginTop="4dp"/>
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
@@ -215,8 +274,11 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_marginEnd="8dp"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="2dp">
+                    app:cardCornerRadius="18dp"
+                    app:cardElevation="0dp"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="@color/outline"
+                    android:backgroundTint="@color/surface">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -224,19 +286,22 @@
                         android:orientation="vertical"
                         android:padding="14dp">
 
-                        <TextView
+                        <com.google.android.material.textview.MaterialTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Vencidos"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            android:textColor="@color/onSurfaceVariant"/>
 
-                        <TextView
+                        <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/tvPrestamosVencidos"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="20sp"
+                            android:text="0"
+                            android:textSize="22sp"
                             android:textStyle="bold"
-                            android:text="0" />
+                            android:textColor="@color/text_primary"
+                            android:layout_marginTop="4dp"/>
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
@@ -244,8 +309,11 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="2dp">
+                    app:cardCornerRadius="18dp"
+                    app:cardElevation="0dp"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="@color/outline"
+                    android:backgroundTint="@color/surface">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -253,30 +321,37 @@
                         android:orientation="vertical"
                         android:padding="14dp">
 
-                        <TextView
+                        <com.google.android.material.textview.MaterialTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Devueltos"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            android:textColor="@color/onSurfaceVariant"/>
 
-                        <TextView
+                        <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/tvPrestamosDevueltos"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="20sp"
+                            android:text="0"
+                            android:textSize="22sp"
                             android:textStyle="bold"
-                            android:text="0" />
+                            android:textColor="@color/text_primary"
+                            android:layout_marginTop="4dp"/>
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
+
             </LinearLayout>
 
-            <!-- Multas + dinero -->
+            <!-- Card: Multas + dinero + % a tiempo -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="2dp">
+                app:cardCornerRadius="20dp"
+                app:cardElevation="0dp"
+                app:strokeWidth="1dp"
+                app:strokeColor="@color/outline"
+                android:backgroundTint="@color/surface">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -284,106 +359,154 @@
                     android:orientation="vertical"
                     android:padding="14dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <com.google.android.material.textview.MaterialTextView
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Multas"
-                        android:textStyle="bold" />
+                        android:text="Multas y devoluciones"
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        android:textColor="@color/text_primary"/>
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <com.google.android.material.textview.MaterialTextView
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Pendientes / Pagadas / Condonadas" />
+                        android:text="Pendientes / Pagadas / Condonadas"
+                        android:textColor="@color/onSurfaceVariant"
+                        android:layout_marginTop="2dp"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:layout_marginTop="6dp">
+                        android:layout_marginTop="10dp">
 
-                        <TextView
+                        <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/tvMultasPendientes"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:text="0"
                             android:textStyle="bold"
                             android:textSize="18sp"
-                            android:text="0"/>
+                            android:textColor="@color/text_primary"/>
 
-                        <TextView
+                        <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/tvMultasPagadas"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="0"
                             android:textStyle="bold"
                             android:textSize="18sp"
-                            android:gravity="center"
-                            android:text="0"/>
+                            android:textColor="@color/text_primary"/>
 
-                        <TextView
+                        <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/tvMultasCondonadas"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:gravity="end"
+                            android:text="0"
                             android:textStyle="bold"
                             android:textSize="18sp"
-                            android:gravity="end"
-                            android:text="0"/>
+                            android:textColor="@color/text_primary"/>
                     </LinearLayout>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="Dinero recaudado"
-                        android:textStyle="bold"/>
+                    <!-- Separador suave -->
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginBottom="12dp"
+                        android:background="@color/outline"/>
 
-                    <TextView
-                        android:id="@+id/tvRecaudado"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="22sp"
-                        android:textStyle="bold"
-                        android:text="0,00 €"/>
+                        android:orientation="horizontal">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="Dinero pendiente"
-                        android:textStyle="bold"/>
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/tvPendiente"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:text="0,00 €"/>
+                            <com.google.android.material.textview.MaterialTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Recaudado"
+                                android:textStyle="bold"
+                                android:textColor="@color/onSurfaceVariant"/>
 
-                    <TextView
+                            <com.google.android.material.textview.MaterialTextView
+                                android:id="@+id/tvRecaudado"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0,00 €"
+                                android:textStyle="bold"
+                                android:textSize="20sp"
+                                android:textColor="@color/text_primary"
+                                android:layout_marginTop="4dp"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:gravity="end">
+
+                            <com.google.android.material.textview.MaterialTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Pendiente"
+                                android:textStyle="bold"
+                                android:textColor="@color/onSurfaceVariant"/>
+
+                            <com.google.android.material.textview.MaterialTextView
+                                android:id="@+id/tvPendiente"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0,00 €"
+                                android:textStyle="bold"
+                                android:textSize="18sp"
+                                android:textColor="@color/text_primary"
+                                android:layout_marginTop="4dp"/>
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <com.google.android.material.textview.MaterialTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="12dp"
                         android:text="% devoluciones a tiempo"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold"
+                        android:textColor="@color/onSurfaceVariant"/>
 
-                    <TextView
+                    <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/tvPctATiempo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="18sp"
+                        android:text="0 %"
                         android:textStyle="bold"
-                        android:text="0 %"/>
+                        android:textSize="18sp"
+                        android:textColor="@color/text_primary"
+                        android:layout_marginTop="4dp"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
+            <!-- Card: Disponibilidad -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="2dp">
+                app:cardCornerRadius="20dp"
+                app:cardElevation="0dp"
+                app:strokeWidth="1dp"
+                app:strokeColor="@color/outline"
+                android:backgroundTint="@color/surface">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -391,45 +514,49 @@
                     android:orientation="vertical"
                     android:padding="14dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <com.google.android.material.textview.MaterialTextView
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Disponibilidad"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        android:textColor="@color/text_primary"/>
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <com.google.android.material.textview.MaterialTextView
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Disponibles / Prestados ahora"/>
+                        android:text="Disponibles / Prestados ahora"
+                        android:textColor="@color/onSurfaceVariant"
+                        android:layout_marginTop="2dp"/>
 
-                    <!-- Fila solo con los números -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:layout_marginTop="6dp">
+                        android:layout_marginTop="10dp">
 
-                        <TextView
+                        <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/tvDisponibles"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:text="0"
                             android:textStyle="bold"
                             android:textSize="18sp"
-                            android:text="0"/>
+                            android:textColor="@color/text_primary"/>
 
-                        <TextView
+                        <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/tvPrestadosAhora"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:gravity="end"
+                            android:text="0"
                             android:textStyle="bold"
                             android:textSize="18sp"
-                            android:gravity="end"
-                            android:text="0"/>
+                            android:textColor="@color/text_primary"/>
                     </LinearLayout>
 
-                    <!-- Barra debajo (vertical) -->
                     <ProgressBar
                         android:id="@+id/pbPrestados"
                         style="?android:attr/progressBarStyleHorizontal"
@@ -439,117 +566,294 @@
                         android:max="100"
                         android:progress="0"/>
 
-                    <TextView
+                    <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/tvPctPrestados"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp"
+                        android:layout_marginTop="8dp"
                         android:text="0% prestados"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold"
+                        android:textColor="@color/text_primary"/>
 
-                    <TextView
+                    <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/tvEstadoDisponibilidad"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
                         android:text="Estado: NORMAL"
                         android:textStyle="bold"
-                        android:textSize="14sp"/>
-
-
-
+                        android:textSize="14sp"
+                        android:textColor="@color/onSurfaceVariant"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-
         </LinearLayout>
-        <TextView
-            android:id="@+id/tvPrestamosGeneroTitulo"
+
+        <!-- Sección: Gráficos -->
+        <com.google.android.material.textview.MaterialTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Géneros\n0 préstamos"
-            android:textAlignment="center"
-            android:textSize="14sp"
+            android:text="Gráficos"
             android:textStyle="bold"
-            android:paddingTop="8dp"
-            android:paddingBottom="6dp"/>
-
-        <com.github.mikephil.charting.charts.PieChart
-            android:id="@+id/chartPrestamosGenero"
-            android:layout_width="match_parent"
-            android:layout_height="380dp"
-            android:layout_marginTop="4dp"
+            android:textSize="16sp"
+            android:textColor="@color/text_primary"
+            android:layout_marginTop="14dp"
             android:layout_marginBottom="8dp"/>
 
-
-        <com.github.mikephil.charting.charts.LineChart
-            android:id="@+id/chartPrestamosMes"
+        <!-- Card: Donut préstamos por género -->
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
-            android:layout_height="260dp"
-            android:layout_marginTop="8dp"/>
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="0dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="@color/outline"
+            android:backgroundTint="@color/surface">
 
-        <com.github.mikephil.charting.charts.BarChart
-            android:id="@+id/chartMultasMes"
-            android:layout_width="match_parent"
-            android:layout_height="260dp"
-            android:layout_marginTop="16dp"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="14dp">
 
-        <com.github.mikephil.charting.charts.PieChart
-            android:id="@+id/chartMultasEstado"
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tvPrestamosGeneroTitulo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Géneros · 0 préstamos"
+                    android:textAlignment="center"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary"
+                    android:paddingBottom="6dp"/>
+
+                <com.github.mikephil.charting.charts.HorizontalBarChart
+                    android:id="@+id/chartPrestamosGenero"
+                    android:layout_width="match_parent"
+                    android:layout_height="320dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginBottom="4dp"/>
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Card: Línea préstamos por mes -->
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
-            android:layout_height="240dp"
-            android:layout_marginTop="16dp"/>
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="0dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="@color/outline"
+            android:backgroundTint="@color/surface">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="14dp">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Préstamos por mes"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary"
+                    android:paddingBottom="6dp"/>
+
+                <com.github.mikephil.charting.charts.LineChart
+                    android:id="@+id/chartPrestamosMes"
+                    android:layout_width="match_parent"
+                    android:layout_height="240dp"/>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Card: Barras multas por mes -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="0dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="@color/outline"
+            android:backgroundTint="@color/surface">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="14dp">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Importe de multas por mes"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary"
+                    android:paddingBottom="6dp"/>
+
+                <com.github.mikephil.charting.charts.BarChart
+                    android:id="@+id/chartMultasMes"
+                    android:layout_width="match_parent"
+                    android:layout_height="240dp"/>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Card: Donut estado multas -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="0dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="@color/outline"
+            android:backgroundTint="@color/surface">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="14dp">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Estado de multas"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary"
+                    android:paddingBottom="6dp"/>
+
+                <com.github.mikephil.charting.charts.PieChart
+                    android:id="@+id/chartMultasEstado"
+                    android:layout_width="match_parent"
+                    android:layout_height="230dp"/>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Rankings -->
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Rankings"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:textColor="@color/text_primary"
+            android:layout_marginTop="14dp"
+            android:layout_marginBottom="8dp"/>
 
         <!-- Top libros -->
-        <TextView
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Libros más prestados"
-            android:textStyle="bold"
-            android:paddingTop="16dp"
-            android:paddingBottom="8dp"/>
+            app:cardCornerRadius="20dp"
+            app:cardElevation="0dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="@color/outline"
+            android:backgroundTint="@color/surface">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvTopLibros"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:nestedScrollingEnabled="false" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="14dp">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Libros más prestados"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary"
+                    android:paddingBottom="8dp"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvTopLibros"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
         <!-- Top usuarios -->
-        <TextView
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Lectores más activos"
-            android:textStyle="bold"
-            android:paddingTop="16dp"
-            android:paddingBottom="8dp"/>
+            android:layout_marginTop="10dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="0dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="@color/outline"
+            android:backgroundTint="@color/surface">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvTopUsuarios"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="14dp">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Lectores más activos"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary"
+                    android:paddingBottom="8dp"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvTopUsuarios"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Top libros multas -->
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:nestedScrollingEnabled="false" />
+            android:layout_marginTop="10dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="0dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="@color/outline"
+            android:backgroundTint="@color/surface">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Libros con más multas"
-            android:textStyle="bold"
-            android:paddingTop="16dp"
-            android:paddingBottom="8dp"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="14dp">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvTopLibrosMultas"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:nestedScrollingEnabled="false" />
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Libros con más multas"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary"
+                    android:paddingBottom="8dp"/>
 
-        <Button
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvTopLibrosMultas"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Export -->
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnExportPdf"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:text="Exportar PDF"
-            android:layout_marginTop="12dp"/>
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:layout_marginTop="14dp"
+            android:backgroundTint="@color/primary"
+            app:rippleColor="@color/salvia_ripple" />
 
     </LinearLayout>
 </ScrollView>

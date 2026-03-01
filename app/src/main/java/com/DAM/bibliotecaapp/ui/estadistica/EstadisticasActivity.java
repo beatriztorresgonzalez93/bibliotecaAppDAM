@@ -8,7 +8,6 @@ import android.graphics.pdf.PdfDocument;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
@@ -30,8 +29,10 @@ import com.DAM.bibliotecaapp.data.pojo.StatsResumen;
 import com.DAM.bibliotecaapp.data.pojo.TopLibro;
 import com.DAM.bibliotecaapp.data.pojo.TopUsuario;
 import com.DAM.bibliotecaapp.ui.base.BaseActivity;
+import android.widget.AutoCompleteTextView;
 
 import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.charts.HorizontalBarChart;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
@@ -51,6 +52,7 @@ import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -58,6 +60,14 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+
+import com.github.mikephil.charting.charts.HorizontalBarChart;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 
 public class EstadisticasActivity extends BaseActivity {
 
@@ -81,10 +91,11 @@ public class EstadisticasActivity extends BaseActivity {
     private TextView tvPctPrestados;
     private TextView tvEstadoDisponibilidad;
 
-    private PieChart chartPrestamosGenero;
+    private com.github.mikephil.charting.charts.HorizontalBarChart chartPrestamosGenero;
     private TextView tvPrestamosGeneroTitulo;
 
-    private android.widget.Spinner spinnerYear;
+    // ✅ Dropdown bonito (AutoCompleteTextView)
+    private AutoCompleteTextView spinnerYear;
     private String selectedYearStr = null; // null = TODOS
 
     // Comparación vs año anterior
@@ -162,6 +173,7 @@ public class EstadisticasActivity extends BaseActivity {
         rvTopLibros.setLayoutManager(new LinearLayoutManager(this));
         rvTopUsuarios.setLayoutManager(new LinearLayoutManager(this));
 
+        // ✅ id spinnerYear ahora es AutoCompleteTextView en XML
         spinnerYear = findViewById(R.id.spinnerYear);
 
         tvComparacionPrestamos = findViewById(R.id.tvComparacionPrestamos);
@@ -187,10 +199,11 @@ public class EstadisticasActivity extends BaseActivity {
             createPdfLauncher.launch(nombre);
         });
 
-        setupYearSpinnerDesdeBD();
+        setupYearDropdownDesdeBD();
     }
 
-    private void setupYearSpinnerDesdeBD() {
+    // ✅ Dropdown moderno con AutoCompleteTextView
+    private void setupYearDropdownDesdeBD() {
         AppDatabase db = AppDatabase.getInstance(getApplicationContext());
 
         executor.execute(() -> {
@@ -203,23 +216,24 @@ public class EstadisticasActivity extends BaseActivity {
             runOnUiThread(() -> {
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(
                         this,
-                        android.R.layout.simple_spinner_dropdown_item,
+                        android.R.layout.simple_dropdown_item_1line,
                         years
                 );
                 spinnerYear.setAdapter(adapter);
 
-                spinnerYear.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                        String value = years.get(position);
-                        selectedYearStr = value.equals("TODOS") ? null : value;
-                        cargarDatos();
-                    }
-                    @Override
-                    public void onNothingSelected(AdapterView<?> parent) {}
+                // Evita escritura manual (solo selección)
+                spinnerYear.setKeyListener(null);
+
+                spinnerYear.setOnItemClickListener((parent, view, position, id) -> {
+                    String value = years.get(position);
+                    selectedYearStr = value.equals("TODOS") ? null : value;
+                    cargarDatos();
                 });
 
-                spinnerYear.setSelection(0);
+                // Selección inicial
+                spinnerYear.setText("TODOS", false);
+                selectedYearStr = null;
+                cargarDatos();
             });
         });
     }
@@ -229,7 +243,6 @@ public class EstadisticasActivity extends BaseActivity {
 
         executor.execute(() -> {
 
-            // Variables para comparación vs año anterior (si aplica)
             int totalPrestamosThis = 0;
             int totalPrestamosPrev = 0;
             double recaudadoThis = 0.0;
@@ -252,14 +265,12 @@ public class EstadisticasActivity extends BaseActivity {
             List<GeneroConteo> porGenero;
             List<TopLibro> topLibrosMultas;
 
-            // Disponibilidad "AHORA" (global)
             int disponibles = db.estadisticasDao().getEjemplaresDisponibles();
             int prestadosAhora = db.estadisticasDao().getEjemplaresPrestadosAhora();
 
             long desde = desdeUltimos12Meses();
 
             if (selectedYearStr == null) {
-                // ====== TODOS (últimos 12 meses reales desde HOY) ======
                 r = db.estadisticasDao().getResumen();
                 topLibros = db.estadisticasDao().getTopLibros(5);
                 topUsuarios = db.estadisticasDao().getTopUsuarios(5);
@@ -276,11 +287,9 @@ public class EstadisticasActivity extends BaseActivity {
                 porGenero = db.estadisticasDao().getPrestamosPorGenero();
                 topLibrosMultas = db.estadisticasDao().getTopLibrosConMultas(5);
 
-                // Rellenar meses vacíos para que SIEMPRE haya 12 (ventana móvil)
                 List<MesConteo> prestamosMes = rellenar12MesesConteoVentanaMovil(prestamosMesRaw);
                 List<MesImporte> multasMes = rellenar12MesesImporteVentanaMovil(multasMesRaw);
 
-                // Guardar datos PDF (TODOS)
                 pdfResumen = r;
                 pdfDineroPendiente = dineroPendiente;
                 pdfDisponibles = disponibles;
@@ -291,7 +300,6 @@ public class EstadisticasActivity extends BaseActivity {
                 pdfYearLabel = "TODOS";
                 pdfPctATiempo = (totalDevueltos == 0) ? 0 : (devueltosSinMulta * 100.0 / totalDevueltos);
 
-                // UI
                 runOnUiThread(() -> pintarUI(r, topLibros, topUsuarios, topLibrosMultas,
                         prestamosMes, multasMes, multasEstado, porGenero,
                         dineroPendiente, totalDevueltos, devueltosSinMulta,
@@ -300,15 +308,12 @@ public class EstadisticasActivity extends BaseActivity {
                 return;
 
             } else {
-                // ====== FILTRADO POR AÑO ======
                 String y = selectedYearStr;
 
                 r = db.estadisticasDao().getResumenPorYear(y);
                 topLibros = db.estadisticasDao().getTopLibrosPorYear(y, 5);
                 topUsuarios = db.estadisticasDao().getTopUsuariosPorYear(y, 5);
 
-                // OJO: tus DAOs "Ultimos12MesesPorYear" seguramente devuelven meses del año
-                // (yyyy-MM). Perfecto. El problema era el relleno (antes era ventana móvil de HOY).
                 long desdeYear = inicioDeYear(y);
                 long hastaYear = inicioDeYearSiguiente(y);
 
@@ -324,7 +329,6 @@ public class EstadisticasActivity extends BaseActivity {
                 porGenero = db.estadisticasDao().getPrestamosPorGeneroPorYear(y);
                 topLibrosMultas = db.estadisticasDao().getTopLibrosConMultasPorYear(y, 5);
 
-                // ====== COMPARACIÓN VS AÑO ANTERIOR ======
                 totalPrestamosThis = db.estadisticasDao().getTotalPrestamosYear(y);
                 recaudadoThis = db.estadisticasDao().getRecaudadoYear(y);
 
@@ -334,11 +338,9 @@ public class EstadisticasActivity extends BaseActivity {
                 totalPrestamosPrev = db.estadisticasDao().getTotalPrestamosYear(prev);
                 recaudadoPrev = db.estadisticasDao().getRecaudadoYear(prev);
 
-                // ✅ RELLENO CORRECTO: 12 meses del año seleccionado (Ene..Dic de y)
                 List<MesConteo> prestamosMes = rellenar12MesesConteoDelYear(y, prestamosMesRaw);
                 List<MesImporte> multasMes = rellenar12MesesImporteDelYear(y, multasMesRaw);
 
-                // Guardar datos PDF (AÑO)
                 pdfResumen = r;
                 pdfDineroPendiente = dineroPendiente;
                 pdfDisponibles = disponibles;
@@ -349,7 +351,6 @@ public class EstadisticasActivity extends BaseActivity {
                 pdfYearLabel = y;
                 pdfPctATiempo = (totalDevueltos == 0) ? 0 : (devueltosSinMulta * 100.0 / totalDevueltos);
 
-                // UI
                 final int fTotalPrestamosThis = totalPrestamosThis;
                 final int fTotalPrestamosPrev = totalPrestamosPrev;
                 final double fRecaudadoThis = recaudadoThis;
@@ -365,9 +366,6 @@ public class EstadisticasActivity extends BaseActivity {
         });
     }
 
-    /**
-     * Centralizamos la actualización de UI para no duplicar código.
-     */
     private void pintarUI(
             StatsResumen r,
             List<TopLibro> topLibros,
@@ -389,7 +387,6 @@ public class EstadisticasActivity extends BaseActivity {
             int prevYearInt,
             boolean esTodos
     ) {
-        // Resumen
         tvUsuarios.setText(String.valueOf(r.totalUsuarios));
         tvLibros.setText(String.valueOf(r.totalLibros));
         tvEjemplares.setText(String.valueOf(r.totalEjemplares));
@@ -408,7 +405,6 @@ public class EstadisticasActivity extends BaseActivity {
         double pctATiempo = (totalDevueltos == 0) ? 0 : (devueltosSinMulta * 100.0 / totalDevueltos);
         tvPctATiempo.setText(String.format(Locale.getDefault(), "%.0f %%", pctATiempo));
 
-        // Disponibilidad (global "ahora")
         tvDisponibles.setText(String.valueOf(disponibles));
         tvPrestadosAhora.setText(String.valueOf(prestadosAhora));
         int total = disponibles + prestadosAhora;
@@ -432,24 +428,21 @@ public class EstadisticasActivity extends BaseActivity {
             tvEstadoDisponibilidad.setTextColor(Color.parseColor("#D32F2F"));
         }
 
-        // Colores de texto
         tvMultasPend.setTextColor(Color.parseColor("#D32F2F"));
         tvMultasPag.setTextColor(Color.parseColor("#388E3C"));
         tvMultasCond.setTextColor(Color.parseColor("#1976D2"));
         tvPendiente.setTextColor(Color.parseColor("#D32F2F"));
 
-        // Listas
         rvTopLibros.setAdapter(new TopLibrosAdapter(topLibros));
         rvTopUsuarios.setAdapter(new TopUsuariosAdapter(topUsuarios));
         rvTopLibrosMultas.setAdapter(new TopLibrosAdapter(topLibrosMultas));
 
-        // Charts
         pintarLineaPrestamos(prestamosMes);
         pintarBarrasMultas(multasMes);
         pintarTartaMultasEstado(multasEstado);
-        pintarTartaPrestamosGenero(porGenero);
+        pintarBarrasPrestamosGeneroHorizontal(porGenero);
 
-        // Comparación
+
         if (esTodos) {
             tvComparacionPrestamos.setText("Comparación: —");
             tvComparacionPrestamos.setTextColor(Color.parseColor("#666666"));
@@ -467,9 +460,6 @@ public class EstadisticasActivity extends BaseActivity {
         }
     }
 
-    // ---------------------------
-    // Comparación (texto + color)
-    // ---------------------------
     private static class ComparacionText {
         String text;
         int color;
@@ -636,12 +626,13 @@ public class EstadisticasActivity extends BaseActivity {
         chartMultasEstado.invalidate();
     }
 
-    private void pintarTartaPrestamosGenero(List<GeneroConteo> data) {
+    private void pintarBarrasPrestamosGeneroHorizontal(List<GeneroConteo> data) {
         if (chartPrestamosGenero == null) return;
 
+        chartPrestamosGenero.clear();
+        chartPrestamosGenero.setNoDataText("Sin datos");
+
         if (data == null || data.isEmpty()) {
-            chartPrestamosGenero.clear();
-            chartPrestamosGenero.setNoDataText("Sin datos");
             chartPrestamosGenero.invalidate();
             if (tvPrestamosGeneroTitulo != null) {
                 tvPrestamosGeneroTitulo.setText("Géneros\n0 préstamos");
@@ -651,72 +642,173 @@ public class EstadisticasActivity extends BaseActivity {
 
         final int TOP = 6;
 
-        ArrayList<PieEntry> entries = new ArrayList<>();
+        // ===== 1) Ordenar desc + total =====
+        List<GeneroConteo> sorted = new ArrayList<>();
+        for (GeneroConteo g : data) if (g != null) sorted.add(g);
+        Collections.sort(sorted, (a, b) -> Integer.compare(b.total, a.total));
+
+        int total = 0;
+        for (GeneroConteo g : sorted) total += g.total;
+
+        // ===== 2) TOP + Otros =====
+        List<String> labels = new ArrayList<>();
+        List<com.github.mikephil.charting.data.BarEntry> entries = new ArrayList<>();
+
         int otros = 0;
-        int totalPrestamos = 0;
+        int idx = 0;
 
-        for (int i = 0; i < data.size(); i++) {
-            GeneroConteo g = data.get(i);
-            if (g == null) continue;
-
-            totalPrestamos += g.total;
-
-            if (i < TOP) entries.add(new PieEntry(g.total, g.genero));
-            else otros += g.total;
+        for (int i = 0; i < sorted.size(); i++) {
+            GeneroConteo g = sorted.get(i);
+            if (i < TOP) {
+                labels.add(safeLabelMultiLine(g.genero));
+                entries.add(new com.github.mikephil.charting.data.BarEntry(idx, g.total));
+                idx++;
+            } else {
+                otros += g.total;
+            }
         }
-        if (otros > 0) entries.add(new PieEntry(otros, "Otros"));
 
-        ArrayList<Integer> colores = new ArrayList<>();
-        colores.add(Color.parseColor("#1E88E5"));
-        colores.add(Color.parseColor("#43A047"));
-        colores.add(Color.parseColor("#FB8C00"));
-        colores.add(Color.parseColor("#8E24AA"));
-        colores.add(Color.parseColor("#E53935"));
-        colores.add(Color.parseColor("#00897B"));
-        colores.add(Color.parseColor("#6D4C41"));
-        colores.add(Color.parseColor("#3949AB"));
+        if (otros > 0) {
+            labels.add("Otros");
+            entries.add(new com.github.mikephil.charting.data.BarEntry(idx, otros));
+        }
 
-        PieDataSet set = new PieDataSet(entries, "");
-        set.setColors(colores);
+        // ===== 3) Paleta TFG (verde salvia) =====
+        // - 1º color: salvia (tu identidad)
+        // - resto: tonos complementarios suaves (dashboard)
+        ArrayList<Integer> palette = new ArrayList<>();
+        palette.add(Color.parseColor("#5C8D89")); // salvia principal
+        palette.add(Color.parseColor("#3E6B68")); // salvia oscura
+        palette.add(Color.parseColor("#8FB9B6")); // salvia clara
+        palette.add(Color.parseColor("#2F6F9F")); // azul sobrio
+        palette.add(Color.parseColor("#7A5C9B")); // morado suave
+        palette.add(Color.parseColor("#C97A3D")); // naranja suave
+        palette.add(Color.parseColor("#B54A4A")); // rojo suave
+        palette.add(Color.parseColor("#6B7280")); // gris neutro
+
+        ArrayList<Integer> colors = new ArrayList<>();
+        for (int i = 0; i < entries.size(); i++) colors.add(palette.get(i % palette.size()));
+
+        com.github.mikephil.charting.data.BarDataSet set =
+                new com.github.mikephil.charting.data.BarDataSet(entries, "");
+        set.setColors(colors);
+
+        // Valores al final de cada barra
         set.setDrawValues(true);
-        set.setValueTextColor(Color.WHITE);
-        set.setValueTextSize(12f);
+        set.setValueTextSize(11f);
+        set.setValueTextColor(Color.parseColor("#1F2937"));
+        set.setValueFormatter(new com.github.mikephil.charting.formatter.ValueFormatter() {
+            @Override
+            public String getBarLabel(com.github.mikephil.charting.data.BarEntry e) {
+                return String.format(Locale.getDefault(), "%,.0f", e.getY());
+            }
+        });
 
-        PieData pieData = new PieData(set);
-        chartPrestamosGenero.setData(pieData);
+        // Espaciado entre barras (evita que se vea “apretado”)
+        set.setBarShadowColor(Color.TRANSPARENT);
+        set.setHighLightAlpha(0);
 
-        chartPrestamosGenero.setDrawCenterText(false);
-        chartPrestamosGenero.setCenterText("");
-        chartPrestamosGenero.setDrawEntryLabels(false);
+        com.github.mikephil.charting.data.BarData barData =
+                new com.github.mikephil.charting.data.BarData(set);
 
-        chartPrestamosGenero.setDrawHoleEnabled(true);
-        chartPrestamosGenero.setHoleRadius(52f);
-        chartPrestamosGenero.setTransparentCircleRadius(56f);
-        chartPrestamosGenero.setHoleColor(Color.WHITE);
+        // Grosor de barra (con 280dp y 7 barras se ve muy bien)
+        barData.setBarWidth(0.50f);
 
+        chartPrestamosGenero.setData(barData);
+
+        // ===== 4) Estilo general (dashboard limpio) =====
         chartPrestamosGenero.getDescription().setEnabled(false);
-        chartPrestamosGenero.setRotationEnabled(false);
+        chartPrestamosGenero.getLegend().setEnabled(false);
+        chartPrestamosGenero.setDrawGridBackground(false);
 
-        Legend legend = chartPrestamosGenero.getLegend();
-        legend.setEnabled(true);
-        legend.setDrawInside(false);
-        legend.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
-        legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.LEFT);
-        legend.setOrientation(Legend.LegendOrientation.VERTICAL);
-        legend.setTextSize(11f);
-        legend.setFormSize(11f);
-        legend.setYEntrySpace(6f);
+        chartPrestamosGenero.setPinchZoom(false);
+        chartPrestamosGenero.setScaleEnabled(false);
+        chartPrestamosGenero.setDoubleTapToZoomEnabled(false);
 
-        chartPrestamosGenero.setExtraBottomOffset(110f);
-        chartPrestamosGenero.animateY(900);
+        chartPrestamosGenero.setHighlightPerTapEnabled(false);
+        chartPrestamosGenero.setHighlightPerDragEnabled(false);
 
-        chartPrestamosGenero.setVisibility(View.VISIBLE);
-        chartPrestamosGenero.requestLayout();
+        // valores fuera (a la derecha)
+        chartPrestamosGenero.setDrawValueAboveBar(true);
+
+        // ✅ CLAVE: mover TODO a la derecha para que NO se corten los géneros
+        // left, top, right, bottom
+        chartPrestamosGenero.setExtraOffsets(90f, 10f, 26f, 10f);
+
+        // ===== 5) XAxis (categorías / géneros) =====
+        com.github.mikephil.charting.components.XAxis x = chartPrestamosGenero.getXAxis();
+        x.setPosition(com.github.mikephil.charting.components.XAxis.XAxisPosition.BOTTOM);
+        x.setDrawGridLines(false);
+
+        x.setGranularity(1f);
+        x.setGranularityEnabled(true);
+
+        x.setTextSize(9f);
+        x.setTextColor(Color.parseColor("#111827"));
+        x.setLabelCount(labels.size(), false);
+
+        // ✅ separa un poco el texto del eje (para que no “roce” el chart)
+        x.setXOffset(10f);
+        x.setYOffset(2f);
+
+        x.setValueFormatter(new com.github.mikephil.charting.formatter.ValueFormatter() {
+            @Override
+            public String getFormattedValue(float value) {
+                int i = Math.round(value);
+                if (i >= 0 && i < labels.size()) return labels.get(i);
+                return "";
+            }
+        });
+
+        // Rango del eje de categorías
+        x.setAxisMinimum(-0.5f);
+        x.setAxisMaximum(labels.size() - 0.5f);
+
+        // ===== 6) Eje de valores (préstamos) =====
+        com.github.mikephil.charting.components.YAxis left = chartPrestamosGenero.getAxisLeft();
+        com.github.mikephil.charting.components.YAxis right = chartPrestamosGenero.getAxisRight();
+
+        left.setAxisMinimum(0f);
+        left.setGranularity(1f);
+        left.setGranularityEnabled(true);
+
+        // grid suave para lectura (estilo dashboard)
+        left.setDrawGridLines(true);
+        left.setGridLineWidth(0.7f);
+        left.setTextSize(11f);
+        left.setTextColor(Color.parseColor("#374151"));
+
+        // margen arriba para que no se corte el máximo
+        left.setSpaceTop(12f);
+
+        right.setEnabled(false);
+
+        // ===== 7) Animación + refresh =====
+        chartPrestamosGenero.animateY(600);
         chartPrestamosGenero.invalidate();
 
         if (tvPrestamosGeneroTitulo != null) {
-            tvPrestamosGeneroTitulo.setText("Géneros\n" + totalPrestamos + " préstamos");
+            tvPrestamosGeneroTitulo.setText("Géneros\n" + total + " préstamos");
         }
+    }
+
+    /**
+     * Parte labels largos en 2 líneas para evitar recorte/solape.
+     */
+    private String safeLabelMultiLine(String s) {
+        if (s == null) return "";
+        s = s.trim();
+        if (s.length() <= 18) return s;
+
+        int mid = Math.min(18, s.length() - 1);
+        int cut = s.lastIndexOf(' ', mid);
+        if (cut < 8) cut = mid;
+
+        String a = s.substring(0, cut).trim();
+        String b = s.substring(cut).trim();
+
+        if (b.length() > 18) b = b.substring(0, 18).trim() + "…";
+        return a + "\n" + b;
     }
 
     // ---------------------------
@@ -743,9 +835,6 @@ public class EstadisticasActivity extends BaseActivity {
         return cal.getTimeInMillis();
     }
 
-    /**
-     * Ventana móvil: últimos 12 meses desde "hoy" (para TODOS).
-     */
     private List<MesConteo> rellenar12MesesConteoVentanaMovil(List<MesConteo> originales) {
         Map<String, Integer> map = new HashMap<>();
         if (originales != null) {
@@ -794,9 +883,6 @@ public class EstadisticasActivity extends BaseActivity {
         return out;
     }
 
-    /**
-     * ✅ Año seleccionado: siempre 12 meses de ese año (ene..dic), con claves yyyy-MM.
-     */
     private List<MesConteo> rellenar12MesesConteoDelYear(String year, List<MesConteo> originales) {
         Map<String, Integer> map = new HashMap<>();
         if (originales != null) {
