@@ -7,15 +7,17 @@
     android:layout_height="match_parent"
     android:fillViewport="true"
     android:overScrollMode="never"
+    android:background="#F7FAF9"
     android:paddingStart="20dp"
     android:paddingEnd="20dp"
     android:paddingTop="16dp"
-    android:paddingBottom="16dp"
+    android:paddingBottom="20dp"
     tools:context=".ui.main.MainActivity">
 
+    <!-- 👇 CLAVE: height="match_parent" para que el spacer empuje el botón abajo -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <!-- ===== Header ===== -->
         <TextView
@@ -23,37 +25,77 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Biblioteca"
-            android:textSize="26sp"
+            android:textSize="28sp"
             android:textStyle="bold"
             android:textColor="#111827"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
+        <!-- “Pill” de modo -->
         <TextView
             android:id="@+id/tvSubtitulo"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
+            android:layout_marginTop="10dp"
             android:text="Modo Bibliotecario"
-            android:textSize="14sp"
-            android:textColor="#6B7280"
+            android:textSize="13sp"
+            android:textColor="#356B66"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:background="@android:color/transparent"
             app:layout_constraintTop_toBottomOf="@id/tvTitulo"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/tvSaludo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hola"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="#111827"
+            android:layout_marginTop="6dp"
+            app:layout_constraintTop_toBottomOf="@id/tvSubtitulo"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <Space
+            android:id="@+id/spaceSaludo"
+            android:layout_width="0dp"
+            android:layout_height="12dp"
+            app:layout_constraintTop_toBottomOf="@id/tvSaludo"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardModo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="999dp"
+            app:cardElevation="0dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="#DCE7E5"
+            android:backgroundTint="#EAF3F1"
+            app:layout_constraintTop_toTopOf="@id/tvSubtitulo"
+            app:layout_constraintTop_toBottomOf="@id/tvSaludo"
+            app:layout_constraintStart_toStartOf="@id/tvSubtitulo"
+            app:layout_constraintEnd_toEndOf="@id/tvSubtitulo" />
 
         <!-- ===== Resumen (Dashboard Card) ===== -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardResumen"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
-            app:cardCornerRadius="18dp"
+            android:layout_marginTop="16dp"
+            app:cardCornerRadius="20dp"
             app:cardUseCompatPadding="true"
             app:cardElevation="2dp"
             app:strokeWidth="1dp"
             app:strokeColor="#E5E7EB"
-            app:layout_constraintTop_toBottomOf="@id/tvSubtitulo"
+            android:backgroundTint="#FFFFFF"
+            app:layout_constraintTop_toBottomOf="@id/spaceSaludo"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
@@ -79,7 +121,6 @@
                     android:textSize="13sp"
                     android:textColor="#6B7280" />
 
-                <!-- mini KPIs (placeholders; luego los puedes rellenar con datos reales) -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -87,7 +128,6 @@
                     android:orientation="horizontal"
                     android:weightSum="3">
 
-                    <!-- Préstamos -->
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -111,7 +151,6 @@
                             android:textColor="#111827" />
                     </LinearLayout>
 
-                    <!-- Vencidos -->
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -135,7 +174,6 @@
                             android:textColor="#111827" />
                     </LinearLayout>
 
-                    <!-- Multas -->
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -160,7 +198,6 @@
                     </LinearLayout>
 
                 </LinearLayout>
-
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
@@ -176,47 +213,87 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
+            <!-- ======================
+                 TEMPLATE CARD VERTICAL (para grid)
+                 ====================== -->
+
             <!-- Libros -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/btnLibros"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:minHeight="150dp"
                 android:layout_margin="6dp"
-                app:cardCornerRadius="18dp"
+                app:cardCornerRadius="20dp"
                 app:cardElevation="2dp"
                 app:cardUseCompatPadding="true"
                 app:strokeWidth="1dp"
                 app:strokeColor="#E5E7EB"
+                android:backgroundTint="#FFFFFF"
                 app:layout_columnWeight="1">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="16dp"
+                    android:gravity="center_horizontal">
 
-                    <ImageView
-                        android:layout_width="26dp"
-                        android:layout_height="26dp"
-                        android:src="@drawable/ic_books_24"
-                        android:contentDescription="@null" />
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        app:cardCornerRadius="24dp"
+                        app:cardElevation="0dp"
+                        app:strokeWidth="1dp"
+                        app:strokeColor="#DCE7E5"
+                        android:backgroundTint="#EAF3F1">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:padding="12dp"
+                            app:srcCompat="@drawable/ic_books_24"
+                            app:tint="@color/primary_dark"
+                            android:contentDescription="@null" />
+
+
+
+                    </com.google.android.material.card.MaterialCardView>
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:text="Libros"
                         android:textStyle="bold"
                         android:textSize="16sp"
-                        android:textColor="#111827" />
+                        android:textColor="#111827"
+                        android:gravity="center"
+                        android:maxLines="1"
+                        android:ellipsize="end" />
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
                         android:text="Catálogo y ejemplares"
                         android:textSize="12sp"
-                        android:textColor="#6B7280" />
+                        android:textColor="#6B7280"
+                        android:gravity="center"
+                        android:maxLines="2"
+                        android:ellipsize="end" />
+
+                    <ImageView
+                        android:id="@+id/chevronLibros"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_marginTop="8dp"
+                        app:srcCompat="@drawable/ic_chevron_right_24"
+                        app:tint="@color/primary_dark"
+                        android:alpha="0.6"
+                        android:visibility="gone"
+                        android:contentDescription="@null" />
+
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -225,42 +302,63 @@
                 android:id="@+id/btnPrestamos"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:minHeight="150dp"
                 android:layout_margin="6dp"
-                app:cardCornerRadius="18dp"
+                app:cardCornerRadius="20dp"
                 app:cardElevation="2dp"
                 app:cardUseCompatPadding="true"
                 app:strokeWidth="1dp"
                 app:strokeColor="#E5E7EB"
+                android:backgroundTint="#FFFFFF"
                 app:layout_columnWeight="1">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="16dp"
+                    android:gravity="center_horizontal">
 
-                    <ImageView
-                        android:layout_width="26dp"
-                        android:layout_height="26dp"
-                        android:src="@drawable/ic_loans_24"
-                        android:contentDescription="@null" />
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        app:cardCornerRadius="24dp"
+                        app:cardElevation="0dp"
+                        app:strokeWidth="1dp"
+                        app:strokeColor="#DCE7E5"
+                        android:backgroundTint="#EAF3F1">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:padding="12dp"
+                            app:srcCompat="@drawable/ic_loans_24"
+                            app:tint="@color/primary_dark"
+                            android:contentDescription="@null" />
+                    </com.google.android.material.card.MaterialCardView>
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:text="Préstamos"
                         android:textStyle="bold"
                         android:textSize="16sp"
-                        android:textColor="#111827" />
+                        android:textColor="#111827"
+                        android:gravity="center"
+                        android:maxLines="1"
+                        android:ellipsize="end" />
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
                         android:text="Gestionar activos/vencidos"
                         android:textSize="12sp"
-                        android:textColor="#6B7280" />
+                        android:textColor="#6B7280"
+                        android:gravity="center"
+                        android:maxLines="2"
+                        android:ellipsize="end" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -269,42 +367,78 @@
                 android:id="@+id/btnUsuarios"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:minHeight="150dp"
                 android:layout_margin="6dp"
-                app:cardCornerRadius="18dp"
+                app:cardCornerRadius="20dp"
                 app:cardElevation="2dp"
                 app:cardUseCompatPadding="true"
                 app:strokeWidth="1dp"
                 app:strokeColor="#E5E7EB"
+                android:backgroundTint="#FFFFFF"
                 app:layout_columnWeight="1">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="16dp"
+                    android:gravity="center_horizontal">
 
-                    <ImageView
-                        android:layout_width="26dp"
-                        android:layout_height="26dp"
-                        android:src="@drawable/ic_users_24"
-                        android:contentDescription="@null" />
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        app:cardCornerRadius="24dp"
+                        app:cardElevation="0dp"
+                        app:strokeWidth="1dp"
+                        app:strokeColor="#DCE7E5"
+                        android:backgroundTint="#EAF3F1">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:padding="12dp"
+                            app:srcCompat="@drawable/ic_users_24"
+                            app:tint="@color/primary_dark"
+                            android:contentDescription="@null" />
+
+
+
+                    </com.google.android.material.card.MaterialCardView>
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:text="Usuarios"
                         android:textStyle="bold"
                         android:textSize="16sp"
-                        android:textColor="#111827" />
+                        android:textColor="#111827"
+                        android:gravity="center"
+                        android:maxLines="1"
+                        android:ellipsize="end" />
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
                         android:text="Perfiles y actividad"
                         android:textSize="12sp"
-                        android:textColor="#6B7280" />
+                        android:textColor="#6B7280"
+                        android:gravity="center"
+                        android:maxLines="2"
+                        android:ellipsize="end" />
+
+                    <ImageView
+                        android:id="@+id/chevronUsuarios"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_marginTop="8dp"
+                        app:srcCompat="@drawable/ic_chevron_right_24"
+                        app:tint="@color/primary_dark"
+                        android:alpha="0.6"
+                        android:visibility="gone"
+                        android:contentDescription="@null" />
+
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -313,86 +447,128 @@
                 android:id="@+id/btnMultas"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:minHeight="150dp"
                 android:layout_margin="6dp"
-                app:cardCornerRadius="18dp"
+                app:cardCornerRadius="20dp"
                 app:cardElevation="2dp"
                 app:cardUseCompatPadding="true"
                 app:strokeWidth="1dp"
                 app:strokeColor="#E5E7EB"
+                android:backgroundTint="#FFFFFF"
                 app:layout_columnWeight="1">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="16dp"
+                    android:gravity="center_horizontal">
 
-                    <ImageView
-                        android:layout_width="26dp"
-                        android:layout_height="26dp"
-                        android:src="@drawable/ic_fines_24"
-                        android:contentDescription="@null" />
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        app:cardCornerRadius="24dp"
+                        app:cardElevation="0dp"
+                        app:strokeWidth="1dp"
+                        app:strokeColor="#DCE7E5"
+                        android:backgroundTint="#EAF3F1">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:padding="12dp"
+                            app:srcCompat="@drawable/ic_fines_24"
+                            app:tint="@color/chip_danger_text"
+                            android:contentDescription="@null" />
+                    </com.google.android.material.card.MaterialCardView>
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:text="Multas"
                         android:textStyle="bold"
                         android:textSize="16sp"
-                        android:textColor="#111827" />
+                        android:textColor="#111827"
+                        android:gravity="center"
+                        android:maxLines="1"
+                        android:ellipsize="end" />
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
                         android:text="Pendientes y pagadas"
                         android:textSize="12sp"
-                        android:textColor="#6B7280" />
+                        android:textColor="#6B7280"
+                        android:gravity="center"
+                        android:maxLines="2"
+                        android:ellipsize="end" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Historial devoluciones -->
+            <!-- Historial -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/btnDevolucion"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:minHeight="150dp"
                 android:layout_margin="6dp"
-                app:cardCornerRadius="18dp"
+                app:cardCornerRadius="20dp"
                 app:cardElevation="2dp"
                 app:cardUseCompatPadding="true"
                 app:strokeWidth="1dp"
                 app:strokeColor="#E5E7EB"
+                android:backgroundTint="#FFFFFF"
                 app:layout_columnWeight="1">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="16dp"
+                    android:gravity="center_horizontal">
 
-                    <ImageView
-                        android:layout_width="26dp"
-                        android:layout_height="26dp"
-                        android:src="@drawable/ic_history_24"
-                        android:contentDescription="@null" />
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        app:cardCornerRadius="24dp"
+                        app:cardElevation="0dp"
+                        app:strokeWidth="1dp"
+                        app:strokeColor="#DCE7E5"
+                        android:backgroundTint="#EAF3F1">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:padding="12dp"
+                            app:srcCompat="@drawable/ic_history_24"
+                            app:tint="@color/primary_dark"
+                            android:contentDescription="@null" />
+                    </com.google.android.material.card.MaterialCardView>
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:text="Historial"
                         android:textStyle="bold"
                         android:textSize="16sp"
-                        android:textColor="#111827" />
+                        android:textColor="#111827"
+                        android:gravity="center"
+                        android:maxLines="1"
+                        android:ellipsize="end" />
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
                         android:text="Devoluciones registradas"
                         android:textSize="12sp"
-                        android:textColor="#6B7280" />
+                        android:textColor="#6B7280"
+                        android:gravity="center"
+                        android:maxLines="2"
+                        android:ellipsize="end" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -401,42 +577,63 @@
                 android:id="@+id/btnEstadisticas"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:minHeight="150dp"
                 android:layout_margin="6dp"
-                app:cardCornerRadius="18dp"
+                app:cardCornerRadius="20dp"
                 app:cardElevation="2dp"
                 app:cardUseCompatPadding="true"
                 app:strokeWidth="1dp"
                 app:strokeColor="#E5E7EB"
+                android:backgroundTint="#FFFFFF"
                 app:layout_columnWeight="1">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="16dp"
+                    android:gravity="center_horizontal">
 
-                    <ImageView
-                        android:layout_width="26dp"
-                        android:layout_height="26dp"
-                        android:src="@drawable/ic_stats_24"
-                        android:contentDescription="@null" />
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        app:cardCornerRadius="24dp"
+                        app:cardElevation="0dp"
+                        app:strokeWidth="1dp"
+                        app:strokeColor="#DCE7E5"
+                        android:backgroundTint="#EAF3F1">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:padding="12dp"
+                            app:srcCompat="@drawable/ic_stats_24"
+                            app:tint="@color/primary_dark"
+                            android:contentDescription="@null" />
+                    </com.google.android.material.card.MaterialCardView>
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:text="Estadísticas"
                         android:textStyle="bold"
                         android:textSize="16sp"
-                        android:textColor="#111827" />
+                        android:textColor="#111827"
+                        android:gravity="center"
+                        android:maxLines="1"
+                        android:ellipsize="end" />
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
                         android:text="KPIs y gráficos"
                         android:textSize="12sp"
-                        android:textColor="#6B7280" />
+                        android:textColor="#6B7280"
+                        android:gravity="center"
+                        android:maxLines="2"
+                        android:ellipsize="end" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -449,7 +646,7 @@
             android:layout_height="wrap_content"
             android:text="+ Añadir bibliotecario"
             android:textSize="14sp"
-            android:textColor="#6B7280"
+            android:textColor="#356B66"
             android:textStyle="bold"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
@@ -461,18 +658,228 @@
             app:layout_constraintTop_toBottomOf="@id/gridMenu"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="6dp" />
+            android:layout_marginTop="8dp" />
 
-        <!-- Logout -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnLogout"
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardActividadLector"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="14dp"
+            app:cardCornerRadius="20dp"
+            app:cardUseCompatPadding="true"
+            app:cardElevation="2dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="#E5E7EB"
+            android:backgroundTint="#FFFFFF"
+            app:layout_constraintTop_toBottomOf="@id/gridMenu"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <!-- Header con icono -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        app:cardCornerRadius="18dp"
+                        app:cardElevation="0dp"
+                        app:strokeWidth="1dp"
+                        app:strokeColor="#DCE7E5"
+                        android:backgroundTint="#EAF3F1">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:padding="8dp"
+                            app:srcCompat="@drawable/ic_activity_24"
+                            app:tint="@color/primary_dark"
+                            android:contentDescription="@null" />
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Mi actividad"
+                            android:textStyle="bold"
+                            android:textSize="16sp"
+                            android:textColor="#111827" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text="Resumen rápido de tu cuenta"
+                            android:textSize="13sp"
+                            android:textColor="#6B7280" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <!-- KPIs con icono -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <!-- Préstamos -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            app:cardCornerRadius="18dp"
+                            app:cardElevation="0dp"
+                            app:strokeWidth="1dp"
+                            app:strokeColor="#DCE7E5"
+                            android:backgroundTint="#EAF3F1">
+
+                            <ImageView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:padding="8dp"
+                                app:srcCompat="@drawable/ic_books_24"
+                                app:tint="@color/primary_dark"
+                                android:contentDescription="@null" />
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Préstamos activos"
+                                android:textSize="12sp"
+                                android:textColor="#6B7280" />
+
+                            <TextView
+                                android:id="@+id/tvLectorPrestamosActivos"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="—"
+                                android:textStyle="bold"
+                                android:textSize="20sp"
+                                android:textColor="#111827" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!-- Multas -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            app:cardCornerRadius="18dp"
+                            app:cardElevation="0dp"
+                            app:strokeWidth="1dp"
+                            app:strokeColor="#DCE7E5"
+                            android:backgroundTint="#EAF3F1">
+
+                            <ImageView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:padding="8dp"
+                                app:srcCompat="@drawable/ic_fines_24"
+                                app:tint="@color/primary_dark"
+                                android:contentDescription="@null" />
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Multas pendientes"
+                                android:textSize="12sp"
+                                android:textColor="#6B7280" />
+
+                            <TextView
+                                android:id="@+id/tvLectorMultasPendientes"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="—"
+                                android:textStyle="bold"
+                                android:textSize="20sp"
+                                android:textColor="#111827" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <!-- CTA suave -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="Puedes ver el detalle en tu perfil."
+                    android:textSize="12sp"
+                    android:textColor="#356B66" />
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+
+        <!-- ✅ Spacer que empuja el botón al fondo cuando hay poco contenido -->
+        <Space
+            android:id="@+id/spacerPushBottom"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@id/cardActividadLector"
+            app:layout_constraintBottom_toTopOf="@id/btnLogout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- Logout (tonal) -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnLogout"
+            android:layout_width="0dp"
+            android:layout_height="52dp"
+            android:layout_marginTop="14dp"
+            android:layout_marginBottom="10dp"
             android:text="Cerrar sesión"
-            android:padding="14dp"
-            app:cornerRadius="16dp"
-            app:layout_constraintTop_toBottomOf="@id/btnAddBibliotecario"
+            android:textAllCaps="false"
+            android:textSize="15sp"
+            app:cornerRadius="18dp"
+            android:backgroundTint="#EAF3F1"
+            android:textColor="#356B66"
+            app:rippleColor="#DCE7E5"
+            app:layout_constraintTop_toBottomOf="@id/spacerPushBottom"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" />

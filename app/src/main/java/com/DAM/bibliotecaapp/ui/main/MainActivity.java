@@ -37,6 +37,16 @@ public class MainActivity extends BaseActivity {
     private TextView tvSubtitulo;
     private View cardResumen;
 
+    private TextView tvLectorPrestamosActivos, tvLectorMultasPendientes;
+    private View cardActividadLector;
+    private final java.util.concurrent.ExecutorService dbExecutor =
+            java.util.concurrent.Executors.newSingleThreadExecutor();
+
+    private View chevronLibros;
+    private View chevronUsuarios;
+
+    private TextView tvSaludo;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +89,15 @@ public class MainActivity extends BaseActivity {
         tvSubtitulo = findViewById(R.id.tvSubtitulo);
 
         cardResumen = findViewById(R.id.cardResumen);
+
+        tvLectorPrestamosActivos = findViewById(R.id.tvLectorPrestamosActivos);
+        tvLectorMultasPendientes = findViewById(R.id.tvLectorMultasPendientes);
+        cardActividadLector = findViewById(R.id.cardActividadLector);
+
+        chevronLibros = findViewById(R.id.chevronLibros);
+        chevronUsuarios = findViewById(R.id.chevronUsuarios);
+
+        tvSaludo = findViewById(R.id.tvSaludo);
 
 
         // Clicks
@@ -140,9 +159,26 @@ public class MainActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         aplicarUIRol();
+        cargarSaludo();
+        cargarResumenLectorSiToca();
     }
 
     private void aplicarUIRol() {
+
+        SessionManager sm = new SessionManager(this);
+
+        if (sm.isLector()) {
+
+            // Mostrar chevrons en lector
+            chevronLibros.setVisibility(View.VISIBLE);
+            chevronUsuarios.setVisibility(View.VISIBLE);
+
+        } else {
+
+            // Ocultar en bibliotecario
+            chevronLibros.setVisibility(View.GONE);
+            chevronUsuarios.setVisibility(View.GONE);
+    }
         SessionManager session = new SessionManager(this);
         boolean isAdmin = session.isBibliotecario();
 
@@ -194,6 +230,75 @@ public class MainActivity extends BaseActivity {
                 }
             });
         });
+    }
+
+    private void cargarResumenLectorSiToca() {
+        // Aquí usa tu forma real de detectar rol y obtener id
+        // En tu TFG normalmente lo guardas en SharedPreferences / SessionManager
+        SessionManager sm = new SessionManager(this);
+
+        if (!sm.isLector()) {   // si es bibliotecario, oculta la card
+            if (cardActividadLector != null) cardActividadLector.setVisibility(View.GONE);
+            return;
+        }
+
+        long idUsuario = sm.getUsuarioId(); // <- tu método real
+        if (idUsuario <= 0) {
+            // si no hay id, no podemos consultar
+            if (tvLectorPrestamosActivos != null) tvLectorPrestamosActivos.setText("—");
+            if (tvLectorMultasPendientes != null) tvLectorMultasPendientes.setText("—");
+            return;
+        }
+
+        if (cardActividadLector != null) cardActividadLector.setVisibility(View.VISIBLE);
+
+        // placeholder mientras carga
+        if (tvLectorPrestamosActivos != null) tvLectorPrestamosActivos.setText("…");
+        if (tvLectorMultasPendientes != null) tvLectorMultasPendientes.setText("…");
+
+        dbExecutor.execute(() -> {
+            AppDatabase db = AppDatabase.getInstance(getApplicationContext());
+
+            int prestamosActivos = db.prestamoDao().countActivosOVencidosPorUsuario(idUsuario);
+            int multasPendientes = db.multaDao().countPendientesPorUsuario(idUsuario);
+
+            runOnUiThread(() -> {
+                if (tvLectorPrestamosActivos != null) {
+                    tvLectorPrestamosActivos.setText(String.valueOf(prestamosActivos));
+                }
+                if (tvLectorMultasPendientes != null) {
+                    tvLectorMultasPendientes.setText(String.valueOf(multasPendientes));
+                }
+            });
+        });
+    }
+
+    private void cargarSaludo() {
+
+        SessionManager sm = new SessionManager(this);
+
+        if (tvSaludo == null) return; // seguridad por si acaso
+
+        if (sm.isLector()) {
+
+            String nombre = sm.getNombre();
+
+            if (nombre != null && !nombre.trim().isEmpty()) {
+
+                // Solo primer nombre
+                String primerNombre = nombre.trim().split(" ")[0];
+
+                tvSaludo.setText("¡Hola, " + primerNombre + "! Bienvenida 🎉");
+
+            } else {
+
+                tvSaludo.setText("¡Hola! Bienvenida 🎉");
+            }
+
+        } else if (sm.isBibliotecario()) {
+
+            tvSaludo.setText("Panel de gestión");
+        }
     }
 
 

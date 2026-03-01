@@ -12,19 +12,29 @@ public class SessionManager {
     private static final String KEY_USUARIO_ID = "usuario_id";
     private static final String KEY_BIBLIO_ID = "bibliotecario_id";
 
+    // ✅ NUEVO
+    private static final String KEY_NOMBRE = "nombre";
+
     private final SharedPreferences prefs;
 
     public SessionManager(Context ctx) {
         prefs = ctx.getApplicationContext().getSharedPreferences(PREFS, Context.MODE_PRIVATE);
     }
 
-    public void loginLector(long usuarioId) {
+    // ✅ NUEVO: guardar también nombre del lector
+    public void loginLector(long usuarioId, String nombre) {
         prefs.edit()
                 .putString(KEY_ROLE_NEW, "LECTOR")
                 .putString(KEY_ROLE_OLD, "LECTOR")
                 .putLong(KEY_USUARIO_ID, usuarioId)
                 .putLong(KEY_BIBLIO_ID, -1L)
+                .putString(KEY_NOMBRE, nombre == null ? "" : nombre)
                 .apply();
+    }
+
+    // (opcional) mantener el método antiguo por compatibilidad
+    public void loginLector(long usuarioId) {
+        loginLector(usuarioId, "");
     }
 
     public void loginBibliotecario(long biblioId) {
@@ -33,6 +43,8 @@ public class SessionManager {
                 .putString(KEY_ROLE_OLD, "BIBLIOTECARIO")
                 .putLong(KEY_BIBLIO_ID, biblioId)
                 .putLong(KEY_USUARIO_ID, -1L)
+                // ✅ opcional: limpiar nombre en bibliotecario
+                .putString(KEY_NOMBRE, "")
                 .apply();
     }
 
@@ -68,6 +80,11 @@ public class SessionManager {
 
     public boolean isLoggedIn() {
         return getUsuarioId() != -1L || getBibliotecarioId() != -1L;
+    }
+
+    // ✅ NUEVO
+    public String getNombre() {
+        return prefs.getString(KEY_NOMBRE, "");
     }
 
     public void logout() {

@@ -98,7 +98,7 @@ public class LoginActivity extends BaseActivity {
                         btnLogin.setEnabled(true);
 
                         SessionManager s = new SessionManager(LoginActivity.this);
-                        s.loginLector(u.id);
+                        s.loginLector(u.id, u.nombre);
 
                         Toast.makeText(LoginActivity.this, "Modo lector: " + u.nombre, Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(LoginActivity.this, MainActivity.class));
