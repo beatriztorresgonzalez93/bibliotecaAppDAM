@@ -440,7 +440,7 @@ public class EstadisticasActivity extends BaseActivity {
         pintarLineaPrestamos(prestamosMes);
         pintarBarrasMultas(multasMes);
         pintarTartaMultasEstado(multasEstado);
-        pintarBarrasPrestamosGeneroHorizontal(porGenero);
+        pintarTartaPrestamosGenero(porGenero);
 
 
         if (esTodos) {
@@ -626,132 +626,107 @@ public class EstadisticasActivity extends BaseActivity {
         chartMultasEstado.invalidate();
     }
 
-    private void pintarBarrasPrestamosGeneroHorizontal(List<GeneroConteo> data) {
+    private void pintarTartaPrestamosGenero(List<GeneroConteo> data) {
         if (chartPrestamosGenero == null) return;
 
         chartPrestamosGenero.clear();
-        chartPrestamosGenero.setNoDataText("Sin datos");
+        chartPrestamosGenero.setData(null);
+        chartPrestamosGenero.fitScreen(); // reset zoom/translate
 
         if (data == null || data.isEmpty()) {
+            chartPrestamosGenero.setNoDataText("Sin datos");
             chartPrestamosGenero.invalidate();
-            if (tvPrestamosGeneroTitulo != null) {
-                tvPrestamosGeneroTitulo.setText("Géneros\n0 préstamos");
-            }
+            if (tvPrestamosGeneroTitulo != null) tvPrestamosGeneroTitulo.setText("Géneros\n0 préstamos");
             return;
         }
 
         final int TOP = 6;
 
-        // ===== 1) Ordenar desc + total =====
+        // Ordenar desc
         List<GeneroConteo> sorted = new ArrayList<>();
         for (GeneroConteo g : data) if (g != null) sorted.add(g);
-        Collections.sort(sorted, (a, b) -> Integer.compare(b.total, a.total));
+        java.util.Collections.sort(sorted, (a, b) -> Integer.compare(b.total, a.total));
+
+        ArrayList<com.github.mikephil.charting.data.BarEntry> entries = new ArrayList<>();
+        ArrayList<String> labels = new ArrayList<>();
 
         int total = 0;
-        for (GeneroConteo g : sorted) total += g.total;
-
-        // ===== 2) TOP + Otros =====
-        List<String> labels = new ArrayList<>();
-        List<com.github.mikephil.charting.data.BarEntry> entries = new ArrayList<>();
-
         int otros = 0;
-        int idx = 0;
 
         for (int i = 0; i < sorted.size(); i++) {
             GeneroConteo g = sorted.get(i);
+            total += g.total;
+
             if (i < TOP) {
+                entries.add(new com.github.mikephil.charting.data.BarEntry(i, g.total));
                 labels.add(safeLabelMultiLine(g.genero));
-                entries.add(new com.github.mikephil.charting.data.BarEntry(idx, g.total));
-                idx++;
             } else {
                 otros += g.total;
             }
         }
 
         if (otros > 0) {
-            labels.add("Otros");
+            int idx = entries.size();
             entries.add(new com.github.mikephil.charting.data.BarEntry(idx, otros));
+            labels.add("Otros");
         }
 
-        // ===== 3) Paleta TFG (verde salvia) =====
-        // - 1º color: salvia (tu identidad)
-        // - resto: tonos complementarios suaves (dashboard)
+        // Dataset
+        com.github.mikephil.charting.data.BarDataSet set =
+                new com.github.mikephil.charting.data.BarDataSet(entries, "");
+
         ArrayList<Integer> palette = new ArrayList<>();
-        palette.add(Color.parseColor("#5C8D89")); // salvia principal
-        palette.add(Color.parseColor("#3E6B68")); // salvia oscura
-        palette.add(Color.parseColor("#8FB9B6")); // salvia clara
-        palette.add(Color.parseColor("#2F6F9F")); // azul sobrio
-        palette.add(Color.parseColor("#7A5C9B")); // morado suave
-        palette.add(Color.parseColor("#C97A3D")); // naranja suave
-        palette.add(Color.parseColor("#B54A4A")); // rojo suave
-        palette.add(Color.parseColor("#6B7280")); // gris neutro
+        palette.add(Color.parseColor("#1E88E5"));
+        palette.add(Color.parseColor("#43A047"));
+        palette.add(Color.parseColor("#FB8C00"));
+        palette.add(Color.parseColor("#8E24AA"));
+        palette.add(Color.parseColor("#E53935"));
+        palette.add(Color.parseColor("#00897B"));
+        palette.add(Color.parseColor("#6D4C41"));
+        palette.add(Color.parseColor("#3949AB"));
 
         ArrayList<Integer> colors = new ArrayList<>();
         for (int i = 0; i < entries.size(); i++) colors.add(palette.get(i % palette.size()));
-
-        com.github.mikephil.charting.data.BarDataSet set =
-                new com.github.mikephil.charting.data.BarDataSet(entries, "");
         set.setColors(colors);
 
-        // Valores al final de cada barra
+        // Valores al final
         set.setDrawValues(true);
         set.setValueTextSize(11f);
         set.setValueTextColor(Color.parseColor("#1F2937"));
         set.setValueFormatter(new com.github.mikephil.charting.formatter.ValueFormatter() {
             @Override
-            public String getBarLabel(com.github.mikephil.charting.data.BarEntry e) {
-                return String.format(Locale.getDefault(), "%,.0f", e.getY());
+            public String getBarLabel(com.github.mikephil.charting.data.BarEntry barEntry) {
+                return String.format(Locale.getDefault(), "%,.0f", barEntry.getY());
             }
         });
 
-        // Espaciado entre barras (evita que se vea “apretado”)
-        set.setBarShadowColor(Color.TRANSPARENT);
-        set.setHighLightAlpha(0);
-
         com.github.mikephil.charting.data.BarData barData =
                 new com.github.mikephil.charting.data.BarData(set);
-
-        // Grosor de barra (con 280dp y 7 barras se ve muy bien)
-        barData.setBarWidth(0.50f);
+        barData.setBarWidth(0.70f);
 
         chartPrestamosGenero.setData(barData);
 
-        // ===== 4) Estilo general (dashboard limpio) =====
+        // ===== Estilo general =====
         chartPrestamosGenero.getDescription().setEnabled(false);
         chartPrestamosGenero.getLegend().setEnabled(false);
         chartPrestamosGenero.setDrawGridBackground(false);
-
         chartPrestamosGenero.setPinchZoom(false);
         chartPrestamosGenero.setScaleEnabled(false);
         chartPrestamosGenero.setDoubleTapToZoomEnabled(false);
+        chartPrestamosGenero.getAxisLeft().setGranularity(1f);
+        chartPrestamosGenero.getAxisLeft().setLabelCount(5, true);
 
-        chartPrestamosGenero.setHighlightPerTapEnabled(false);
-        chartPrestamosGenero.setHighlightPerDragEnabled(false);
+        // ✅ offsets para que no se coma textos (ajusta el LEFT si hace falta)
+        chartPrestamosGenero.setExtraOffsets(1f, 18f, 18f, 18f);
 
-        // valores fuera (a la derecha)
-        chartPrestamosGenero.setDrawValueAboveBar(true);
-
-        // ✅ CLAVE: mover TODO a la derecha para que NO se corten los géneros
-        // left, top, right, bottom
-        chartPrestamosGenero.setExtraOffsets(90f, 10f, 26f, 10f);
-
-        // ===== 5) XAxis (categorías / géneros) =====
-        com.github.mikephil.charting.components.XAxis x = chartPrestamosGenero.getXAxis();
-        x.setPosition(com.github.mikephil.charting.components.XAxis.XAxisPosition.BOTTOM);
-        x.setDrawGridLines(false);
-
-        x.setGranularity(1f);
-        x.setGranularityEnabled(true);
-
-        x.setTextSize(9f);
-        x.setTextColor(Color.parseColor("#111827"));
-        x.setLabelCount(labels.size(), false);
-
-        // ✅ separa un poco el texto del eje (para que no “roce” el chart)
-        x.setXOffset(10f);
-        x.setYOffset(2f);
-
-        x.setValueFormatter(new com.github.mikephil.charting.formatter.ValueFormatter() {
+        // ====== XAxis = categorías (en HorizontalBarChart) ======
+        com.github.mikephil.charting.components.XAxis xAxis = chartPrestamosGenero.getXAxis();
+        xAxis.setPosition(com.github.mikephil.charting.components.XAxis.XAxisPosition.BOTTOM);
+        xAxis.setGranularity(1f);
+        xAxis.setTextSize(11f);
+        xAxis.setDrawGridLines(false);
+        xAxis.setLabelCount(labels.size(), false);
+        xAxis.setValueFormatter(new com.github.mikephil.charting.formatter.ValueFormatter() {
             @Override
             public String getFormattedValue(float value) {
                 int i = Math.round(value);
@@ -760,55 +735,34 @@ public class EstadisticasActivity extends BaseActivity {
             }
         });
 
-        // Rango del eje de categorías
-        x.setAxisMinimum(-0.5f);
-        x.setAxisMaximum(labels.size() - 0.5f);
-
-        // ===== 6) Eje de valores (préstamos) =====
+        // ====== YAxis LEFT = valores (0..max) ======
         com.github.mikephil.charting.components.YAxis left = chartPrestamosGenero.getAxisLeft();
-        com.github.mikephil.charting.components.YAxis right = chartPrestamosGenero.getAxisRight();
-
-        left.setAxisMinimum(0f);
-        left.setGranularity(1f);
-        left.setGranularityEnabled(true);
-
-        // grid suave para lectura (estilo dashboard)
         left.setDrawGridLines(true);
-        left.setGridLineWidth(0.7f);
-        left.setTextSize(11f);
-        left.setTextColor(Color.parseColor("#374151"));
+        left.setAxisMinimum(0f);
 
-        // margen arriba para que no se corte el máximo
-        left.setSpaceTop(12f);
+        float max = 0f;
+        for (com.github.mikephil.charting.data.BarEntry e : entries) {
+            if (e.getY() > max) max = e.getY();
+        }
+        left.setAxisMaximum(max * 1.15f);
+        left.setTextSize(10f);
+        left.setValueFormatter(new com.github.mikephil.charting.formatter.ValueFormatter() {
+            @Override
+            public String getFormattedValue(float value) {
+                return String.format(Locale.getDefault(), "%,.0f", value);
+            }
+        });
 
-        right.setEnabled(false);
+        // Eje derecho fuera
+        chartPrestamosGenero.getAxisRight().setEnabled(false);
 
-        // ===== 7) Animación + refresh =====
-        chartPrestamosGenero.animateY(600);
+        chartPrestamosGenero.setFitBars(true);
+        chartPrestamosGenero.notifyDataSetChanged();
         chartPrestamosGenero.invalidate();
 
         if (tvPrestamosGeneroTitulo != null) {
             tvPrestamosGeneroTitulo.setText("Géneros\n" + total + " préstamos");
         }
-    }
-
-    /**
-     * Parte labels largos en 2 líneas para evitar recorte/solape.
-     */
-    private String safeLabelMultiLine(String s) {
-        if (s == null) return "";
-        s = s.trim();
-        if (s.length() <= 18) return s;
-
-        int mid = Math.min(18, s.length() - 1);
-        int cut = s.lastIndexOf(' ', mid);
-        if (cut < 8) cut = mid;
-
-        String a = s.substring(0, cut).trim();
-        String b = s.substring(cut).trim();
-
-        if (b.length() > 18) b = b.substring(0, 18).trim() + "…";
-        return a + "\n" + b;
     }
 
     // ---------------------------
@@ -1149,5 +1103,30 @@ public class EstadisticasActivity extends BaseActivity {
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
         return cal.getTimeInMillis();
+    }
+
+    private String safeLabelMultiLine(String s) {
+        if (s == null) return "";
+
+        s = s.trim();
+
+        // si es corto, no dividir
+        if (s.length() <= 18) return s;
+
+        // buscar espacio cercano al límite
+        int max = Math.min(18, s.length());
+        int cut = s.lastIndexOf(' ', max);
+
+        if (cut == -1) cut = max;
+
+        String line1 = s.substring(0, cut).trim();
+        String line2 = s.substring(cut).trim();
+
+        // limitar segunda línea
+        if (line2.length() > 18) {
+            line2 = line2.substring(0, 18).trim() + "…";
+        }
+
+        return line1 + "\n" + line2;
     }
 }
