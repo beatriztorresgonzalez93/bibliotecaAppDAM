@@ -37,8 +37,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textStyle="bold"
-                    android:textSize="20sp"
-                    android:textColor="#1F2937" />
+                    android:textColor="#1F2937"
+                    app:autoSizeTextType="uniform"
+                    app:autoSizeMinTextSize="16sp"
+                    app:autoSizeMaxTextSize="22sp"
+                    app:autoSizeStepGranularity="1sp" />
 
                 <!-- Email -->
                 <TextView
@@ -48,7 +51,10 @@
                     android:layout_marginTop="6dp"
                     android:textColor="#4B5563"
                     android:drawableStart="@drawable/ic_email_20"
-                    android:drawablePadding="8dp" />
+                    android:drawablePadding="8dp"
+                    app:autoSizeTextType="uniform"
+                    app:autoSizeMinTextSize="12sp"
+                    app:autoSizeMaxTextSize="16sp" />
 
                 <!-- Rol -->
                 <TextView
@@ -58,8 +64,12 @@
                     android:layout_marginTop="6dp"
                     android:textColor="#4B5563"
                     android:drawableStart="@drawable/ic_user_20"
-                    android:drawablePadding="8dp" />
+                    android:drawablePadding="8dp"
+                    app:autoSizeTextType="uniform"
+                    app:autoSizeMinTextSize="12sp"
+                    app:autoSizeMaxTextSize="16sp" />
 
+                <!-- AVISO -->
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/cardAvisoVencidos"
                     android:layout_width="match_parent"
@@ -76,28 +86,41 @@
                         android:layout_height="wrap_content"
                         android:padding="14dp"
                         android:orientation="horizontal"
-                        android:background="#FFEBEE">
+                        android:background="#FFEBEE"
+                        android:gravity="center_vertical">
 
+                        <!-- Icono fijo -->
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_marginEnd="10dp"
+                            android:gravity="center"
                             android:text="⚠️"
-                            android:textSize="18sp"
-                            android:layout_marginEnd="10dp"/>
+                            android:textSize="16sp" />
 
+                        <!-- Texto adaptable -->
                         <TextView
                             android:id="@+id/tvAvisoVencidos"
-                            android:layout_width="match_parent"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:text="Tienes préstamos vencidos"
+                            android:layout_weight="1"
                             android:textStyle="bold"
-                            android:textColor="#B71C1C"/>
+                            android:textColor="#B71C1C"
+
+                            android:maxLines="3"
+                            android:ellipsize="end"
+                            android:breakStrategy="balanced"
+
+                            app:autoSizeTextType="uniform"
+                            app:autoSizeMinTextSize="12sp"
+                            app:autoSizeMaxTextSize="16sp"
+                            app:autoSizeStepGranularity="1sp" />
 
                     </LinearLayout>
 
                 </com.google.android.material.card.MaterialCardView>
 
-                <!-- KPIs rápidos -->
+                <!-- KPIs -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -105,7 +128,7 @@
                     android:orientation="horizontal"
                     android:weightSum="3">
 
-                    <!-- Activos/Vencidos (lo sigues seteando tú en tvPrestamosActivos) -->
+                    <!-- PRESTAMOS -->
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -129,20 +152,24 @@
                                 android:textSize="12sp"
                                 android:textColor="#6B7280" />
 
-
-
                             <TextView
                                 android:id="@+id/tvPrestamosActivos"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="4dp"
                                 android:textStyle="bold"
-                                android:textSize="14sp"
-                                android:textColor="#111827" />
+                                android:textColor="#111827"
+                                android:maxLines="2"
+                                android:ellipsize="end"
+                                android:breakStrategy="balanced"
+                                app:autoSizeTextType="uniform"
+                                app:autoSizeMinTextSize="10sp"
+                                app:autoSizeMaxTextSize="16sp" />
+
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
 
-                    <!-- Multas € (tvMultasPendientes) -->
+                    <!-- MULTAS € -->
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -172,13 +199,18 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="4dp"
                                 android:textStyle="bold"
-                                android:textSize="14sp"
                                 android:textColor="#111827"
-                                android:text="Multas pendientes: 0,00 €" />
+                                android:maxLines="2"
+                                android:ellipsize="end"
+                                android:breakStrategy="balanced"
+                                app:autoSizeTextType="uniform"
+                                app:autoSizeMinTextSize="10sp"
+                                app:autoSizeMaxTextSize="16sp" />
+
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
 
-                    <!-- Nº multas (tvNumMultasPendientes) -->
+                    <!-- Nº MULTAS -->
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -206,17 +238,21 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="4dp"
-                                android:textSize="14sp"
                                 android:textStyle="bold"
                                 android:textColor="#111827"
-                                android:text="Multas pendientes: 0" />
+                                android:maxLines="2"
+                                android:ellipsize="end"
+                                android:breakStrategy="balanced"
+                                app:autoSizeTextType="uniform"
+                                app:autoSizeMinTextSize="10sp"
+                                app:autoSizeMaxTextSize="16sp" />
+
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
 
                 </LinearLayout>
 
             </LinearLayout>
-
         </com.google.android.material.card.MaterialCardView>
 
         <!-- ========= CARD ESTADÍSTICAS ========= -->

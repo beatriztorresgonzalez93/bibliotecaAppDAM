@@ -33,6 +33,9 @@ public interface LibroDao {
     @Query("DELETE FROM libro WHERE id = :idLibro")
     void deleteById(int idLibro);
 
+    @Query("SELECT * FROM Libro ORDER BY COALESCE(genero,'') COLLATE NOCASE ASC, COALESCE(titulo,'') COLLATE NOCASE ASC")
+    List<Libro> getAllOrderByGeneroSafe();
+
 
 
 

@@ -183,7 +183,8 @@ public class UsuarioDetalleActivity extends BaseActivity {
                 tvEmail.setText(usuario.email);
                 tvRol.setText("Rol: " + usuario.rol);
 
-                tvPrestamosActivos.setText("Activos: " + finalActivos + " · Vencidos: " + finalVencidos);
+                // ✅ Mejor en pantallas pequeñas: 2 líneas
+                tvPrestamosActivos.setText("Activos: " + finalActivos + "\nVencidos: " + finalVencidos);
 
                 // ✅ listado de préstamos activos con info
                 adapter.setData(activosInfo);
@@ -191,16 +192,13 @@ public class UsuarioDetalleActivity extends BaseActivity {
                 // ✅ mensaje “sin préstamos”
                 tvSinPrestamos.setVisibility((activosInfo == null || activosInfo.isEmpty()) ? View.VISIBLE : View.GONE);
 
+                // ✅ Mini KPIs: SOLO VALOR (sin frase larga)
                 if (tvMultasPendientes != null) {
-                    tvMultasPendientes.setText(
-                            "Multas pendientes: " +
-                                    String.format(java.util.Locale.getDefault(), "%.2f", finalTotalMultasPendientes) +
-                                    " €"
-                    );
+                    tvMultasPendientes.setText(formatEuros(finalTotalMultasPendientes)); // "16,50 €"
                 }
 
                 if (tvNumMultasPendientes != null) {
-                    tvNumMultasPendientes.setText("Nº multas pendientes: " + finalNumPendientes);
+                    tvNumMultasPendientes.setText(String.valueOf(finalNumPendientes)); // "5"
                 }
 
                 // ✅ estadísticas del usuario (siempre)
@@ -236,5 +234,10 @@ public class UsuarioDetalleActivity extends BaseActivity {
                             String.format(java.util.Locale.getDefault(), "%.2f €", totalPendiente));
             });
         });
+    }
+
+    private String formatEuros(double value) {
+        java.text.NumberFormat nf = java.text.NumberFormat.getCurrencyInstance(new java.util.Locale("es", "ES"));
+        return nf.format(value); // -> "16,50 €"
     }
 }

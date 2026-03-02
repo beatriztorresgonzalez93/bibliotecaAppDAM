@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.DAM.bibliotecaapp.R;
 import com.DAM.bibliotecaapp.SessionManager;
-import com.DAM.bibliotecaapp.data.db.AppDatabase;
 import com.DAM.bibliotecaapp.data.entities.Libro;
 import com.DAM.bibliotecaapp.ui.prestamo.NuevoPrestamoActivity;
 
@@ -22,14 +21,25 @@ import java.util.List;
 
 public class LibroAdapter extends RecyclerView.Adapter<LibroAdapter.LibroViewHolder> {
 
-    private final AppDatabase db;
-    private final List<Libro> libros = new ArrayList<>();
+    // ✅ Item UI con disponibilidad ya calculada (NO DB en adapter)
+    public static class LibroItem {
+        public final Libro libro;
+        public final int total;
+        public final int disponibles;
+
+        public LibroItem(Libro libro, int total, int disponibles) {
+            this.libro = libro;
+            this.total = total;
+            this.disponibles = disponibles;
+        }
+    }
+
+    private final List<LibroItem> items = new ArrayList<>();
     private final boolean isAdmin;
 
-    public LibroAdapter(AppDatabase db, List<Libro> inicial, boolean isAdmin) {
-        this.db = db;
+    public LibroAdapter(List<LibroItem> inicial, boolean isAdmin) {
         this.isAdmin = isAdmin;
-        if (inicial != null) libros.addAll(inicial);
+        if (inicial != null) items.addAll(inicial);
     }
 
     @NonNull
@@ -41,28 +51,30 @@ public class LibroAdapter extends RecyclerView.Adapter<LibroAdapter.LibroViewHol
 
     @Override
     public void onBindViewHolder(@NonNull LibroViewHolder holder, int position) {
-        Libro libro = libros.get(position);
+        LibroItem it = items.get(position);
+        Libro libro = it.libro;
 
         // Título / autor
-        holder.tvTitulo.setText(libro.titulo != null ? libro.titulo : "");
-        holder.tvAutor.setText(libro.autor != null ? libro.autor : "");
+        holder.tvTitulo.setText(libro != null && libro.titulo != null ? libro.titulo : "");
+        holder.tvAutor.setText(libro != null && libro.autor != null ? libro.autor : "");
 
         // Info compacta (ISBN + Editorial)
-        String isbn = (libro.isbn != null) ? libro.isbn : "";
-        String editorial = (libro.editorial != null) ? libro.editorial : "";
+        String isbn = (libro != null && libro.isbn != null) ? libro.isbn : "";
+        String editorial = (libro != null && libro.editorial != null) ? libro.editorial : "";
         String info = "ISBN: " + isbn;
         if (!editorial.trim().isEmpty()) info += " · Editorial: " + editorial;
         holder.tvInfo.setText(info);
 
-        // Chips: género
-        String genero = (libro.genero != null) ? libro.genero : "Sin género";
+        // Chip género
+        String genero = (libro != null && libro.genero != null && !libro.genero.trim().isEmpty())
+                ? libro.genero.trim()
+                : "Sin género";
         holder.chipGenero.setText(genero);
 
-        // Disponibilidad
-        int total = db.ejemplarDao().countTotal(libro.id);
-        int disp = db.ejemplarDao().countDisponibles(libro.id);
+        // Disponibilidad (ya viene calculada)
+        int total = it.total;
+        int disp = it.disponibles;
 
-        // Chip disponibilidad (verde si hay, rojo si no)
         if (disp > 0) {
             holder.chipDisponibilidad.setText("Disponible · " + disp + "/" + total);
             holder.chipDisponibilidad.setBackgroundResource(R.drawable.bg_chip_success);
@@ -77,13 +89,11 @@ public class LibroAdapter extends RecyclerView.Adapter<LibroAdapter.LibroViewHol
         if (!isAdmin) {
             holder.btnPrestar.setVisibility(View.GONE);
             holder.btnBorrar.setVisibility(View.GONE);
-
             holder.btnPrestar.setOnClickListener(null);
             holder.btnBorrar.setOnClickListener(null);
             return;
         }
 
-        // ADMIN
         holder.btnPrestar.setVisibility(View.VISIBLE);
         holder.btnBorrar.setVisibility(View.VISIBLE);
 
@@ -114,11 +124,10 @@ public class LibroAdapter extends RecyclerView.Adapter<LibroAdapter.LibroViewHol
 
     @Override
     public int getItemCount() {
-        return libros.size();
+        return items.size();
     }
 
     static class LibroViewHolder extends RecyclerView.ViewHolder {
-
         TextView tvTitulo, tvAutor, tvInfo;
         TextView chipGenero, chipDisponibilidad;
         View btnPrestar, btnBorrar;
@@ -138,9 +147,9 @@ public class LibroAdapter extends RecyclerView.Adapter<LibroAdapter.LibroViewHol
         }
     }
 
-    public void setData(List<Libro> list) {
-        libros.clear();
-        if (list != null) libros.addAll(list);
+    public void setData(List<LibroItem> list) {
+        items.clear();
+        if (list != null) items.addAll(list);
         notifyDataSetChanged();
     }
 

@@ -1,6 +1,7 @@
 package com.DAM.bibliotecaapp.ui.libro;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -19,6 +20,8 @@ import com.DAM.bibliotecaapp.RoleGuard;
 import com.DAM.bibliotecaapp.SessionManager;
 import com.DAM.bibliotecaapp.data.db.AppDatabase;
 import com.DAM.bibliotecaapp.data.entities.Libro;
+import com.DAM.bibliotecaapp.data.seed.HistorySeedData;
+import com.DAM.bibliotecaapp.data.seed.SeedData;
 import com.DAM.bibliotecaapp.ui.base.BaseActivity;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -27,6 +30,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -37,15 +41,21 @@ public class LibrosActivity extends BaseActivity {
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
     private String queryActual = "";
+
+    // orden: titulo | autor | editorial | genero
     private String ordenActual = "titulo";
 
     private LibroAdapter adapter;
-    private boolean isAdmin; // CONTROL DE ROL
+    private boolean isAdmin;
 
-    private TextView tvEmpty; // ✅ ahora es campo
+    private TextView tvEmpty;
 
-    private android.os.Handler searchHandler = new android.os.Handler();
+    private final android.os.Handler searchHandler = new android.os.Handler();
     private Runnable searchRunnable;
+
+    // (opcional) prefs para recordar el orden
+    private static final String PREFS_LIBROS = "prefs_libros";
+    private static final String KEY_ORDEN = "orden_libros";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +63,7 @@ public class LibrosActivity extends BaseActivity {
 
         RoleGuard.requireLogin(this);
         WindowCompat.setDecorFitsSystemWindows(getWindow(), true);
+
         setContentView(R.layout.activity_libros);
         applySystemBarsPadding(R.id.main);
 
@@ -63,31 +74,23 @@ public class LibrosActivity extends BaseActivity {
         MaterialToolbar toolbar = findViewById(R.id.toolbarLibros);
         setSupportActionBar(toolbar);
 
-        // ✅ Buscar con el EditText del layout (NO SearchView)
-        TextInputEditText etBuscar = findViewById(R.id.etBuscar);
+        // recuperar orden guardado (opcional)
+        ordenActual = getSharedPreferences(PREFS_LIBROS, MODE_PRIVATE)
+                .getString(KEY_ORDEN, "titulo");
 
+        // Buscar (debounce)
+        TextInputEditText etBuscar = findViewById(R.id.etBuscar);
         if (etBuscar != null) {
             etBuscar.addTextChangedListener(new TextWatcher() {
-
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-                @Override
-                public void afterTextChanged(Editable s) {}
+                @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                @Override public void afterTextChanged(Editable s) {}
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-
                     queryActual = (s == null) ? "" : s.toString().trim();
 
-                    // cancelar búsqueda anterior si existe
-                    if (searchRunnable != null) {
-                        searchHandler.removeCallbacks(searchRunnable);
-                    }
-
-                    // esperar 300ms antes de buscar
+                    if (searchRunnable != null) searchHandler.removeCallbacks(searchRunnable);
                     searchRunnable = () -> cargarLibros();
-
                     searchHandler.postDelayed(searchRunnable, 300);
                 }
             });
@@ -96,15 +99,13 @@ public class LibrosActivity extends BaseActivity {
         rvLibros = findViewById(R.id.rvLibros);
         rvLibros.setLayoutManager(new LinearLayoutManager(this));
 
-        tvEmpty = findViewById(R.id.tvEmpty); // ✅ solo se inicializa aquí
+        tvEmpty = findViewById(R.id.tvEmpty);
 
         db = AppDatabase.getInstance(this);
 
-        // Adapter con rol: admin = puede prestar/borrar, lector = oculto/bloqueado
-        adapter = new LibroAdapter(db, new ArrayList<>(), isAdmin);
+        adapter = new LibroAdapter(new ArrayList<>(), isAdmin);
         rvLibros.setAdapter(adapter);
 
-        // Borrar solo admin (aunque el adapter ya lo oculta)
         adapter.setOnLibroDeleteListener(libro -> {
             if (!isAdmin) {
                 Toast.makeText(this, "Acceso solo para bibliotecario", Toast.LENGTH_SHORT).show();
@@ -114,14 +115,9 @@ public class LibrosActivity extends BaseActivity {
         });
 
         FloatingActionButton fab = findViewById(R.id.fabAddLibro);
-
         if (isAdmin) {
             fab.setVisibility(View.VISIBLE);
-
-            fab.setOnClickListener(v -> {
-                startActivity(new Intent(this, NuevoLibroActivity.class));
-            });
-
+            fab.setOnClickListener(v -> startActivity(new Intent(this, NuevoLibroActivity.class)));
         } else {
             fab.setVisibility(View.GONE);
         }
@@ -141,7 +137,7 @@ public class LibrosActivity extends BaseActivity {
                 libros = db.libroDao().search(q);
             }
 
-            // ✅ Si es lector: solo libros con ejemplares disponibles
+            // Lector: solo libros con ejemplares disponibles (OJO: esto hace muchas queries)
             if (!isAdmin) {
                 List<Libro> filtrados = new ArrayList<>();
                 for (Libro l : libros) {
@@ -154,22 +150,38 @@ public class LibrosActivity extends BaseActivity {
             ordenarEnMemoria(libros);
 
             List<Libro> finalLibros = libros;
+            List<LibroAdapter.LibroItem> uiItems = new ArrayList<>();
+
+            for (Libro l : libros) {
+                int total = db.ejemplarDao().countTotal(l.id);
+                int disp = db.ejemplarDao().countDisponibles(l.id);
+                uiItems.add(new LibroAdapter.LibroItem(l, total, disp));
+            }
+
+            List<LibroAdapter.LibroItem> finalItems = uiItems;
 
             runOnUiThread(() -> {
-                adapter.setData(finalLibros);
+                adapter.setData(finalItems);
                 if (tvEmpty != null) {
-                    tvEmpty.setVisibility(finalLibros.isEmpty() ? View.VISIBLE : View.GONE);
+                    tvEmpty.setVisibility(finalItems.isEmpty() ? View.VISIBLE : View.GONE);
                 }
             });
         });
+    }
+
+    private static String safe(String s) {
+        return (s == null) ? "" : s.trim().toLowerCase(Locale.ROOT);
     }
 
     private void ordenarEnMemoria(List<Libro> libros) {
         if (libros == null) return;
 
         Collections.sort(libros, (a, b) -> {
-            String sa, sb;
+            if (a == null && b == null) return 0;
+            if (a == null) return 1;
+            if (b == null) return -1;
 
+            String sa, sb;
             switch (ordenActual) {
                 case "autor":
                     sa = safe(a.autor);
@@ -187,12 +199,19 @@ public class LibrosActivity extends BaseActivity {
                     sa = safe(a.titulo);
                     sb = safe(b.titulo);
             }
-            return sa.compareTo(sb);
-        });
-    }
 
-    private String safe(String s) {
-        return s == null ? "" : s.toLowerCase();
+            // ✅ vacíos al final (sobre todo para género/editorial/autor)
+            boolean ea = sa.isEmpty();
+            boolean eb = sb.isEmpty();
+            if (ea && !eb) return 1;
+            if (!ea && eb) return -1;
+
+            int c = sa.compareTo(sb);
+            if (c != 0) return c;
+
+            // desempate por título (para que el orden sea estable)
+            return safe(a.titulo).compareTo(safe(b.titulo));
+        });
     }
 
     @Override
@@ -212,29 +231,36 @@ public class LibrosActivity extends BaseActivity {
         int id = item.getItemId();
 
         if (id == R.id.orden_titulo) {
-            ordenActual = "titulo";
-            cargarLibros();
+            setOrden("titulo");
             return true;
         } else if (id == R.id.orden_autor) {
-            ordenActual = "autor";
-            cargarLibros();
+            setOrden("autor");
             return true;
         } else if (id == R.id.orden_editorial) {
-            ordenActual = "editorial";
-            cargarLibros();
+            setOrden("editorial");
             return true;
         } else if (id == R.id.orden_genero) {
-            ordenActual = "genero";
-            cargarLibros();
+            setOrden("genero");
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
+    private void setOrden(String orden) {
+        ordenActual = orden;
+
+        // guardar orden (opcional)
+        getSharedPreferences(PREFS_LIBROS, MODE_PRIVATE)
+                .edit()
+                .putString(KEY_ORDEN, ordenActual)
+                .apply();
+
+        cargarLibros();
+    }
+
     private void borrarLibro(Libro libro) {
         executor.execute(() -> {
-
             int prestados = db.ejemplarDao().countPrestadosByLibro(libro.id);
 
             if (prestados > 0) {
@@ -258,5 +284,17 @@ public class LibrosActivity extends BaseActivity {
         });
     }
 
+    // (no se usa ahora, lo dejo por si lo activas)
+    private void seedOnce() {
+        SharedPreferences p = getSharedPreferences("seed_flags", MODE_PRIVATE);
+        boolean done = p.getBoolean("seed_done", false);
+        if (done) return;
 
+        ExecutorService ex = Executors.newSingleThreadExecutor();
+        ex.execute(() -> {
+            SeedData.seedIfEmpty(this);
+            HistorySeedData.seedHistoryIfEmpty(this);
+            p.edit().putBoolean("seed_done", true).apply();
+        });
+    }
 }
