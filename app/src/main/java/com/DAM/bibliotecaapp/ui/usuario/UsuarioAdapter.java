@@ -58,7 +58,7 @@ public class UsuarioAdapter extends RecyclerView.Adapter<UsuarioAdapter.VH> {
         }
         h.tvAvatar.setText(inicial);
 
-        // Chip rol (si tu entity tiene rol; si no, se queda LECTOR)
+        // Chip rol
         String rol = "LECTOR";
         try {
             if (u.rol != null) rol = u.rol.trim().toUpperCase(Locale.ROOT);
@@ -79,7 +79,7 @@ public class UsuarioAdapter extends RecyclerView.Adapter<UsuarioAdapter.VH> {
             // h.tvRolChip.setCompoundDrawableTintList(ContextCompat.getColorStateList(h.itemView.getContext(), R.color.text_secondary));
         }
 
-        // ✅ Click seguro: al card si existe, si no al itemView
+        // ✅ Click seguro
         View.OnClickListener click = v -> {
             if (listener != null) listener.onClick(u);
         };

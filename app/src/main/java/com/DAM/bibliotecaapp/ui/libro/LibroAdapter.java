@@ -21,7 +21,7 @@ import java.util.List;
 
 public class LibroAdapter extends RecyclerView.Adapter<LibroAdapter.LibroViewHolder> {
 
-    // ✅ Item UI con disponibilidad ya calculada (NO DB en adapter)
+    // ✅ Item UI con disponibilidad ya calculada
     public static class LibroItem {
         public final Libro libro;
         public final int total;
@@ -71,7 +71,7 @@ public class LibroAdapter extends RecyclerView.Adapter<LibroAdapter.LibroViewHol
                 : "Sin género";
         holder.chipGenero.setText(genero);
 
-        // Disponibilidad (ya viene calculada)
+        // Disponibilidad
         int total = it.total;
         int disp = it.disponibles;
 

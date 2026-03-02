@@ -62,12 +62,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 
-import com.github.mikephil.charting.charts.HorizontalBarChart;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+
 
 public class EstadisticasActivity extends BaseActivity {
 
@@ -510,9 +505,7 @@ public class EstadisticasActivity extends BaseActivity {
         return new ComparacionText(text, color);
     }
 
-    // ---------------------------
-    // Charts
-    // ---------------------------
+
     private void pintarLineaPrestamos(List<MesConteo> data12) {
         if (chartPrestamosMes == null) return;
 
@@ -765,9 +758,7 @@ public class EstadisticasActivity extends BaseActivity {
         }
     }
 
-    // ---------------------------
-    // Utilidades meses
-    // ---------------------------
+
     private String formatearMesYYYYMM(String yyyymm) {
         try {
             SimpleDateFormat inFmt = new SimpleDateFormat("yyyy-MM", Locale.US);
@@ -871,9 +862,7 @@ public class EstadisticasActivity extends BaseActivity {
         return out;
     }
 
-    // ===========================
-    // PDF (tu sistema multipágina)
-    // ===========================
+
     private void exportarPdf(Uri uri) {
         try (OutputStream os = getContentResolver().openOutputStream(uri)) {
 
@@ -1110,10 +1099,9 @@ public class EstadisticasActivity extends BaseActivity {
 
         s = s.trim();
 
-        // si es corto, no dividir
+
         if (s.length() <= 18) return s;
 
-        // buscar espacio cercano al límite
         int max = Math.min(18, s.length());
         int cut = s.lastIndexOf(' ', max);
 
@@ -1122,7 +1110,7 @@ public class EstadisticasActivity extends BaseActivity {
         String line1 = s.substring(0, cut).trim();
         String line2 = s.substring(cut).trim();
 
-        // limitar segunda línea
+
         if (line2.length() > 18) {
             line2 = line2.substring(0, 18).trim() + "…";
         }

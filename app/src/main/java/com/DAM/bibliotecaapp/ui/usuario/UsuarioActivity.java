@@ -32,7 +32,7 @@ public class UsuarioActivity extends BaseActivity {
     private AppDatabase db;
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
-    // Debounce búsqueda
+
     private final Handler handler = new Handler(Looper.getMainLooper());
     private Runnable searchRunnable;
 
@@ -44,7 +44,7 @@ public class UsuarioActivity extends BaseActivity {
 
         SessionManager s = new SessionManager(this);
 
-        // ✅ Si es lector, va directo a su perfil
+        //  Si es lector, va directo a su perfil
         if (s.isLector()) {
             long miId = s.getUsuarioId();
 
@@ -84,7 +84,7 @@ public class UsuarioActivity extends BaseActivity {
         // Carga inicial
         cargarUsuarios();
 
-        // ✅ Búsqueda con debounce (300ms)
+        //  Búsqueda con debounce (300ms)
         search.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             @Override public void afterTextChanged(Editable s) {}
@@ -100,7 +100,7 @@ public class UsuarioActivity extends BaseActivity {
             }
         });
 
-        // ✅ Abrir pantalla añadir usuario
+        //  Abrir pantalla añadir usuario
         fab.setOnClickListener(v ->
                 startActivity(new Intent(UsuarioActivity.this, AddUsuarioActivity.class))
         );

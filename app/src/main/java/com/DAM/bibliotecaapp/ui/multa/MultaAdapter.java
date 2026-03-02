@@ -62,7 +62,7 @@ public class MultaAdapter extends RecyclerView.Adapter<MultaAdapter.VH> {
         switch (estado) {
             case "PENDIENTE":
                 h.chipEstado.setBackgroundResource(R.drawable.chip_danger);
-                h.chipEstado.setTextColor(ctx.getColor(R.color.chip_danger_text)); // lo creamos abajo
+                h.chipEstado.setTextColor(ctx.getColor(R.color.chip_danger_text));
                 break;
             case "PAGADA":
                 h.chipEstado.setBackgroundResource(R.drawable.bg_chip_success);
@@ -82,13 +82,10 @@ public class MultaAdapter extends RecyclerView.Adapter<MultaAdapter.VH> {
         // --- Chip días ---
         int dias = m.diasRetraso;
         if (dias <= 0) {
-            // Opción 1: ocultar
+
             h.chipDias.setVisibility(View.GONE);
 
-            // Opción 2 (si prefieres mostrarlo): descomenta y comenta el GONE
-            // h.chipDias.setVisibility(View.VISIBLE);
-            // h.chipDias.setBackgroundResource(R.drawable.chip_neutral);
-            // h.chipDias.setText("✅ En plazo");
+
         } else {
             h.chipDias.setVisibility(View.VISIBLE);
             h.chipDias.setBackgroundResource(R.drawable.bg_chip_neutral);
@@ -98,20 +95,17 @@ public class MultaAdapter extends RecyclerView.Adapter<MultaAdapter.VH> {
         // --- Chip importe ---
         double importe = m.importe;
         if (importe <= 0.00001) {
-            // Para evitar “0.0 €” que queda feo
+
             h.chipImporte.setVisibility(View.GONE);
 
-            // Alternativa:
-            // h.chipImporte.setVisibility(View.VISIBLE);
-            // h.chipImporte.setBackgroundResource(R.drawable.chip_neutral);
-            // h.chipImporte.setText("💶 Sin importe");
+
         } else {
             h.chipImporte.setVisibility(View.VISIBLE);
             h.chipImporte.setBackgroundResource(R.drawable.bg_chip_success);
             h.chipImporte.setText(String.format(Locale.getDefault(), "💶 %.2f €", importe));
         }
 
-        // --- Acciones: solo si pendiente (más limpio visualmente) ---
+
         h.btnPagar.setVisibility(pendiente ? View.VISIBLE : View.GONE);
         h.btnCondonar.setVisibility(pendiente ? View.VISIBLE : View.GONE);
 

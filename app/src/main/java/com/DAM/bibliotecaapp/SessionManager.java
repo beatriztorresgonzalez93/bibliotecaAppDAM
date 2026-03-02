@@ -21,7 +21,7 @@ public class SessionManager {
         prefs = ctx.getApplicationContext().getSharedPreferences(PREFS, Context.MODE_PRIVATE);
     }
 
-    // ✅ NUEVO: guardar también nombre del lector
+    // NUEVO: guardar también nombre del lector
     public void loginLector(long usuarioId, String nombre) {
         prefs.edit()
                 .putString(KEY_ROLE_NEW, "LECTOR")
@@ -32,7 +32,7 @@ public class SessionManager {
                 .apply();
     }
 
-    // (opcional) mantener el método antiguo por compatibilidad
+
     public void loginLector(long usuarioId) {
         loginLector(usuarioId, "");
     }

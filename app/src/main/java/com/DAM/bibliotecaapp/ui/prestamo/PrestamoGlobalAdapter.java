@@ -74,7 +74,7 @@ public class PrestamoGlobalAdapter extends RecyclerView.Adapter<PrestamoGlobalAd
         String estado = (p.estado == null) ? "" : p.estado.trim().toUpperCase(Locale.ROOT);
         h.tvEstadoChip.setText(estado.isEmpty() ? "—" : estado);
 
-        // Colores (usa tus colores pastel ya definidos / o cambia aquí)
+        // Colores
         int colorEstado = ContextCompat.getColor(h.itemView.getContext(), R.color.estado_activo);
 
         if ("VENCIDO".equals(estado)) {

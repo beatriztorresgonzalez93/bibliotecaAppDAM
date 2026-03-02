@@ -62,14 +62,14 @@ public class MultasActivity extends BaseActivity {
 
         db = AppDatabase.getInstance(this);
 
-        // Views
+
         tvEmpty = findViewById(R.id.tvEmpty);
 
         spFiltro = findViewById(R.id.spEstado);
         actUsuarioFiltro = findViewById(R.id.actvUsuario);
         btnLimpiarFiltro = findViewById(R.id.btnClearUser);
 
-        // Recycler
+
         RecyclerView rv = findViewById(R.id.rvMultas);
         rv.setLayoutManager(new LinearLayoutManager(this));
 

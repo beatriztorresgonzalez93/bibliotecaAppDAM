@@ -31,10 +31,7 @@ public class BaseActivity extends AppCompatActivity {
         // darkIcons=true -> iconos negros
     }
 
-    /**
-     * Llama a esto DESPUÉS de setContentView() en cada Activity
-     * y pásale el id del root (normalmente R.id.main).
-     */
+
     protected void applySystemBarsPadding(int rootId) {
         View root = findViewById(rootId);
         if (root == null) return;

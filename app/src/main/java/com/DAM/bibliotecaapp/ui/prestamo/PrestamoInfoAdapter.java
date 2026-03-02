@@ -37,14 +37,13 @@ public class PrestamoInfoAdapter extends RecyclerView.Adapter<PrestamoInfoAdapte
         this.isAdmin = new SessionManager(parentForContext.getContext()).isBibliotecario();
     }
 
-    // ✅ Constructor compatible con tu uso actual: PrestamoInfoAdapter(listener)
+
     public PrestamoInfoAdapter(OnDevolverClickListener listener, android.content.Context context) {
         this.listener = listener;
         this.isAdmin = new SessionManager(context).isBibliotecario();
     }
 
-    // ✅ Mantengo tu constructor original, pero por seguridad lo dejo como admin=false si no pasas context.
-    // Te recomiendo usar el de abajo desde UsuarioDetalleActivity.
+
     public PrestamoInfoAdapter(OnDevolverClickListener listener) {
         this.listener = listener;
         this.isAdmin = false; // si no me pasas contexto, no puedo saber rol => oculto devolver

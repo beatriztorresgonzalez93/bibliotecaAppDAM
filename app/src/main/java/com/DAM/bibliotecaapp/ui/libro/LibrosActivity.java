@@ -53,7 +53,7 @@ public class LibrosActivity extends BaseActivity {
     private final android.os.Handler searchHandler = new android.os.Handler();
     private Runnable searchRunnable;
 
-    // (opcional) prefs para recordar el orden
+
     private static final String PREFS_LIBROS = "prefs_libros";
     private static final String KEY_ORDEN = "orden_libros";
 
@@ -284,7 +284,6 @@ public class LibrosActivity extends BaseActivity {
         });
     }
 
-    // (no se usa ahora, lo dejo por si lo activas)
     private void seedOnce() {
         SharedPreferences p = getSharedPreferences("seed_flags", MODE_PRIVATE);
         boolean done = p.getBoolean("seed_done", false);

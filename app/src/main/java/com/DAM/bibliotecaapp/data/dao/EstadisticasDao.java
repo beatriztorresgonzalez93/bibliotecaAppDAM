@@ -316,14 +316,7 @@ public interface EstadisticasDao {
     int getDevueltosSinMultaPorYear(String yearStr);
 
 
-// =====================
-// DISPONIBILIDAD POR AÑO (opción A: igual que global)
-// Normalmente disponibilidad es “ahora”, no tiene sentido por año.
-// Si la quieres “por año”, sería otra métrica distinta.
-// =====================
 
-
-    // =====================
 // TOP LIBROS CON MÁS MULTAS POR AÑO
 // =====================
     @Query(

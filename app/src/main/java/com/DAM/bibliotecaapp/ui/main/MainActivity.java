@@ -28,7 +28,6 @@ public class MainActivity extends BaseActivity {
     private TextView tvTitulo;
     private TextView btnAddBibliotecario;
 
-    // ✅ Ahora son Views porque en el XML son MaterialCardView (no Button)
     private View btnPrestamos, btnMultas, btnDevoluciones, btnEstadisticas;
 
     private TextView tvResumenPrestamos;
@@ -52,7 +51,7 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // ✅ Guard: obliga a estar logueado (lector o bibliotecario)
+
         RoleGuard.requireLogin(this);
 
         WindowCompat.setDecorFitsSystemWindows(getWindow(), true);
@@ -69,7 +68,7 @@ public class MainActivity extends BaseActivity {
 
         tvTitulo = findViewById(R.id.tvTitulo);
 
-        // ✅ Todos como View (da igual si son CardView o Button)
+
         View btnLibros = findViewById(R.id.btnLibros);
         btnPrestamos = findViewById(R.id.btnPrestamos);
         View btnUsuario = findViewById(R.id.btnUsuarios);
@@ -169,13 +168,13 @@ public class MainActivity extends BaseActivity {
 
         if (sm.isLector()) {
 
-            // Mostrar chevrons en lector
+
             chevronLibros.setVisibility(View.VISIBLE);
             chevronUsuarios.setVisibility(View.VISIBLE);
 
         } else {
 
-            // Ocultar en bibliotecario
+
             chevronLibros.setVisibility(View.GONE);
             chevronUsuarios.setVisibility(View.GONE);
     }
@@ -203,7 +202,7 @@ public class MainActivity extends BaseActivity {
         if (btnDevoluciones != null) btnDevoluciones.setVisibility(isAdmin ? View.VISIBLE : View.GONE);
         if (btnEstadisticas != null) btnEstadisticas.setVisibility(isAdmin ? View.VISIBLE : View.GONE);
 
-        // ✅ Solo si es admin cargamos los KPIs globales
+
         if (isAdmin) {
             cargarResumenBibliotecario();
         }
@@ -233,8 +232,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private void cargarResumenLectorSiToca() {
-        // Aquí usa tu forma real de detectar rol y obtener id
-        // En tu TFG normalmente lo guardas en SharedPreferences / SessionManager
+
         SessionManager sm = new SessionManager(this);
 
         if (!sm.isLector()) {   // si es bibliotecario, oculta la card
@@ -252,7 +250,7 @@ public class MainActivity extends BaseActivity {
 
         if (cardActividadLector != null) cardActividadLector.setVisibility(View.VISIBLE);
 
-        // placeholder mientras carga
+
         if (tvLectorPrestamosActivos != null) tvLectorPrestamosActivos.setText("…");
         if (tvLectorMultasPendientes != null) tvLectorMultasPendientes.setText("…");
 
@@ -285,7 +283,7 @@ public class MainActivity extends BaseActivity {
 
             if (nombre != null && !nombre.trim().isEmpty()) {
 
-                // Solo primer nombre
+
                 String primerNombre = nombre.trim().split(" ")[0];
 
                 tvSaludo.setText("¡Hola, " + primerNombre + "! Bienvenida 🎉");

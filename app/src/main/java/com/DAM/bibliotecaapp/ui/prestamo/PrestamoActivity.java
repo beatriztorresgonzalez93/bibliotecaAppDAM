@@ -40,16 +40,16 @@ public class PrestamoActivity extends BaseActivity {
 
     private PrestamoGlobalAdapter prestamoAdapter;
 
-    // ✅ Dropdown estado (reemplaza Spinner)
+
     private MaterialAutoCompleteTextView actEstado;
     private String filtroActual = "Todos";
 
-    // ✅ Filtro usuario
+
     private MaterialAutoCompleteTextView actUsuarioFiltro;
     private MaterialButton btnLimpiarFiltro;
     private Integer selectedUsuarioId = null;
 
-    // Helper para el autocompletar
+
     static class UserChoice {
         final int id;
         final String label;
@@ -280,7 +280,7 @@ public class PrestamoActivity extends BaseActivity {
         }
     }
 
-    // TextWatcher simple local
+
     public abstract static class SimpleTextWatcher implements TextWatcher {
         @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
         @Override public void afterTextChanged(Editable s) {}

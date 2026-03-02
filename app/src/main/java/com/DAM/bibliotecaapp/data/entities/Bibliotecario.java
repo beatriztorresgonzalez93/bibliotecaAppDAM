@@ -26,10 +26,10 @@ public class Bibliotecario {
 
     public long createdAt;
 
-    // ✅ Constructor vacío para crear objetos fácil y para Room
+
     public Bibliotecario() { }
 
-    // ✅ Si quieres mantener este constructor, márcalo como @Ignore para Room
+
     @Ignore
     public Bibliotecario(@NonNull String nombre,
                          @NonNull String email,

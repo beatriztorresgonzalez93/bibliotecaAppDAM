@@ -25,7 +25,7 @@ import java.util.concurrent.Executors;
 
 public class UsuarioDetalleActivity extends BaseActivity {
 
-    public static final String EXTRA_USUARIO_ID = "usuario_id"; // ✅ una sola clave
+    public static final String EXTRA_USUARIO_ID = "usuario_id"; //  una sola clave
 
     private AppDatabase db;
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -49,7 +49,7 @@ public class UsuarioDetalleActivity extends BaseActivity {
 
         SessionManager s = new SessionManager(this);
 
-        // ✅ leer id desde intent con compatibilidad
+
         long idIntent = -1L;
         Bundle extras = getIntent().getExtras();
 
@@ -68,13 +68,13 @@ public class UsuarioDetalleActivity extends BaseActivity {
             }
         }
 
-        // ✅ lector: si no viene por intent, usar sesión
+
         long idSesion = s.getUsuarioId();
 
-        // decidir id final
+
         long elegido = (idIntent != -1L) ? idIntent : idSesion;
 
-        // validar
+
         if (elegido == -1L) {
             Toast.makeText(this, "Error: usuario no recibido", Toast.LENGTH_SHORT).show();
             finish();
@@ -213,8 +213,7 @@ public class UsuarioDetalleActivity extends BaseActivity {
         if (usuarioId != -1) cargarDatos(usuarioId);
     }
 
-    // ⚠️ En esta pantalla (perfil lector) ya NO deberíamos devolver desde el listado.
-    // Si quieres devolución, déjalo para pantallas de bibliotecario (PrestamoActivity / DevolucionesActivity).
+
 
     private void cargarEstadisticasUsuario(int idUsuario) {
         executor.execute(() -> {

@@ -50,7 +50,7 @@ public class PrestamoActivoAdapter extends RecyclerView.Adapter<PrestamoActivoAd
         String fVence = formatDateSafe(p.fechaVencimiento);
         h.tvLinea2.setText("Prestado: " + fPrestamo + " · Vence: " + fVence);
 
-        // 3) Chip estado bonito (si existe en el layout)
+        // 3) Chip estado bonito
         if (h.tvEstadoChip != null) {
             String estado = (p.estado == null) ? "" : p.estado.trim().toUpperCase(Locale.ROOT);
 
@@ -101,7 +101,7 @@ public class PrestamoActivoAdapter extends RecyclerView.Adapter<PrestamoActivoAd
             tvLinea1 = itemView.findViewById(R.id.tvLinea1);
             tvLinea2 = itemView.findViewById(R.id.tvLinea2);
 
-            // Si tu layout aún no tiene este id, quedará null y no pasa nada
+
             tvEstadoChip = itemView.findViewById(R.id.tvEstadoChip);
         }
     }
