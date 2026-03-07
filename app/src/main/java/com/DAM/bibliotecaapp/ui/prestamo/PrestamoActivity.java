@@ -204,12 +204,29 @@ public class PrestamoActivity extends BaseActivity {
     }
 
     private void mostrarDialogoDevolucion(int idPrestamo) {
-        new AlertDialog.Builder(this)
-                .setTitle("Confirmar devolución")
-                .setMessage("¿Quieres marcar este préstamo como devuelto?")
-                .setNegativeButton("Cancelar", (d, w) -> d.dismiss())
-                .setPositiveButton("Devolver", (d, w) -> devolverPrestamo(idPrestamo))
-                .show();
+        executor.execute(() -> {
+            Multa multaPendiente = db.multaDao().getPendienteByPrestamo(idPrestamo);
+
+            runOnUiThread(() -> {
+                if (multaPendiente != null) {
+                    String importeTexto = String.format(Locale.getDefault(), "%.2f", multaPendiente.importe);
+
+                    new AlertDialog.Builder(this)
+                            .setTitle("Préstamo vencido")
+                            .setMessage("Este préstamo tiene una multa pendiente de " + importeTexto + " €.\n\n¿Deseas pagar la multa y registrar la devolución?")
+                            .setNegativeButton("Cancelar", (d, w) -> d.dismiss())
+                            .setPositiveButton("Pagar y devolver", (d, w) -> pagarMultaYDevolver(idPrestamo, multaPendiente.id))
+                            .show();
+                } else {
+                    new AlertDialog.Builder(this)
+                            .setTitle("Confirmar devolución")
+                            .setMessage("¿Quieres marcar este préstamo como devuelto?")
+                            .setNegativeButton("Cancelar", (d, w) -> d.dismiss())
+                            .setPositiveButton("Devolver", (d, w) -> devolverPrestamo(idPrestamo))
+                            .show();
+                }
+            });
+        });
     }
 
     private void devolverPrestamo(int idPrestamo) {
@@ -284,5 +301,30 @@ public class PrestamoActivity extends BaseActivity {
     public abstract static class SimpleTextWatcher implements TextWatcher {
         @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
         @Override public void afterTextChanged(Editable s) {}
+    }
+
+    private void pagarMultaYDevolver(int idPrestamo, int idMulta) {
+        executor.execute(() -> {
+            long ahora = System.currentTimeMillis();
+
+            try {
+                db.runInTransaction(() -> {
+                    int idEjemplar = db.prestamoDao().getIdEjemplarByPrestamo(idPrestamo);
+
+                    db.multaDao().pagar(idMulta, ahora);
+                    db.prestamoDao().marcarDevuelto(idPrestamo, ahora);
+                    db.ejemplarDao().actualizarEstado(idEjemplar, "DISPONIBLE");
+                });
+
+                runOnUiThread(() -> {
+                    Toast.makeText(this, "Multa pagada y devolución registrada", Toast.LENGTH_SHORT).show();
+                    cargarPrestamos();
+                });
+            } catch (Exception e) {
+                runOnUiThread(() ->
+                        Toast.makeText(this, "Error al pagar la multa y devolver el préstamo", Toast.LENGTH_LONG).show()
+                );
+            }
+        });
     }
 }

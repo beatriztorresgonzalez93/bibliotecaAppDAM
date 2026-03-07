@@ -212,6 +212,9 @@ public interface MultaDao {
     @Query("SELECT COUNT(*) FROM Multa WHERE idUsuario = :idUsuario AND estado = 'PENDIENTE'")
     int countPendientesPorUsuario(long idUsuario);
 
+    @Query("SELECT * FROM multa WHERE idPrestamo = :idPrestamo AND estado = 'PENDIENTE' LIMIT 1")
+    Multa getPendienteByPrestamo(int idPrestamo);
+
 
 
 }
