@@ -40,6 +40,12 @@ public interface UsuarioDao {
     @Query("SELECT email FROM Usuario ORDER BY email")
     List<String> getAllEmails();
 
+    @Query("DELETE FROM Usuario WHERE id = :id")
+    int deleteById(int id);
+
+    @Query("SELECT COUNT(*) FROM Usuario WHERE id = :id")
+    int existsById(int id);
+
 
 
 

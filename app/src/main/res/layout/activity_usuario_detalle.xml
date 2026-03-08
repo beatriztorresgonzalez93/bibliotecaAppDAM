@@ -369,6 +369,15 @@
             android:layout_marginTop="8dp"
             android:paddingBottom="12dp" />
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnEliminarUsuario"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Eliminar usuario"
+            android:textAllCaps="false"
+            app:backgroundTint="@android:color/holo_red_light" />
+
     </LinearLayout>
 
 </ScrollView>

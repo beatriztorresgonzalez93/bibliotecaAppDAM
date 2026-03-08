@@ -41,6 +41,8 @@ public class UsuarioDetalleActivity extends BaseActivity {
     private View cardAvisoVencidos;
     private TextView tvAvisoVencidos;
 
+    private com.google.android.material.button.MaterialButton btnEliminarUsuario;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,6 +115,13 @@ public class UsuarioDetalleActivity extends BaseActivity {
         tvAvisoVencidos = findViewById(R.id.tvAvisoVencidos);
 
         RecyclerView rv = findViewById(R.id.rvPrestamosActivos);
+        btnEliminarUsuario = findViewById(R.id.btnEliminarUsuario);
+        SessionManager sessionManager = new SessionManager(this);
+        btnEliminarUsuario.setVisibility(sessionManager.isBibliotecario() ? View.VISIBLE : View.GONE);
+
+        if (sessionManager.isBibliotecario()) {
+            btnEliminarUsuario.setOnClickListener(v -> mostrarDialogoEliminarUsuario());
+        }
         rv.setLayoutManager(new LinearLayoutManager(this));
         adapter = new PrestamoInfoActivoAdapter();
         rv.setAdapter(adapter);
@@ -238,5 +247,43 @@ public class UsuarioDetalleActivity extends BaseActivity {
     private String formatEuros(double value) {
         java.text.NumberFormat nf = java.text.NumberFormat.getCurrencyInstance(new java.util.Locale("es", "ES"));
         return nf.format(value); // -> "16,50 €"
+    }
+
+
+    private void mostrarDialogoEliminarUsuario() {
+        new androidx.appcompat.app.AlertDialog.Builder(this)
+                .setTitle("Eliminar usuario")
+                .setMessage("¿Seguro que quieres eliminar este usuario? Esta acción no se puede deshacer.")
+                .setNegativeButton("Cancelar", (d, w) -> d.dismiss())
+                .setPositiveButton("Eliminar", (d, w) -> intentarEliminarUsuario())
+                .show();
+    }
+
+
+    private void intentarEliminarUsuario() {
+        executor.execute(() -> {
+            int prestamosPendientes = db.prestamoDao().countActivosOVencidosPorUsuario(usuarioId);
+            int multasPendientes = db.multaDao().countPendientesPorUsuario(usuarioId);
+
+            if (prestamosPendientes > 0 || multasPendientes > 0) {
+                runOnUiThread(() -> Toast.makeText(
+                        this,
+                        "No se puede eliminar: el usuario tiene préstamos activos/vencidos o multas pendientes.",
+                        Toast.LENGTH_LONG
+                ).show());
+                return;
+            }
+
+            int deleted = db.usuarioDao().deleteById(usuarioId);
+
+            runOnUiThread(() -> {
+                if (deleted > 0) {
+                    Toast.makeText(this, "Usuario eliminado correctamente", Toast.LENGTH_SHORT).show();
+                    finish();
+                } else {
+                    Toast.makeText(this, "No se pudo eliminar el usuario", Toast.LENGTH_SHORT).show();
+                }
+            });
+        });
     }
 }
