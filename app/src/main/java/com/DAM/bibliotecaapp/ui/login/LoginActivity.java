@@ -24,7 +24,6 @@ public class LoginActivity extends BaseActivity {
 
     private EditText etUsuario, etPassword;
     private Button btnLogin;
-
     private AppDatabase db;
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
